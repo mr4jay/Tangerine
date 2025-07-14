@@ -15,7 +15,7 @@ const professionalHeadshotUrl = "https://placehold.co/1200x630.png";
 export const metadata: Metadata = {
   title: 'Rajure Ajay Kumar | Senior Data Engineer Portfolio',
   description: '6+ years as a Senior Data Engineer delivering $5M+ in savings and revenue growth with AWS, Snowflake, and Dataiku DSS. Explore my projects and skills.',
-  keywords: ['data engineer portfolio', 'Rajure Ajay Kumar', 'Senior Data Engineer', 'Hyderabad', 'AWS', 'Snowflake', 'Dataiku DSS', 'Python', 'MLOps', 'AWS certified', 'Snowflake expert', 'data engineering projects', 'data engineer hyderabad'],
+  keywords: ['data engineer portfolio', 'Rajure Ajay Kumar', 'Senior Data Engineer', 'Hyderabad', 'AWS', 'Snowflake', 'Dataiku DSS', 'Python', 'MLOps', 'AWS certified', 'Snowflake expert', 'data engineering projects', 'data engineer hyderabad', 'data engineering blog'],
   authors: [{ name: 'Rajure Ajay Kumar' }],
   openGraph: {
     title: 'Rajure Ajay Kumar | Senior Data Engineer Portfolio',
