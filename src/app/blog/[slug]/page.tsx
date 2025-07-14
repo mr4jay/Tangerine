@@ -3,15 +3,16 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Linkedin, Twitter, ArrowLeft } from 'lucide-react';
+import { Linkedin, Twitter, ArrowLeft, Clock } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { notFound } from 'next/navigation';
 import Header from '@/components/layout/header';
 import Footer from '@/components/layout/footer';
 import { getPostData, getSortedPostsData } from '@/lib/posts';
 import { format } from 'date-fns';
+import { Badge } from '@/components/ui/badge';
 
-const allPosts = getSortedPostsData();
+const allPosts = await getSortedPostsData();
 
 const RelatedPosts = ({ currentSlug }: { currentSlug: string }) => {
   const related = allPosts.filter(p => p.slug !== currentSlug).slice(0, 2);
@@ -73,8 +74,18 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5 }}
                     >
+                        <div className="flex flex-wrap gap-2 mb-2">
+                            {post.tags.map((tag) => (
+                                <Badge key={tag} variant="default" className="bg-primary/20 text-primary border-primary/40 hover:bg-primary/30 cursor-pointer">
+                                    {tag}
+                                </Badge>
+                            ))}
+                        </div>
                         <h1 className="text-3xl md:text-4xl font-bold tracking-tight font-headline text-foreground mb-4">{post.title}</h1>
-                        <p className="text-muted-foreground mb-6">{format(new Date(post.publishDate), 'MMMM dd, yyyy')}</p>
+                        <div className="flex items-center gap-4 text-muted-foreground mb-6">
+                            <span>{format(new Date(post.publishDate), 'MMMM dd, yyyy')}</span>
+                            <span className='flex items-center gap-1'><Clock className="h-4 w-4" /> {post.readTime} min read</span>
+                        </div>
                         
                         <div className="relative w-full h-64 md:h-96 mb-8 rounded-lg overflow-hidden shadow-lg">
                             <Image src={post.imageUrl} alt={post.title} fill className="object-cover" data-ai-hint={post.aiHint} loading="lazy" />

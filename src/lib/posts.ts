@@ -4,6 +4,7 @@ import matter from 'gray-matter';
 import { remark } from 'remark';
 import html from 'remark-html';
 import { summarizePost } from '@/ai/flows/summarize-post-flow';
+import { extractTags } from '@/ai/flows/extract-tags-flow';
 
 const postsDirectory = path.join(process.cwd(), 'posts');
 
@@ -14,7 +15,17 @@ export type PostData = {
   imageUrl: string;
   aiHint: string;
   publishDate: string;
+  tags: string[];
+  readTime: number; // in minutes
   contentHtml?: string;
+};
+
+// Helper function to calculate reading time
+const calculateReadTime = (content: string): number => {
+    const wordsPerMinute = 200;
+    const words = content.split(/\s+/).length;
+    const readTime = Math.ceil(words / wordsPerMinute);
+    return readTime;
 };
 
 export async function getSortedPostsData(): Promise<PostData[]> {
@@ -26,19 +37,28 @@ export async function getSortedPostsData(): Promise<PostData[]> {
     const fileContents = fs.readFileSync(fullPath, 'utf8');
     const matterResult = matter(fileContents);
 
-    // AI-generate the summary instead of using the static excerpt
+    const readTime = calculateReadTime(matterResult.content);
+
+    // AI-generate the summary and tags
     let summary = matterResult.data.excerpt; // Fallback to excerpt
+    let tags: string[] = matterResult.data.tags || []; // Fallback to frontmatter tags
+
     try {
-      const summaryResult = await summarizePost({ content: matterResult.content });
+      const [summaryResult, tagsResult] = await Promise.all([
+        summarizePost({ content: matterResult.content }),
+        extractTags({ content: matterResult.content })
+      ]);
       summary = summaryResult.summary;
+      tags = tagsResult.tags;
     } catch (error) {
-        console.error(`Failed to generate summary for ${slug}:`, error);
-        // Fallback to the static excerpt if AI fails
+        console.error(`Failed to generate AI content for ${slug}:`, error);
     }
 
     return {
       slug,
       excerpt: summary,
+      tags,
+      readTime,
       ...(matterResult.data as { 
         title: string; 
         imageUrl: string; 
@@ -79,20 +99,29 @@ export async function getPostData(slug: string): Promise<PostData> {
     .process(matterResult.content);
   const contentHtml = processedContent.toString();
 
-  // AI-generate the summary instead of using the static excerpt
+  const readTime = calculateReadTime(matterResult.content);
+
+  // AI-generate the summary and tags
   let summary = matterResult.data.excerpt; // Fallback to excerpt
+  let tags: string[] = matterResult.data.tags || [];
+
   try {
-      const summaryResult = await summarizePost({ content: matterResult.content });
+      const [summaryResult, tagsResult] = await Promise.all([
+        summarizePost({ content: matterResult.content }),
+        extractTags({ content: matterResult.content })
+      ]);
       summary = summaryResult.summary;
+      tags = tagsResult.tags;
   } catch (error) {
-      console.error(`Failed to generate summary for ${slug}:`, error);
-      // Fallback to the static excerpt if AI fails
+      console.error(`Failed to generate AI content for ${slug}:`, error);
   }
 
   return {
     slug,
     contentHtml,
     excerpt: summary,
+    tags,
+    readTime,
     ...(matterResult.data as { 
         title: string; 
         imageUrl: string; 

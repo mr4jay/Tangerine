@@ -4,10 +4,12 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Clock } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { cardVariants, headerVariants } from '@/lib/motion';
 import type { PostData } from '@/lib/posts';
+import { Badge } from '@/components/ui/badge';
+import { format } from 'date-fns';
 
 export default function Blog({ posts }: { posts: PostData[] }) {
   return (
@@ -44,7 +46,18 @@ export default function Blog({ posts }: { posts: PostData[] }) {
                   </div>
                 </CardHeader>
                 <CardContent className="pt-6 flex-grow flex flex-col">
+                  <div className="flex items-center gap-4 text-sm text-muted-foreground mb-2">
+                     <span>{format(new Date(post.publishDate), 'MMMM dd, yyyy')}</span>
+                     <span className="flex items-center gap-1"><Clock className="h-4 w-4" /> {post.readTime} min read</span>
+                  </div>
                   <CardTitle className="mb-2 font-headline text-2xl text-foreground">{post.title}</CardTitle>
+                   <div className="flex flex-wrap gap-2 mb-4">
+                    {post.tags.slice(0,3).map((tag) => (
+                      <Badge key={tag} variant="default" className="bg-primary/20 text-primary border-primary/40">
+                        {tag}
+                      </Badge>
+                    ))}
+                  </div>
                   <CardDescription className="flex-grow text-base text-muted-foreground">{post.excerpt}</CardDescription>
                 </CardContent>
                 <CardFooter className="flex justify-start pt-4">
