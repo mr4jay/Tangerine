@@ -31,7 +31,7 @@ export default function Hero() {
   const y = useTransform(scrollYProgress, [0, 1], ["0%", "10%"]);
 
   return (
-    <section ref={targetRef} id="home" className="relative w-full h-screen min-h-[700px] flex flex-col items-center justify-center overflow-hidden">
+    <section ref={targetRef} id="home" className="relative w-full min-h-screen flex flex-col items-center justify-center overflow-hidden">
       <motion.div
         className="absolute inset-0 w-full h-full bg-gradient-hero"
         style={{ y }}
@@ -56,13 +56,13 @@ export default function Hero() {
                     priority
                 />
             </motion.div>
-            <motion.h1 variants={fadeIn(0.2)} className="text-4xl md:text-5xl font-bold tracking-tight text-[#F7FAFC]">
+            <motion.h1 variants={fadeIn(0.2)} className="text-4xl md:text-5xl font-bold tracking-tight text-foreground">
               Senior Data Engineer
             </motion.h1>
             <motion.h2 variants={fadeIn(0.3)} className="text-3xl md:text-4xl font-bold tracking-tight text-primary mb-4">
               Building Scalable Data Solutions
             </motion.h2>
-            <motion.p variants={fadeIn(0.4)} className="max-w-3xl mx-auto text-lg md:text-xl text-[#E2E8F0] mb-8">
+            <motion.p variants={fadeIn(0.4)} className="max-w-3xl mx-auto text-lg md:text-xl text-muted-foreground mb-8">
               6+ years driving impact with AWS, Snowflake, and AI
             </motion.p>
             <motion.div variants={fadeIn(0.5)}>
