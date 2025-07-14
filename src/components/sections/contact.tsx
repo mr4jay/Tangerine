@@ -26,7 +26,7 @@ const socialLinks = [
 
 export default function Contact() {
   return (
-    <section id="contact" className="w-full py-12 md:py-24 lg:py-32 bg-secondary/20">
+    <section id="contact" className="w-full py-12 md:py-24 lg:py-32 bg-background">
       <div className="container mx-auto px-4 md:px-6 max-w-4xl">
         <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12">
           <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl font-headline">Get In Touch</h2>
@@ -36,7 +36,7 @@ export default function Contact() {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {socialLinks.map((link) => (
-                 <Card key={link.name} className="text-center p-6 flex flex-col items-center justify-center">
+                 <Card key={link.name} className="text-center p-6 flex flex-col items-center justify-center bg-card">
                     <link.icon className="h-10 w-10 text-primary mb-4" />
                     <h3 className="text-xl font-semibold mb-1">{link.name}</h3>
                     <p className="text-muted-foreground break-all">{link.value}</p>

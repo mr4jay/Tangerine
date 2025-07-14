@@ -37,7 +37,7 @@ const projects = [
 
 export default function Projects() {
   return (
-    <section id="projects" className="w-full py-12 md:py-24 lg:py-32">
+    <section id="projects" className="w-full py-12 md:py-24 lg:py-32 bg-secondary/20">
       <div className="container mx-auto px-4 md:px-6 max-w-7xl">
         <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12">
           <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl font-headline">Featured Projects</h2>
@@ -47,7 +47,7 @@ export default function Projects() {
         </div>
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
           {projects.map((project, index) => (
-            <Card key={index} className="flex flex-col overflow-hidden transform transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-primary/20 bg-secondary/30">
+            <Card key={index} className="flex flex-col overflow-hidden transform transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-primary/20 bg-card">
               <CardHeader className="p-0">
                 <div className="relative w-full h-48">
                     <Image src={project.imageUrl} alt={project.title} fill className="object-cover" data-ai-hint={project.aiHint} />
