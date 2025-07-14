@@ -3,7 +3,7 @@
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { Github, Linkedin, Mail, Bot, User, Send, Loader2, Volume2 } from 'lucide-react';
+import { Github, Linkedin, Mail, Bot, User, Send, Loader2, Briefcase } from 'lucide-react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { useState, useRef, useEffect } from 'react';
@@ -14,6 +14,13 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { askAssistant } from '@/ai/flows/portfolio-assistant';
 import { textToSpeech } from '@/ai/flows/tts-flow';
 import { cn } from '@/lib/utils';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogClose } from '@/components/ui/dialog';
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Textarea } from '@/components/ui/textarea';
+import { useToast } from '@/hooks/use-toast';
 
 
 const socialLinks = [
@@ -48,6 +55,113 @@ type Message = {
     isAudioLoading?: boolean;
 };
 
+const hireMeFormSchema = z.object({
+    name: z.string().min(2, { message: "Name must be at least 2 characters." }),
+    email: z.string().email({ message: "Please enter a valid email address." }),
+    message: z.string().min(10, { message: "Message must be at least 10 characters." }).max(1000, { message: "Message cannot exceed 1000 characters." }),
+});
+
+
+const HireMeModal = () => {
+    const [open, setOpen] = useState(false);
+    const { toast } = useToast();
+
+    const form = useForm<z.infer<typeof hireMeFormSchema>>({
+        resolver: zodResolver(hireMeFormSchema),
+        defaultValues: {
+            name: "",
+            email: "",
+            message: "",
+        },
+    });
+
+    const onSubmit = async (values: z.infer<typeof hireMeFormSchema>) => {
+        console.log("Form submitted:", values);
+        // TODO: Implement backend submission logic here (e.g., send an email, save to DB).
+        // For example:
+        // await fetch('/api/contact', { method: 'POST', body: JSON.stringify(values) });
+        
+        toast({
+            title: "Message Sent!",
+            description: "Thank you for reaching out. I'll get back to you shortly.",
+        });
+        form.reset();
+        setOpen(false);
+    }
+
+    return (
+        <Dialog open={open} onOpenChange={setOpen}>
+            <DialogTrigger asChild>
+                <Button size="lg" className="w-full mt-6 group">
+                    <Briefcase className="mr-2 h-5 w-5" />
+                    Hire Me
+                </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[480px] bg-card border-border/60">
+                <DialogHeader>
+                    <DialogTitle className="text-2xl font-headline">Contact Me</DialogTitle>
+                    <DialogDescription>
+                        Interested in working together? Fill out the form below and I'll get back to you as soon as possible.
+                    </DialogDescription>
+                </DialogHeader>
+                <Form {...form}>
+                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                        <FormField
+                            control={form.control}
+                            name="name"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Name</FormLabel>
+                                    <FormControl>
+                                        <Input placeholder="Your Name" {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                         <FormField
+                            control={form.control}
+                            name="email"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Email</FormLabel>
+                                    <FormControl>
+                                        <Input placeholder="your.email@example.com" {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                         <FormField
+                            control={form.control}
+                            name="message"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Message</FormLabel>
+                                    <FormControl>
+                                        <Textarea placeholder="Tell me about your project or opportunity..." className="resize-none" rows={5} {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                         <DialogFooter>
+                            <DialogClose asChild>
+                                <Button type="button" variant="secondary">Cancel</Button>
+                            </DialogClose>
+                            <Button type="submit" disabled={form.formState.isSubmitting}>
+                                {form.formState.isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Send className="mr-2 h-4 w-4" />}
+                                Send Message
+                            </Button>
+                        </DialogFooter>
+                    </form>
+                </Form>
+            </DialogContent>
+        </Dialog>
+    )
+}
+
+
 const AIChatAssistant = () => {
     const [messages, setMessages] = useState<Message[]>([]);
     const [input, setInput] = useState('');
@@ -55,7 +169,6 @@ const AIChatAssistant = () => {
     const scrollAreaRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        // Scroll to the bottom when messages change
         if (scrollAreaRef.current) {
             scrollAreaRef.current.scrollTo({ top: scrollAreaRef.current.scrollHeight, behavior: 'smooth' });
         }
@@ -101,7 +214,6 @@ const AIChatAssistant = () => {
             };
             setMessages((prev) => [...prev, assistantMessage]);
             
-            // Fire and forget audio generation
             handleNewAudio(result.answer, assistantMessageId);
 
         } catch (error) {
@@ -221,11 +333,13 @@ export default function Contact() {
                             <div>
                                 <h3 className="text-lg font-semibold">{link.name}</h3>
                                 <p className="text-muted-foreground break-all text-sm">{link.value}</p>
+
                                 <span className="text-primary text-sm font-medium mt-1 inline-block">{link.cta}</span>
                             </div>
                         </Link>
                     </Card>
                 ))}
+                <HireMeModal />
             </motion.div>
         </div>
       </div>
