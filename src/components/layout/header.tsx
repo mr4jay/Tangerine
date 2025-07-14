@@ -21,14 +21,32 @@ const navLinks = [
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const [hasScrolled, setHasScrolled] = useState(false);
+  const [activeLink, setActiveLink] = useState('#home');
 
   useEffect(() => {
     const handleScroll = () => {
       setHasScrolled(window.scrollY > 10);
+
+      const sections = navLinks.map(link => document.getElementById(link.href.substring(1))).filter(Boolean);
+      let current = '#home';
+      for (const section of sections) {
+        if (section && section.offsetTop <= window.scrollY + 100) {
+          current = `#${section.id}`;
+        }
+      }
+      setActiveLink(current);
     };
+
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  const getLinkClass = (href: string) => cn(
+    "text-sm font-semibold text-foreground/80 transition-all duration-300 hover:text-primary hover:scale-105 hover:opacity-90",
+    "relative after:content-[''] after:absolute after:left-0 after:bottom-[-4px] after:w-full after:h-[2px] after:bg-primary after:scale-x-0 after:transition-transform after:duration-300 after:origin-center",
+    activeLink === href && "text-primary after:scale-x-100"
+  );
+
 
   return (
     <header className={cn(
@@ -44,7 +62,7 @@ export default function Header() {
         <div className="flex items-center gap-4">
           <nav className="hidden md:flex items-center space-x-6">
             {navLinks.map((link) => (
-              <Link key={link.href} href={link.href} className="text-sm font-semibold text-foreground/80 transition-all duration-300 hover:text-primary hover:scale-105 hover:opacity-90 hover:underline hover:underline-offset-4 decoration-primary">
+              <Link key={link.href} href={link.href} className={getLinkClass(link.href)}>
                 {link.name}
               </Link>
             ))}

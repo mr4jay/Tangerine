@@ -11,31 +11,31 @@ import { motion } from 'framer-motion';
 const blogPosts = [
   {
     title: 'Scaling Data Pipelines with Snowflake: A Deep Dive',
+    slug: 'scaling-data-pipelines-with-snowflake',
     excerpt: 'Explore advanced techniques for building and scaling high-throughput data pipelines using Snowflake’s powerful architecture.',
     imageUrl: 'https://placehold.co/600x400.png',
     aiHint: 'data pipeline illustration',
-    postUrl: '#',
   },
   {
     title: 'Real-Time Analytics with Kafka and AWS Kinesis',
+    slug: 'real-time-analytics-with-kafka-and-aws-kinesis',
     excerpt: 'A comprehensive guide to implementing a real-time analytics engine by integrating Apache Kafka with AWS Kinesis for live data streaming.',
     imageUrl: 'https://placehold.co/600x400.png',
     aiHint: 'real-time data chart',
-    postUrl: '#',
   },
   {
     title: 'The Art of MLOps: Deploying Models at Scale',
+    slug: 'the-art-of-mlops-deploying-models-at-scale',
     excerpt: 'From development to deployment, this post covers the best practices for operationalizing machine learning models.',
     imageUrl: 'https://placehold.co/600x400.png',
     aiHint: 'machine learning deployment',
-    postUrl: '#',
   },
   {
     title: 'Optimizing Data Warehouses for Performance',
+    slug: 'optimizing-data-warehouses-for-performance',
     excerpt: 'Learn how to tune your data warehouse for maximum query performance and cost-efficiency in a cloud environment.',
     imageUrl: 'https://placehold.co/600x400.png',
     aiHint: 'database performance graph',
-    postUrl: '#',
   },
 ];
 
@@ -86,7 +86,7 @@ export default function Blog() {
                 </CardContent>
                 <CardFooter className="flex justify-start pt-4">
                   <Button asChild variant="default" aria-label={`Read more about ${post.title}`}>
-                    <Link href={post.postUrl} className="group">
+                    <Link href={`/blog/${post.slug}`} className="group">
                       Read More
                       <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                     </Link>
