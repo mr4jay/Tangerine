@@ -77,7 +77,7 @@ export default function Projects() {
               <Card className="flex flex-col h-full overflow-hidden bg-card transition-shadow duration-300 ease-in-out hover:shadow-2xl hover:shadow-primary/40">
                 <CardHeader className="p-0">
                   <div className="relative w-full h-48">
-                      <Image src={project.imageUrl} alt={project.title} fill className="object-cover" data-ai-hint={project.aiHint} sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" />
+                      <Image src={project.imageUrl} alt={project.title} fill className="object-cover" data-ai-hint={project.aiHint} sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" loading="lazy" />
                   </div>
                 </CardHeader>
                 <CardContent className="pt-6 flex-grow flex flex-col">
