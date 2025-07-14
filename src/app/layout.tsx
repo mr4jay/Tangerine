@@ -5,7 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 export const metadata: Metadata = {
   title: 'DataCraft Portfolio - Rajure Ajay Kumar',
   description: 'Senior Data Engineer portfolio for Rajure Ajay Kumar, based in Hyderabad. Specializing in building scalable data solutions with AWS, Snowflake, and AI.',
-  keywords: ['data engineer portfolio', 'Hyderabad', 'Senior Data Engineer', 'AWS', 'Snowflake', 'Dataiku DSS', 'Rajure Ajay Kumar', 'Portfolio', 'AI'],
+  keywords: ['data engineer portfolio', 'Hyderabad', 'Senior Data Engineer', 'AWS', 'Snowflake', 'Dataiku DSS', 'Rajure Ajay Kumar', 'Portfolio', 'AI', 'data engineer hyderabad', 'AI solutions', 'data engineering projects', 'AWS pipelines', 'data engineer skills', 'AWS expertise', 'data engineer certifications', 'AWS certified', 'contact data engineer'],
 };
 
 export default function RootLayout({
