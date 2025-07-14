@@ -1,12 +1,12 @@
 "use client";
 
-import { Badge } from '@/components/ui/badge';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Progress } from '@/components/ui/progress';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
 
 const skillCategories = [
   {
@@ -52,18 +52,25 @@ const SkillProgressBar = ({ name, level }: { name: string, level: number }) => {
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    const timer = setTimeout(() => setProgress(level), 300);
+    // Animate progress bar on mount
+    const timer = setTimeout(() => setProgress(level), 100);
     return () => clearTimeout(timer);
   }, [level]);
 
   return (
-    <div className="w-full space-y-2">
+    <motion.div
+      className="w-full space-y-2"
+      initial={{ opacity: 0, x: -20 }}
+      whileInView={{ opacity: 1, x: 0 }}
+      viewport={{ once: true, amount: 0.5 }}
+      transition={{ duration: 0.5 }}
+    >
       <div className="flex justify-between">
         <span className="font-medium text-foreground/90">{name}</span>
         <span className="text-sm text-muted-foreground">{level}%</span>
       </div>
       <Progress value={progress} aria-label={`${name} proficiency`} />
-    </div>
+    </motion.div>
   );
 };
 
@@ -80,27 +87,46 @@ const SkillCategoryContent = ({ category }: { category: { name: string; skills: 
     </Card>
 );
 
+const headerVariants = {
+  hidden: { opacity: 0, y: -20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: 'easeOut' } },
+};
+
 export default function Skills() {
     const isMobile = useIsMobile();
 
     if (isMobile) {
         return (
-            <section id="skills" className="w-full py-12 md:py-24 lg:py-32 bg-background">
+            <section id="skills" className="w-full py-12 md:py-24 lg:py-32 bg-background overflow-hidden">
               <div className="container mx-auto px-4 md:px-6 max-w-4xl">
-                <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12">
+                <motion.div 
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, amount: 0.3 }}
+                    variants={headerVariants}
+                    className="flex flex-col items-center justify-center space-y-4 text-center mb-12"
+                >
                   <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl font-headline">Technical Skills</h2>
                   <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed">
                     My proficiency in various technologies across the data engineering landscape.
                   </p>
-                </div>
+                </motion.div>
                 <Accordion type="single" collapsible className="w-full">
                   {skillCategories.map((category) => (
-                    <AccordionItem value={category.name} key={category.name}>
-                      <AccordionTrigger className="text-xl font-headline text-primary hover:no-underline">{category.name}</AccordionTrigger>
-                      <AccordionContent>
-                        <SkillCategoryContent category={category} />
-                      </AccordionContent>
-                    </AccordionItem>
+                    <motion.div
+                      key={category.name}
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true, amount: 0.3 }}
+                      transition={{ duration: 0.5 }}
+                    >
+                      <AccordionItem value={category.name}>
+                        <AccordionTrigger className="text-xl font-headline text-primary hover:no-underline">{category.name}</AccordionTrigger>
+                        <AccordionContent>
+                          <SkillCategoryContent category={category} />
+                        </AccordionContent>
+                      </AccordionItem>
+                    </motion.div>
                   ))}
                 </Accordion>
               </div>
@@ -109,14 +135,20 @@ export default function Skills() {
     }
     
     return (
-        <section id="skills" className="w-full py-12 md:py-24 lg:py-32 bg-background">
+        <section id="skills" className="w-full py-12 md:py-24 lg:py-32 bg-background overflow-hidden">
           <div className="container mx-auto px-4 md:px-6 max-w-5xl">
-            <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12">
+            <motion.div 
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, amount: 0.3 }}
+                variants={headerVariants}
+                className="flex flex-col items-center justify-center space-y-4 text-center mb-12"
+            >
               <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl font-headline">Technical Skills</h2>
               <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed">
                 My proficiency in various technologies across the data engineering landscape.
               </p>
-            </div>
+            </motion.div>
             <Tabs defaultValue={skillCategories[0].name} className="w-full">
                 <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 h-auto">
                     {skillCategories.map((category) => (

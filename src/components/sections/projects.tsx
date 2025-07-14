@@ -54,20 +54,31 @@ const cardVariants = {
   }),
 };
 
+const headerVariants = {
+  hidden: { opacity: 0, y: -20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: 'easeOut' } },
+};
+
 export default function Projects() {
   const handleProjectClick = (projectName: string) => {
     trackEvent('click', 'Projects', `View Project - ${projectName}`);
   };
 
   return (
-    <section id="projects" className="w-full py-12 md:py-24 lg:py-32 bg-secondary/20">
+    <section id="projects" className="w-full py-12 md:py-24 lg:py-32 bg-secondary/20 overflow-hidden">
       <div className="container mx-auto px-4 md:px-6 max-w-7xl">
-        <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12">
+        <motion.div 
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.3 }}
+          variants={headerVariants}
+          className="flex flex-col items-center justify-center space-y-4 text-center mb-12"
+        >
           <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl font-headline">Featured Projects</h2>
           <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
             A selection of my work in data engineering, showcasing my skills in building scalable and efficient data systems.
           </p>
-        </div>
+        </motion.div>
         
         <ProjectTimeline />
 
@@ -80,7 +91,7 @@ export default function Projects() {
               whileInView="visible"
               viewport={{ once: true, amount: 0.3 }}
               variants={cardVariants}
-              whileHover={{ y: -5, transition: { duration: 0.3, ease: 'easeOut' } }}
+              whileHover={{ y: -5, scale: 1.05, boxShadow: "0 10px 20px -5px hsl(var(--primary) / 0.4)", transition: { duration: 0.3, ease: 'easeOut' } }}
               className="h-full"
             >
               <Card className="flex flex-col h-full overflow-hidden bg-card transition-shadow duration-300 ease-in-out hover:shadow-2xl hover:shadow-primary/40">

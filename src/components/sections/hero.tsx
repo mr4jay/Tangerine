@@ -16,6 +16,11 @@ const techLogos = [
   { name: 'Dataiku', component: DataikuLogo },
 ];
 
+const fadeIn = (delay: number) => ({
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.5, delay } },
+});
+
 export default function Hero() {
   const targetRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
@@ -32,8 +37,15 @@ export default function Hero() {
         style={{ y }}
       />
       <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 z-10">
-        <div className="flex flex-col items-center justify-center text-center">
-            <div className="relative mb-6">
+        <motion.div 
+            initial="hidden"
+            animate="visible"
+            variants={{
+                visible: { transition: { staggerChildren: 0.2 } },
+            }}
+            className="flex flex-col items-center justify-center text-center"
+        >
+            <motion.div variants={fadeIn(0)} className="relative mb-6">
                 <Image
                     src="https://placehold.co/150x150.png"
                     alt="Rajure Ajay Kumar Headshot"
@@ -43,23 +55,25 @@ export default function Hero() {
                     data-ai-hint="professional portrait"
                     priority
                 />
-            </div>
-            <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-[#F7FAFC]">
+            </motion.div>
+            <motion.h1 variants={fadeIn(0.2)} className="text-4xl md:text-5xl font-bold tracking-tight text-[#F7FAFC]">
               Senior Data Engineer
-            </h1>
-            <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-primary mb-4">
+            </motion.h1>
+            <motion.h2 variants={fadeIn(0.3)} className="text-3xl md:text-4xl font-bold tracking-tight text-primary mb-4">
               Building Scalable Data Solutions
-            </h2>
-            <p className="max-w-3xl mx-auto text-lg md:text-xl text-[#E2E8F0] mb-8">
+            </motion.h2>
+            <motion.p variants={fadeIn(0.4)} className="max-w-3xl mx-auto text-lg md:text-xl text-[#E2E8F0] mb-8">
               6+ years driving impact with AWS, Snowflake, and AI
-            </p>
-            <Button asChild size="lg" className="group bg-primary hover:bg-primary/90 text-primary-foreground transition-all duration-300 ease-in-out">
-              <Link href="#projects" aria-label="Explore My Work">
-                Explore My Work
-                <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
-              </Link>
-            </Button>
-        </div>
+            </motion.p>
+            <motion.div variants={fadeIn(0.5)}>
+              <Button asChild size="lg" className="group bg-primary hover:bg-primary/90 text-primary-foreground transition-all duration-300 ease-in-out">
+                <Link href="#projects" aria-label="Explore My Work">
+                  Explore My Work
+                  <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
+                </Link>
+              </Button>
+            </motion.div>
+        </motion.div>
       </div>
       <div className="absolute bottom-0 left-0 w-full h-40 overflow-hidden bg-transparent">
         <div className="w-[200%] h-full flex items-center">

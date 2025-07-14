@@ -52,16 +52,27 @@ const cardVariants = {
   }),
 };
 
+const headerVariants = {
+  hidden: { opacity: 0, y: -20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: 'easeOut' } },
+};
+
 export default function Blog() {
   return (
-    <section id="blog" className="w-full py-12 md:py-24 lg:py-32 bg-background">
+    <section id="blog" className="w-full py-12 md:py-24 lg:py-32 bg-background overflow-hidden">
       <div className="container mx-auto px-4 md:px-6 max-w-7xl">
-        <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12">
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.3 }}
+          variants={headerVariants}
+          className="flex flex-col items-center justify-center space-y-4 text-center mb-12"
+        >
           <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl font-headline">From the Blog</h2>
           <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
             Sharing insights and experiences from the world of data engineering and AI.
           </p>
-        </div>
+        </motion.div>
         <div className="grid gap-8 md:grid-cols-2">
           {blogPosts.map((post, index) => (
             <motion.div
