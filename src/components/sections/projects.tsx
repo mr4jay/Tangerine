@@ -1,3 +1,4 @@
+
 "use client";
 
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -70,8 +71,10 @@ export default function Projects() {
               whileInView="visible"
               viewport={{ once: true, amount: 0.3 }}
               variants={cardVariants}
+              whileHover={{ y: -5, transition: { duration: 0.3, ease: 'easeOut' } }}
+              className="h-full"
             >
-              <Card className="flex flex-col h-full overflow-hidden transform transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-2xl hover:shadow-primary/20 bg-card">
+              <Card className="flex flex-col h-full overflow-hidden bg-card transition-shadow duration-300 ease-in-out hover:shadow-2xl hover:shadow-primary/40">
                 <CardHeader className="p-0">
                   <div className="relative w-full h-48">
                       <Image src={project.imageUrl} alt={project.title} fill className="object-cover" data-ai-hint={project.aiHint} sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" />

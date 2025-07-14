@@ -1,8 +1,13 @@
+
+"use client";
+
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import { AwsLogo, SnowflakeLogo, PythonLogo, DataikuLogo } from './tech-logos';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import { useRef } from 'react';
 
 const techLogos = [
   { name: 'AWS', component: AwsLogo },
@@ -12,8 +17,20 @@ const techLogos = [
 ];
 
 export default function Hero() {
+  const targetRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: targetRef,
+    offset: ["start start", "end start"],
+  });
+
+  const y = useTransform(scrollYProgress, [0, 1], ["0%", "10%"]);
+
   return (
-    <section id="home" className="relative w-full h-screen min-h-[700px] flex flex-col items-center justify-center bg-gradient-hero animate-fade-in">
+    <section ref={targetRef} id="home" className="relative w-full h-screen min-h-[700px] flex flex-col items-center justify-center overflow-hidden">
+      <motion.div
+        className="absolute inset-0 w-full h-full bg-gradient-hero"
+        style={{ y }}
+      />
       <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 z-10">
         <div className="flex flex-col items-center justify-center text-center">
             <div className="relative mb-6">

@@ -1,10 +1,15 @@
+
+"use client";
+
 import { Card, CardContent, CardFooter, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import Image from 'next/image';
 import { ExternalLink } from 'lucide-react';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { AwsLogo, AzureLogo, GcpLogo, DataikuLogo, DatabricksLogo } from './tech-logos';
+import { AnimatePresence, motion } from 'framer-motion';
+import { useState } from 'react';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 
 const certifications = [
@@ -66,7 +71,71 @@ const certifications = [
   }
 ];
 
+const CertificationCard = ({ cert, onClick }: { cert: typeof certifications[0], onClick: () => void }) => (
+  <motion.div
+    layoutId={`card-container-${cert.name}`}
+    whileHover={{ scale: 1.05, transition: { duration: 0.3 } }}
+    className="p-1 cursor-pointer"
+    onClick={onClick}
+    aria-label={`View details for ${cert.name}`}
+  >
+    <Card className="flex flex-col h-full overflow-hidden bg-card shadow-sm hover:shadow-2xl hover:shadow-primary/20 transition-shadow duration-300">
+      <CardContent className="p-6 flex-grow flex flex-col items-center text-center">
+        <motion.div layoutId={`card-logo-${cert.name}`} className="mb-4">
+          <cert.logo className="h-16 w-16 text-primary" />
+        </motion.div>
+        <CardTitle className="font-headline text-xl text-foreground mb-2">{cert.name}</CardTitle>
+        <p className="text-base text-muted-foreground">{cert.issuer}</p>
+        <p className="text-sm text-muted-foreground/80 mb-4">{cert.date}</p>
+      </CardContent>
+    </Card>
+  </motion.div>
+);
+
+const ExpandedCard = ({ cert, onClick }: { cert: typeof certifications[0], onClick: () => void }) => {
+  const isMobile = useIsMobile();
+  const scale = isMobile ? 1.1 : 1.2;
+
+  return (
+    <motion.div
+      className="fixed inset-0 z-50 flex items-center justify-center"
+      onClick={onClick}
+    >
+      <motion.div className="absolute inset-0 bg-black/80" onClick={onClick}></motion.div>
+      <motion.div
+        layoutId={`card-container-${cert.name}`}
+        initial={{ scale: 0.8, opacity: 0 }}
+        animate={{ scale, opacity: 1, transition: { duration: 0.4, ease: [0.16, 1, 0.3, 1] } }}
+        exit={{ scale: 0.8, opacity: 0, transition: { duration: 0.3 } }}
+        className="relative z-10 w-11/12 max-w-md"
+      >
+        <Card className="flex flex-col h-full overflow-hidden bg-card shadow-2xl shadow-primary/30">
+          <CardContent className="p-8 flex-grow flex flex-col items-center text-center">
+            <motion.div layoutId={`card-logo-${cert.name}`} className="mb-6">
+              <cert.logo className="h-24 w-24 text-primary" />
+            </motion.div>
+            <CardTitle className="font-headline text-2xl text-foreground mb-2">{cert.name}</CardTitle>
+            <p className="text-lg text-muted-foreground">{cert.issuer}</p>
+            <p className="text-base text-muted-foreground/80 mb-6">{cert.date}</p>
+          </CardContent>
+          <CardFooter className="flex justify-center p-6 bg-card-darker">
+            <Button asChild className="w-full" size="lg">
+              <Link href={cert.verifyUrl} target="_blank" rel="noopener noreferrer" aria-label={`Verify ${cert.name} credential`}>
+                <ExternalLink className="mr-2 h-4 w-4" />
+                Verify Credential
+              </Link>
+            </Button>
+          </CardFooter>
+        </Card>
+      </motion.div>
+    </motion.div>
+  );
+};
+
 export default function Certifications() {
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const selectedCert = selectedId ? certifications.find(c => c.name === selectedId) : null;
+
   return (
     <section id="certifications" className="w-full py-12 md:py-24 lg:py-32">
       <div className="container mx-auto px-4 md:px-6 max-w-7xl">
@@ -86,26 +155,7 @@ export default function Certifications() {
           <CarouselContent>
             {certifications.map((cert, index) => (
               <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
-                <div className="p-1">
-                   <Card className="flex flex-col h-full overflow-hidden transform transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-2xl hover:shadow-primary/20 bg-card">
-                    <CardContent className="p-6 flex-grow flex flex-col items-center text-center">
-                        <div className="mb-4">
-                            <cert.logo className="h-16 w-16 text-primary" />
-                        </div>
-                        <CardTitle className="font-headline text-xl text-foreground mb-2">{cert.name}</CardTitle>
-                        <p className="text-base text-muted-foreground">{cert.issuer}</p>
-                        <p className="text-sm text-muted-foreground/80 mb-4">{cert.date}</p>
-                    </CardContent>
-                    <CardFooter className="flex justify-center pt-0">
-                         <Button asChild className="w-full">
-                            <Link href={cert.verifyUrl} target="_blank" rel="noopener noreferrer" aria-label={`Verify ${cert.name} credential`}>
-                                <ExternalLink className="mr-2 h-4 w-4" />
-                                Verify Credential
-                            </Link>
-                        </Button>
-                    </CardFooter>
-                   </Card>
-                </div>
+                <CertificationCard cert={cert} onClick={() => setSelectedId(cert.name)} />
               </CarouselItem>
             ))}
           </CarouselContent>
@@ -113,6 +163,11 @@ export default function Certifications() {
           <CarouselNext className="mr-12" />
         </Carousel>
       </div>
+      <AnimatePresence>
+        {selectedCert && (
+          <ExpandedCard cert={selectedCert} onClick={() => setSelectedId(null)} />
+        )}
+      </AnimatePresence>
     </section>
   );
 }
