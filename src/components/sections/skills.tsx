@@ -1,44 +1,137 @@
+"use client";
+
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Progress } from '@/components/ui/progress';
+import { useIsMobile } from '@/hooks/use-mobile';
+import { useEffect, useState } from 'react';
 
-const skills = {
-  'Cloud & DevOps': ['AWS (EC2, S3, Kinesis, Lambda, Glue)', 'Docker', 'Kubernetes', 'Terraform', 'CI/CD'],
-  'Data Warehousing': ['Snowflake', 'Amazon Redshift', 'BigQuery', 'Data Modeling', 'ETL/ELT'],
-  'Data Processing': ['Apache Spark', 'Dataiku DSS', 'dbt', 'Airflow', 'Kafka'],
-  'Programming Languages': ['Python', 'SQL', 'Scala', 'Java'],
-  'Databases': ['PostgreSQL', 'MySQL', 'MongoDB', 'DynamoDB'],
-  'BI & Visualization': ['Tableau', 'Power BI', 'Looker', 'Metabase'],
+const skillCategories = [
+  {
+    name: 'Programming',
+    skills: [
+      { name: 'Python', level: 90 },
+      { name: 'SQL', level: 95 },
+      { name: 'PySpark', level: 85 },
+      { name: 'Scala', level: 75 },
+      { name: 'Java', level: 70 },
+    ],
+  },
+  {
+    name: 'Cloud & DevOps',
+    skills: [
+      { name: 'AWS', level: 90 },
+      { name: 'Azure', level: 70 },
+      { name: 'GCP', level: 65 },
+      { name: 'Docker', level: 85 },
+      { name: 'Kubernetes', level: 80 },
+      { name: 'Jenkins', level: 75 },
+    ],
+  },
+  {
+    name: 'Data Tools',
+    skills: [
+      { name: 'Dataiku DSS', level: 90 },
+      { name: 'Snowflake', level: 95 },
+      { name: 'Airflow', level: 85 },
+      { name: 'Apache Spark', level: 88 },
+    ],
+  },
+  {
+    name: 'Marketing Platforms',
+    skills: [
+      { name: 'Salesforce Datorama', level: 80 },
+      { name: 'Google Ads', level: 75 },
+    ],
+  },
+];
+
+const SkillProgressBar = ({ name, level }: { name: string, level: number }) => {
+  const [progress, setProgress] = useState(0);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setProgress(level), 300);
+    return () => clearTimeout(timer);
+  }, [level]);
+
+  return (
+    <div className="w-full space-y-2">
+      <div className="flex justify-between">
+        <span className="font-medium text-foreground/90">{name}</span>
+        <span className="text-sm text-muted-foreground">{level}%</span>
+      </div>
+      <Progress value={progress} aria-label={`${name} proficiency`} />
+    </div>
+  );
 };
 
+
+const SkillCategoryContent = ({ category }: { category: { name: string; skills: { name: string; level: number }[] } }) => (
+    <Card className="bg-card border-border/60">
+        <CardContent className="pt-6">
+            <div className="space-y-6">
+                {category.skills.map((skill) => (
+                    <SkillProgressBar key={skill.name} name={skill.name} level={skill.level} />
+                ))}
+            </div>
+        </CardContent>
+    </Card>
+);
+
 export default function Skills() {
-  return (
-    <section id="skills" className="w-full py-12 md:py-24 lg:py-32 bg-secondary/20">
-      <div className="container mx-auto px-4 md:px-6 max-w-7xl">
-        <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12">
-          <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl font-headline">Technical Skills</h2>
-          <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-            My proficiency in various technologies across the data engineering landscape.
-          </p>
-        </div>
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {Object.entries(skills).map(([category, list]) => (
-            <Card key={category}>
-              <CardHeader>
-                <CardTitle className="font-headline text-xl text-primary">{category}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="flex flex-wrap gap-2">
-                  {list.map((skill) => (
-                    <Badge key={skill} variant="default" className="text-sm font-medium bg-primary/80 hover:bg-primary">
-                      {skill}
-                    </Badge>
-                  ))}
+    const isMobile = useIsMobile();
+
+    if (isMobile) {
+        return (
+            <section id="skills" className="w-full py-12 md:py-24 lg:py-32 bg-background">
+              <div className="container mx-auto px-4 md:px-6 max-w-4xl">
+                <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12">
+                  <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl font-headline">Technical Skills</h2>
+                  <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed">
+                    My proficiency in various technologies across the data engineering landscape.
+                  </p>
                 </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
+                <Accordion type="single" collapsible className="w-full">
+                  {skillCategories.map((category) => (
+                    <AccordionItem value={category.name} key={category.name}>
+                      <AccordionTrigger className="text-xl font-headline text-primary hover:no-underline">{category.name}</AccordionTrigger>
+                      <AccordionContent>
+                        <SkillCategoryContent category={category} />
+                      </AccordionContent>
+                    </AccordionItem>
+                  ))}
+                </Accordion>
+              </div>
+            </section>
+        );
+    }
+    
+    return (
+        <section id="skills" className="w-full py-12 md:py-24 lg:py-32 bg-background">
+          <div className="container mx-auto px-4 md:px-6 max-w-5xl">
+            <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12">
+              <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl font-headline">Technical Skills</h2>
+              <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed">
+                My proficiency in various technologies across the data engineering landscape.
+              </p>
+            </div>
+            <Tabs defaultValue={skillCategories[0].name} className="w-full">
+                <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 h-auto">
+                    {skillCategories.map((category) => (
+                        <TabsTrigger key={category.name} value={category.name} className="text-base py-2.5">
+                            {category.name}
+                        </TabsTrigger>
+                    ))}
+                </TabsList>
+                {skillCategories.map((category) => (
+                    <TabsContent key={category.name} value={category.name}>
+                        <SkillCategoryContent category={category} />
+                    </TabsContent>
+                ))}
+            </Tabs>
+          </div>
+        </section>
+      );
 }
