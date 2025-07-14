@@ -14,16 +14,29 @@ const Analytics = () => {
   const searchParams = useSearchParams();
 
   useEffect(() => {
-    const consentValue = localStorage.getItem(COOKIE_CONSENT_KEY) === 'true';
-    setConsent(consentValue);
+    const checkConsent = () => {
+        const consentValue = localStorage.getItem(COOKIE_CONSENT_KEY) === 'true';
+        setConsent(consentValue);
+    };
+    
+    checkConsent();
+
+    // Listen for storage changes to update consent in real-time
+    window.addEventListener('storage', checkConsent);
+
+    return () => {
+        window.removeEventListener('storage', checkConsent);
+    };
   }, []);
 
   useEffect(() => {
     if (consent && pathname) {
       const url = pathname + (searchParams ? searchParams.toString() : '');
-      window.gtag('config', GA_TRACKING_ID, {
-        page_path: url,
-      });
+      if (typeof window.gtag === 'function') {
+        window.gtag('config', GA_TRACKING_ID, {
+          page_path: url,
+        });
+      }
     }
   }, [pathname, searchParams, consent]);
 
@@ -55,9 +68,12 @@ const Analytics = () => {
                 page_path: window.location.pathname,
             });
 
-            gtag('consent', 'update', {
-                'analytics_storage': 'granted'
-            });
+            const consentGiven = localStorage.getItem('${COOKIE_CONSENT_KEY}') === 'true';
+            if (consentGiven) {
+              gtag('consent', 'update', {
+                  'analytics_storage': 'granted'
+              });
+            }
           `,
         }}
       />
@@ -66,7 +82,7 @@ const Analytics = () => {
 };
 
 export const trackEvent = (action: string, category: string, label: string, value?: number) => {
-    if (typeof window.gtag !== 'function') {
+    if (typeof window.gtag !== 'function' || localStorage.getItem(COOKIE_CONSENT_KEY) !== 'true') {
         return;
     }
     window.gtag('event', action, {

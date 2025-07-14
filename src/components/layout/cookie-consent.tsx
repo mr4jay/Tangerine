@@ -13,22 +13,23 @@ export default function CookieConsent() {
   const [showConsent, setShowConsent] = useState(false);
 
   useEffect(() => {
+    // Check for consent on the client side only
     const consent = localStorage.getItem(COOKIE_CONSENT_KEY);
-    if (consent !== 'true') {
+    if (consent === null) { // Only show if consent has not been given
       setShowConsent(true);
     }
   }, []);
 
-  const acceptConsent = () => {
-    localStorage.setItem(COOKIE_CONSENT_KEY, 'true');
+  const handleConsent = (accepted: boolean) => {
+    localStorage.setItem(COOKIE_CONSENT_KEY, String(accepted));
     setShowConsent(false);
-    // You might want to reload or trigger analytics initialization here
-    window.location.reload(); 
-  };
-  
-  const declineConsent = () => {
-    localStorage.setItem(COOKIE_CONSENT_KEY, 'false');
-    setShowConsent(false);
+    if (accepted && typeof window.gtag === 'function') {
+      // If gtag is already loaded (e.g., from a previous session), update consent
+      window.gtag('consent', 'update', {
+        'analytics_storage': 'granted'
+      });
+    }
+    // No reload needed, Analytics component will react to changes or on next page view.
   };
 
   return (
@@ -53,8 +54,8 @@ export default function CookieConsent() {
               </p>
             </div>
             <div className="flex gap-2 self-start sm:self-center flex-shrink-0">
-              <Button onClick={acceptConsent} size="sm">Accept</Button>
-              <Button onClick={declineConsent} variant="outline" size="sm">Decline</Button>
+              <Button onClick={() => handleConsent(true)} size="sm">Accept</Button>
+              <Button onClick={() => handleConsent(false)} variant="outline" size="sm">Decline</Button>
             </div>
           </div>
         </motion.div>
