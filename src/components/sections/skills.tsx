@@ -8,7 +8,7 @@ import { useIsMobile } from '@/hooks/use-mobile';
 import { motion } from 'framer-motion';
 import { RadialProgress } from './radial-progress';
 
-const skillCategories = [
+export const skillCategories = [
   {
     name: 'Programming',
     skills: [

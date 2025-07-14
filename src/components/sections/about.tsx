@@ -4,7 +4,7 @@
 import { Button } from '@/components/ui/button';
 import { Download, Briefcase } from 'lucide-react';
 import Link from 'next/link';
-import { DataFlowAnimation } from './data-flow-animation';
+import { SkillsChart } from './skills-chart';
 import { trackEvent } from '@/components/analytics';
 import { motion } from 'framer-motion';
 import { staggerContainer, fadeIn } from '@/lib/motion';
@@ -73,7 +73,7 @@ export default function About() {
            </motion.div>
         </div>
          <motion.div variants={fadeIn('left', 'tween', 0.2, 0.6)} className="flex items-center justify-center p-4">
-          <DataFlowAnimation />
+          <SkillsChart />
         </motion.div>
       </motion.div>
     </section>

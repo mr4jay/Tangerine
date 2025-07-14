@@ -3,7 +3,7 @@
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { Github, Linkedin, Mail, Bot, User, Send } from 'lucide-react';
+import { Github, Linkedin, Mail, Bot, User, Send, Loader2, Volume2 } from 'lucide-react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { useState, useRef, useEffect } from 'react';
@@ -12,6 +12,7 @@ import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { askAssistant } from '@/ai/flows/portfolio-assistant';
+import { textToSpeech } from '@/ai/flows/tts-flow';
 import { cn } from '@/lib/utils';
 
 
@@ -40,8 +41,11 @@ const socialLinks = [
 ]
 
 type Message = {
+    id: number;
     role: 'user' | 'assistant';
     content: string;
+    audioUrl?: string;
+    isAudioLoading?: boolean;
 };
 
 const AIChatAssistant = () => {
@@ -57,21 +61,51 @@ const AIChatAssistant = () => {
         }
     }, [messages]);
 
+    const handleNewAudio = async (text: string, messageId: number) => {
+        try {
+            const result = await textToSpeech({ text });
+            setMessages((prev) =>
+                prev.map((m) =>
+                    m.id === messageId
+                        ? { ...m, audioUrl: result.audio, isAudioLoading: false }
+                        : m
+                )
+            );
+        } catch (error) {
+            console.error("Error generating audio:", error);
+            setMessages((prev) =>
+                prev.map((m) =>
+                    m.id === messageId ? { ...m, isAudioLoading: false } : m
+                )
+            );
+        }
+    }
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!input.trim() || isLoading) return;
 
-        const userMessage: Message = { role: 'user', content: input };
+        const userMessage: Message = { id: Date.now(), role: 'user', content: input };
         setMessages((prev) => [...prev, userMessage]);
         setInput('');
         setIsLoading(true);
 
         try {
             const result = await askAssistant({ question: input });
-            const assistantMessage: Message = { role: 'assistant', content: result.answer };
+            const assistantMessageId = Date.now() + 1;
+            const assistantMessage: Message = { 
+                id: assistantMessageId, 
+                role: 'assistant', 
+                content: result.answer,
+                isAudioLoading: true
+            };
             setMessages((prev) => [...prev, assistantMessage]);
+            
+            // Fire and forget audio generation
+            handleNewAudio(result.answer, assistantMessageId);
+
         } catch (error) {
-            const errorMessage: Message = { role: 'assistant', content: "Sorry, I'm having trouble connecting. Please try again later." };
+            const errorMessage: Message = { id: Date.now() + 1, role: 'assistant', content: "Sorry, I'm having trouble connecting. Please try again later." };
             setMessages((prev) => [...prev, errorMessage]);
         } finally {
             setIsLoading(false);
@@ -101,6 +135,14 @@ const AIChatAssistant = () => {
                                 )}
                                 <div className={cn("rounded-lg p-3 max-w-sm text-sm", message.role === 'user' ? 'bg-primary text-primary-foreground' : 'bg-secondary')}>
                                     <p>{message.content}</p>
+                                    {message.role === 'assistant' && (
+                                        <div className="mt-2">
+                                            {message.isAudioLoading && <div className="flex items-center gap-2 text-xs text-muted-foreground"><Loader2 className="h-4 w-4 animate-spin" /> Generating audio...</div>}
+                                            {message.audioUrl && (
+                                                <audio controls src={message.audioUrl} className="w-full h-8" />
+                                            )}
+                                        </div>
+                                    )}
                                 </div>
                                  {message.role === 'user' && (
                                     <Avatar className="h-8 w-8">
