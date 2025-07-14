@@ -15,6 +15,7 @@ const navLinks = [
   { name: 'Blog', href: '#blog' },
   { name: 'Skills', href: '#skills' },
   { name: 'Certifications', href: '#certifications' },
+  { name: 'Testimonials', href: '#testimonials' },
   { name: 'Contact', href: '#contact' },
 ];
 

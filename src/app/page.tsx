@@ -10,6 +10,7 @@ import Projects from '@/components/sections/projects';
 import Blog from '@/components/sections/blog';
 import Skills from '@/components/sections/skills';
 import Certifications from '@/components/sections/certifications';
+import Testimonials from '@/components/sections/testimonials';
 import Contact from '@/components/sections/contact';
 import Footer from '@/components/layout/footer';
 import BackToTopButton from '@/components/layout/back-to-top-button';
@@ -49,6 +50,7 @@ export default function Home() {
             <Blog />
             <Skills />
             <Certifications />
+            <Testimonials />
             <Contact />
           </main>
           <Footer />
