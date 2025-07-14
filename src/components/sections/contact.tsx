@@ -199,12 +199,14 @@ const AIChatAssistant = () => {
         if (!input.trim() || isLoading) return;
 
         const userMessage: Message = { id: Date.now(), role: 'user', content: input };
-        setMessages((prev) => [...prev, userMessage]);
+        const newMessages = [...messages, userMessage];
+        setMessages(newMessages);
         setInput('');
         setIsLoading(true);
 
         try {
-            const result = await askAssistant({ question: input });
+            const conversationHistory = newMessages.slice(0, -1).map(({ id, audioUrl, isAudioLoading, ...rest }) => rest);
+            const result = await askAssistant({ question: input, history: conversationHistory });
             const assistantMessageId = Date.now() + 1;
             const assistantMessage: Message = { 
                 id: assistantMessageId, 

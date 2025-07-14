@@ -99,9 +99,14 @@ const calculateSuitabilityScore = ai.defineTool(
     }
 );
 
+const MessageSchema = z.object({
+    role: z.enum(['user', 'assistant']),
+    content: z.string(),
+});
 
 const AskAssistantInputSchema = z.object({
-  question: z.string().describe('The question to ask the AI assistant.'),
+  question: z.string().describe('The current question to ask the AI assistant.'),
+  history: z.array(MessageSchema).optional().describe('The history of the conversation so far.'),
 });
 type AskAssistantInput = z.infer<typeof AskAssistantInputSchema>;
 
@@ -125,6 +130,8 @@ You must answer questions based *only* on the context provided below. If the ans
 
 If the user asks about suitability for a job role or provides a list of required skills, you MUST use the 'calculateSuitabilityScore' tool to provide a quantitative assessment. Incorporate the tool's output (score, matches, misses) into your final answer in a conversational way.
 
+Use the conversation history to understand context and provide more relevant, follow-up answers.
+
 Keep your answers short and to the point.
 
 CONTEXT:
@@ -132,7 +139,19 @@ CONTEXT:
 ${portfolioContext}
 ---
 
-QUESTION:
+{{#if history}}
+CONVERSATION HISTORY:
+{{#each history}}
+  {{#ifEquals role 'user'}}
+    User: {{{content}}}
+  {{/ifEquals}}
+  {{#ifEquals role 'assistant'}}
+    Assistant: {{{content}}}
+  {{/ifEquals}}
+{{/each}}
+{{/if}}
+
+CURRENT QUESTION:
 {{{question}}}
 `,
 });
