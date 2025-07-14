@@ -2,33 +2,64 @@ import { Code, Github, Linkedin, Mail } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 
+const navLinks = [
+  { name: 'Home', href: '#home' },
+  { name: 'About', href: '#about' },
+  { name: 'Projects', href: '#projects' },
+  { name: 'Skills', href: '#skills' },
+  { name: 'Certifications', href: '#certifications' },
+  { name: 'Contact', href: '#contact' },
+];
+
 export default function Footer() {
   return (
-    <footer className="w-full py-8 border-t border-border/40 bg-card">
-      <div className="container mx-auto flex flex-col md:flex-row items-center justify-between gap-6 px-4 md:px-6 max-w-7xl">
-        <div className="flex items-center gap-2">
-            <Code className="h-6 w-6 text-primary" />
-            <span className="text-lg font-bold">DataCraft Portfolio</span>
+    <footer className="w-full py-12 border-t border-border/40 bg-background">
+      <div className="container mx-auto px-4 md:px-6 max-w-7xl">
+        <div className="grid gap-8 lg:grid-cols-3 text-center lg:text-left">
+          <div className="flex flex-col items-center lg:items-start gap-4">
+            <Link href="#home" className="flex items-center gap-2">
+              <Code className="h-6 w-6 text-primary" />
+              <span className="text-lg font-bold">DataCraft Portfolio</span>
+            </Link>
+             <p className="text-sm text-muted-foreground max-w-xs text-center lg:text-left">
+                A showcase of my journey in data engineering, from complex pipelines to AI-driven insights.
+            </p>
+          </div>
+
+          <div className="flex flex-col items-center gap-4">
+            <h3 className="font-semibold text-foreground tracking-wider uppercase">Links</h3>
+            <nav className="flex flex-col gap-2">
+              {navLinks.map((link) => (
+                <Link key={link.href} href={link.href} className="text-muted-foreground hover:text-primary transition-colors">
+                  {link.name}
+                </Link>
+              ))}
+            </nav>
+          </div>
+          
+          <div className="flex flex-col items-center lg:items-end gap-4">
+             <h3 className="font-semibold text-foreground tracking-wider uppercase">Connect</h3>
+             <div className="flex items-center gap-2">
+                <Button asChild variant="ghost" size="icon" className="text-primary hover:text-primary/90 hover:bg-primary/10">
+                    <Link href="mailto:rajure.ajay.kumar@email.com" aria-label="Email">
+                        <Mail className="h-6 w-6" />
+                    </Link>
+                </Button>
+                <Button asChild variant="ghost" size="icon" className="text-primary hover:text-primary/90 hover:bg-primary/10">
+                    <Link href="https://linkedin.com/in/your-profile" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+                        <Linkedin className="h-6 w-6" />
+                    </Link>
+                </Button>
+                 <Button asChild variant="ghost" size="icon" className="text-primary hover:text-primary/90 hover:bg-primary/10">
+                    <Link href="https://github.com/your-profile" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+                        <Github className="h-6 w-6" />
+                    </Link>
+                </Button>
+            </div>
+          </div>
         </div>
-        <p className="text-sm text-muted-foreground">
+        <div className="mt-12 pt-8 border-t border-border/40 text-center text-sm text-muted-foreground">
           &copy; {new Date().getFullYear()} Rajure Ajay Kumar. All rights reserved.
-        </p>
-        <div className="flex items-center gap-2">
-            <Button asChild variant="ghost" size="icon">
-                <Link href="mailto:rajure.ajay.kumar@email.com" aria-label="Email">
-                    <Mail className="h-5 w-5" />
-                </Link>
-            </Button>
-            <Button asChild variant="ghost" size="icon">
-                <Link href="https://linkedin.com/in/your-profile" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
-                    <Linkedin className="h-5 w-5" />
-                </Link>
-            </Button>
-             <Button asChild variant="ghost" size="icon">
-                <Link href="https://github.com/your-profile" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
-                    <Github className="h-5 w-5" />
-                </Link>
-            </Button>
         </div>
       </div>
     </footer>

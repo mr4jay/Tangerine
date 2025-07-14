@@ -6,6 +6,7 @@ import Skills from '@/components/sections/skills';
 import Certifications from '@/components/sections/certifications';
 import Contact from '@/components/sections/contact';
 import Footer from '@/components/layout/footer';
+import BackToTopButton from '@/components/layout/back-to-top-button';
 
 export default function Home() {
   return (
@@ -20,6 +21,7 @@ export default function Home() {
         <Contact />
       </main>
       <Footer />
+      <BackToTopButton />
     </div>
   );
 }
