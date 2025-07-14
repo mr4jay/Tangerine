@@ -2,6 +2,7 @@ import { Button } from '@/components/ui/button';
 import { Download, Briefcase } from 'lucide-react';
 import Link from 'next/link';
 import { DataFlowAnimation } from './data-flow-animation';
+import { trackEvent } from '@/components/analytics';
 
 const careerTimeline = [
   {
@@ -17,6 +18,10 @@ const careerTimeline = [
 ];
 
 export default function About() {
+  const handleResumeDownload = () => {
+    trackEvent('click', 'About', 'Download Resume');
+  };
+
   return (
     <section id="about" className="w-full py-12 md:py-24 lg:py-32 bg-background">
       <div className="container mx-auto grid items-center gap-12 px-4 md:px-6 lg:grid-cols-2 lg:gap-24 max-w-7xl">
@@ -47,7 +52,7 @@ export default function About() {
                   ))}
               </div>
           </div>
-           <Button asChild size="lg" className="group">
+           <Button asChild size="lg" className="group" onClick={handleResumeDownload}>
               <Link href="/resume.pdf" target="_blank" aria-label="Download my resume">
                 Download Resume
                 <Download className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />

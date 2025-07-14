@@ -3,6 +3,9 @@ import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from '@/components/theme-provider';
 import { Inter } from 'next/font/google';
+import Analytics from '@/components/analytics';
+import CookieConsent from '@/components/layout/cookie-consent';
+
 
 const inter = Inter({
   subsets: ['latin'],
@@ -15,7 +18,7 @@ const professionalHeadshotUrl = "https://placehold.co/1200x630.png";
 export const metadata: Metadata = {
   title: 'Rajure Ajay Kumar | Senior Data Engineer Portfolio',
   description: '6+ years as a Senior Data Engineer delivering $5M+ in savings and revenue growth with AWS, Snowflake, and Dataiku DSS. Explore my projects and skills.',
-  keywords: ['data engineer portfolio', 'Rajure Ajay Kumar', 'Senior Data Engineer', 'Hyderabad', 'AWS', 'Snowflake', 'Dataiku DSS', 'Python', 'MLOps', 'AWS certified', 'Snowflake expert', 'data engineering projects', 'data engineer hyderabad', 'data engineering blog'],
+  keywords: ['data engineer portfolio', 'Rajure Ajay Kumar', 'Senior Data Engineer', 'Hyderabad', 'AWS', 'Snowflake', 'Dataiku DSS', 'Python', 'MLOps', 'AWS certified', 'Snowflake expert', 'data engineering projects', 'data engineer hyderabad', 'data engineering blog', 'fast data engineer portfolio', 'accessible data engineer portfolio', 'interactive data engineer portfolio'],
   authors: [{ name: 'Rajure Ajay Kumar' }],
   openGraph: {
     title: 'Rajure Ajay Kumar | Senior Data Engineer Portfolio',
@@ -97,6 +100,8 @@ export default function RootLayout({
         >
           {children}
           <Toaster />
+          <CookieConsent />
+          <Analytics />
         </ThemeProvider>
       </body>
     </html>

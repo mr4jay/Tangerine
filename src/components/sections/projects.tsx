@@ -8,6 +8,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Github, ExternalLink } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { trackEvent } from '@/components/analytics';
 
 const projects = [
   {
@@ -53,6 +54,10 @@ const cardVariants = {
 };
 
 export default function Projects() {
+  const handleProjectClick = (projectName: string) => {
+    trackEvent('click', 'Projects', `View Project - ${projectName}`);
+  };
+
   return (
     <section id="projects" className="w-full py-12 md:py-24 lg:py-32 bg-secondary/20">
       <div className="container mx-auto px-4 md:px-6 max-w-7xl">
@@ -92,13 +97,13 @@ export default function Projects() {
                   <CardDescription className="flex-grow text-base text-muted-foreground">{project.description}</CardDescription>
                 </CardContent>
                 <CardFooter className="flex justify-start gap-4 pt-4">
-                  <Button asChild variant="outline" aria-label={`View GitHub repository for ${project.title}`}>
+                  <Button asChild variant="outline" aria-label={`View GitHub repository for ${project.title}`} onClick={() => handleProjectClick(`${project.title} - GitHub`)}>
                     <Link href={project.repoUrl} target="_blank" rel="noopener noreferrer">
                       <Github className="mr-2 h-4 w-4" />
                       GitHub
                     </Link>
                   </Button>
-                  <Button asChild aria-label={`View details for ${project.title}`}>
+                  <Button asChild aria-label={`View details for ${project.title}`} onClick={() => handleProjectClick(`${project.title} - Details`)}>
                     <Link href={project.demoUrl} target="_blank" rel="noopener noreferrer">
                       <ExternalLink className="mr-2 h-4 w-4" />
                       View Details
