@@ -7,6 +7,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { cardVariants, headerVariants } from '@/lib/motion';
 
 const blogPosts = [
   {
@@ -38,24 +39,6 @@ const blogPosts = [
     aiHint: 'database performance graph',
   },
 ];
-
-const cardVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: (i: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: {
-      delay: i * 0.2,
-      duration: 0.5,
-      ease: 'easeOut',
-    },
-  }),
-};
-
-const headerVariants = {
-  hidden: { opacity: 0, y: -20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: 'easeOut' } },
-};
 
 export default function Blog() {
   return (

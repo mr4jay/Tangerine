@@ -14,6 +14,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { motion } from 'framer-motion';
 import { useState } from 'react';
+import { headerVariants, fadeIn } from '@/lib/motion';
 
 const socialLinks = [
     {
@@ -45,11 +46,6 @@ const formSchema = z.object({
   message: z.string().min(10, { message: "Message must be at least 10 characters." }),
 });
 
-const headerVariants = {
-  hidden: { opacity: 0, y: -20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: 'easeOut' } },
-};
-
 export default function Contact() {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -65,10 +61,12 @@ export default function Contact() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsSubmitting(true);
     try {
-      const response = await fetch('https://formspree.io/f/your-form-id', { // Replace with your Formspree endpoint
+      // Note: Replace with your actual Formspree endpoint in a real application
+      const response = await fetch('https://formspree.io/f/your-form-id', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Accept': 'application/json'
         },
         body: JSON.stringify(values),
       });
@@ -110,10 +108,10 @@ export default function Contact() {
         </motion.div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
             <motion.div 
-              initial={{ opacity: 0, x: -50 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              variants={fadeIn('right', 'tween', 0.2, 0.6)}
+              initial="hidden"
+              whileInView="visible"
               viewport={{ once: true, amount: 0.5 }}
-              transition={{ duration: 0.5 }}
             >
                 <Card className="bg-card border-none shadow-lg">
                     <CardContent className="p-6">
@@ -168,10 +166,10 @@ export default function Contact() {
             </motion.div>
              <motion.div 
                 className="space-y-6 flex flex-col justify-center"
-                initial={{ opacity: 0, x: 50 }}
-                whileInView={{ opacity: 1, x: 0 }}
+                variants={fadeIn('left', 'tween', 0.2, 0.6)}
+                initial="hidden"
+                whileInView="visible"
                 viewport={{ once: true, amount: 0.5 }}
-                transition={{ duration: 0.5, delay: 0.2 }}
              >
                 {socialLinks.map((link) => (
                     <Card key={link.name} className="bg-card border-none shadow-lg p-4 transition-transform hover:scale-105">
