@@ -18,6 +18,7 @@ import Preloader from '@/components/layout/preloader';
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
+  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -29,13 +30,17 @@ export default function Home() {
     return () => clearTimeout(timer);
   }, []);
 
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
   return (
     <>
       <AnimatePresence>
         {isLoading && <Preloader />}
       </AnimatePresence>
       
-      {!isLoading && (
+      {!isLoading && isClient && (
         <motion.div 
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
