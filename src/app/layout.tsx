@@ -15,7 +15,7 @@ const inter = Inter({
 });
 
 const professionalHeadshotUrl = "https://placehold.co/1200x630.png";
-const portfolioUrl = "https://ajay-kumar-portfolio.vercel.app"; // Example URL
+const portfolioUrl = "https://ajay-kumar-portfolio.vercel.app";
 
 export const metadata: Metadata = {
   title: 'Rajure Ajay Kumar | Senior Data Engineer Portfolio',
@@ -71,8 +71,8 @@ const jsonLd = {
   alumniOf: 'Hyderabad',
   knowsAbout: ['Data Engineering', 'AWS', 'Snowflake', 'Dataiku DSS', 'Python', 'MLOps', 'SQL'],
   sameAs: [
-    'https://linkedin.com/in/rajure-ajay-kumar', // Example LinkedIn
-    'https://github.com/rajure-ajay', // Example GitHub
+    'https://linkedin.com/in/rajure-ajay-kumar',
+    'https://github.com/rajure-ajay',
   ],
   "mainEntityOfPage": {
     "@type": "WebPage",
