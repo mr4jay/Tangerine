@@ -7,6 +7,7 @@
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
+import { skillCategories } from '@/components/sections/skills';
 
 // This context should be updated with the specific details from the portfolio
 const portfolioContext = `
@@ -40,6 +41,65 @@ Testimonials:
 - "The customer churn prediction model Ajay developed was a game-changer for our retention strategy, directly contributing to a $1.2M increase in retained revenue." - Jane Smith, Product Manager, Spoors
 `;
 
+const SuitabilityScoreInputSchema = z.object({
+  requiredSkills: z.array(z.string()).describe('A list of skills required for a job position.'),
+});
+
+const SuitabilityScoreOutputSchema = z.object({
+  score: z.number().describe('A suitability score from 0 to 100.'),
+  matchedSkills: z.array(z.string()).describe('A list of skills that match the portfolio.'),
+  missingSkills: z.array(z.string()).describe('A list of required skills that are not in the portfolio.'),
+  comment: z.string().describe('A brief comment on the suitability.'),
+});
+
+const calculateSuitabilityScore = ai.defineTool(
+    {
+        name: 'calculateSuitabilityScore',
+        description: 'Calculates a suitability score based on how well the skills in the portfolio match a list of required skills for a job. Use this tool whenever a user asks about suitability for a role or provides a list of skills.',
+        inputSchema: SuitabilityScoreInputSchema,
+        outputSchema: SuitabilityScoreOutputSchema,
+    },
+    async ({ requiredSkills }) => {
+        const allMySkills = skillCategories.flatMap(category => category.skills);
+        const mySkillMap = new Map(allMySkills.map(skill => [skill.name.toLowerCase(), skill.level]));
+
+        let totalScore = 0;
+        let matchedSkills: string[] = [];
+        let missingSkills: string[] = [];
+
+        requiredSkills.forEach(reqSkill => {
+            const reqSkillLower = reqSkill.toLowerCase();
+            if (mySkillMap.has(reqSkillLower)) {
+                totalScore += mySkillMap.get(reqSkillLower)!;
+                matchedSkills.push(reqSkill);
+            } else {
+                missingSkills.push(reqSkill);
+            }
+        });
+        
+        const maxPossibleScore = requiredSkills.length * 100;
+        const finalScore = maxPossibleScore > 0 ? Math.round((totalScore / maxPossibleScore) * 100) : 0;
+        
+        let comment = `Based on the required skills, the suitability score is ${finalScore}%. `;
+        if (matchedSkills.length > 0) {
+            comment += `Strong match in: ${matchedSkills.join(', ')}. `;
+        }
+        if (missingSkills.length > 0) {
+            comment += `Skills not listed in portfolio: ${missingSkills.join(', ')}.`;
+        } else if (matchedSkills.length === requiredSkills.length) {
+            comment += 'All required skills are present in the portfolio.'
+        }
+
+        return {
+            score: finalScore,
+            matchedSkills,
+            missingSkills,
+            comment,
+        };
+    }
+);
+
+
 const AskAssistantInputSchema = z.object({
   question: z.string().describe('The question to ask the AI assistant.'),
 });
@@ -58,9 +118,12 @@ const prompt = ai.definePrompt({
   name: 'portfolioAssistantPrompt',
   input: {schema: AskAssistantInputSchema},
   output: {schema: AskAssistantOutputSchema},
+  tools: [calculateSuitabilityScore],
   prompt: `You are an AI assistant for Rajure Ajay Kumar's personal portfolio. Your goal is to answer questions from potential employers or collaborators based on the information provided in this portfolio.
 
 You must answer questions based *only* on the context provided below. If the answer is not in the context, politely state that you do not have that information. Be friendly, professional, and concise.
+
+If the user asks about suitability for a job role or provides a list of required skills, you MUST use the 'calculateSuitabilityScore' tool to provide a quantitative assessment. Incorporate the tool's output (score, matches, misses) into your final answer in a conversational way.
 
 Keep your answers short and to the point.
 
