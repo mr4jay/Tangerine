@@ -1,3 +1,4 @@
+
 import type { Metadata } from 'next';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
@@ -14,6 +15,7 @@ const inter = Inter({
 });
 
 const professionalHeadshotUrl = "https://placehold.co/1200x630.png";
+const portfolioUrl = "https://ajay-kumar-portfolio.vercel.app"; // Example URL
 
 export const metadata: Metadata = {
   title: 'Rajure Ajay Kumar | Senior Data Engineer Portfolio',
@@ -23,7 +25,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Rajure Ajay Kumar | Senior Data Engineer Portfolio',
     description: 'Explore the portfolio of Rajure Ajay Kumar, a Senior Data Engineer with expertise in building scalable data solutions using AWS, Snowflake, and AI.',
-    url: 'https://your-domain.com', // Replace with your actual domain
+    url: portfolioUrl,
     siteName: 'DataCraft Portfolio',
     images: [
       {
@@ -59,7 +61,7 @@ const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Person',
   name: 'Rajure Ajay Kumar',
-  url: 'https://your-domain.com', // Replace with your actual domain
+  url: portfolioUrl,
   image: professionalHeadshotUrl,
   jobTitle: 'Senior Data Engineer',
   worksFor: {
@@ -69,12 +71,12 @@ const jsonLd = {
   alumniOf: 'Hyderabad',
   knowsAbout: ['Data Engineering', 'AWS', 'Snowflake', 'Dataiku DSS', 'Python', 'MLOps', 'SQL'],
   sameAs: [
-    'https://linkedin.com/in/your-profile', // Replace with your actual LinkedIn
-    'https://github.com/your-profile', // Replace with your actual GitHub
+    'https://linkedin.com/in/rajure-ajay-kumar', // Example LinkedIn
+    'https://github.com/rajure-ajay', // Example GitHub
   ],
   "mainEntityOfPage": {
     "@type": "WebPage",
-    "@id": "https://your-domain.com" // Replace with your actual domain
+    "@id": portfolioUrl
   }
 };
 

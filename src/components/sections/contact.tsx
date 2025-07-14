@@ -27,14 +27,14 @@ const socialLinks = [
         icon: Linkedin,
         name: 'LinkedIn',
         value: 'linkedin.com/in/rajure-ajay-kumar',
-        href: 'https://linkedin.com/in/your-profile',
+        href: 'https://linkedin.com/in/rajure-ajay-kumar',
         cta: 'Connect on LinkedIn'
     },
     {
         icon: Github,
         name: 'GitHub',
         value: 'github.com/rajure-ajay',
-        href: 'https://github.com/your-profile',
+        href: 'https://github.com/rajure-ajay',
         cta: 'View on GitHub'
     },
 ]
