@@ -1,26 +1,68 @@
-import { Card, CardDescription, CardTitle } from '@/components/ui/card';
-import { Award } from 'lucide-react';
+import { Card, CardContent, CardFooter, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
+import Image from 'next/image';
+import { ExternalLink } from 'lucide-react';
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+import { AwsLogo, AzureLogo, GcpLogo, DataikuLogo, DatabricksLogo } from './tech-logos';
+
 
 const certifications = [
   {
-    name: 'AWS Certified Data Analytics – Specialty',
+    name: 'AWS Certified Solutions Architect - Associate',
     issuer: 'Amazon Web Services',
     date: 'Issued Aug 2023',
+    logo: AwsLogo,
+    verifyUrl: '#',
   },
   {
-    name: 'SnowPro Core Certification',
-    issuer: 'Snowflake',
-    date: 'Issued Jan 2023',
+    name: 'Azure Data Engineer Associate',
+    issuer: 'Microsoft',
+    date: 'Issued Mar 2023',
+    logo: AzureLogo,
+    verifyUrl: '#',
   },
   {
-    name: 'Dataiku DSS Core Designer',
+    name: 'Google Cloud Professional Data Engineer',
+    issuer: 'Google',
+    date: 'Issued Dec 2022',
+    logo: GcpLogo,
+    verifyUrl: '#',
+  },
+  {
+    name: 'Dataiku Core Designer',
     issuer: 'Dataiku',
     date: 'Issued Nov 2022',
+    logo: DataikuLogo,
+    verifyUrl: '#',
+  },
+    {
+    name: 'Dataiku Advanced Designer',
+    issuer: 'Dataiku',
+    date: 'Issued Jan 2023',
+    logo: DataikuLogo,
+    verifyUrl: '#',
   },
   {
-    name: 'Certified Kubernetes Application Developer (CKAD)',
-    issuer: 'The Linux Foundation',
-    date: 'Issued May 2022',
+    name: 'Dataiku ML Practitioner',
+    issuer: 'Dataiku',
+    date: 'Issued Feb 2023',
+    logo: DataikuLogo,
+    verifyUrl: '#',
+  },
+    {
+    name: 'Dataiku MLOps Practitioner',
+    issuer: 'Dataiku',
+    date: 'Issued Apr 2023',
+    logo: DataikuLogo,
+    verifyUrl: '#',
+  },
+  {
+    name: 'Databricks Certified Data Engineer Associate',
+    issuer: 'Databricks',
+    date: 'Issued Jun 2022',
+    logo: DatabricksLogo,
+    verifyUrl: '#',
   }
 ];
 
@@ -34,17 +76,42 @@ export default function Certifications() {
             Validation of my expertise through industry-recognized certifications.
           </p>
         </div>
-        <div className="grid gap-6 md:grid-cols-2">
+        <Carousel
+          opts={{
+            align: "start",
+            loop: true,
+          }}
+          className="w-full"
+        >
+          <CarouselContent>
             {certifications.map((cert, index) => (
-                <Card key={index} className="flex items-center p-6 gap-6 transform transition-all duration-300 hover:bg-secondary/40">
-                    <Award className="h-12 w-12 text-primary flex-shrink-0" />
-                    <div className="flex-grow">
-                        <CardTitle className="font-headline text-lg">{cert.name}</CardTitle>
-                        <CardDescription className="text-muted-foreground">{cert.issuer} &middot; {cert.date}</CardDescription>
-                    </div>
-                </Card>
+              <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
+                <div className="p-1">
+                   <Card className="flex flex-col h-full overflow-hidden transform transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-2xl hover:shadow-primary/20 bg-card">
+                    <CardContent className="p-6 flex-grow flex flex-col items-center text-center">
+                        <div className="mb-4">
+                            <cert.logo className="h-16 w-16 text-primary" />
+                        </div>
+                        <CardTitle className="font-headline text-xl text-foreground mb-2">{cert.name}</CardTitle>
+                        <p className="text-base text-muted-foreground">{cert.issuer}</p>
+                        <p className="text-sm text-muted-foreground/80 mb-4">{cert.date}</p>
+                    </CardContent>
+                    <CardFooter className="flex justify-center pt-0">
+                         <Button asChild className="w-full">
+                            <Link href={cert.verifyUrl} target="_blank" rel="noopener noreferrer" aria-label={`Verify ${cert.name} credential`}>
+                                <ExternalLink className="mr-2 h-4 w-4" />
+                                Verify Credential
+                            </Link>
+                        </Button>
+                    </CardFooter>
+                   </Card>
+                </div>
+              </CarouselItem>
             ))}
-        </div>
+          </CarouselContent>
+          <CarouselPrevious className="ml-12" />
+          <CarouselNext className="mr-12" />
+        </Carousel>
       </div>
     </section>
   );

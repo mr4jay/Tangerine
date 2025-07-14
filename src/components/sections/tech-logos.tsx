@@ -63,3 +63,36 @@ export const DataikuLogo = ({ className }: { className?: string }) => (
     <path fill="currentColor" d="M12.012 3.816L3.822 12l8.19 8.184l8.19-8.184zm0 2.828l5.361 5.358l-5.361 5.358l-5.361-5.358z"></path>
   </svg>
 );
+
+export const AzureLogo = ({ className }: { className?: string }) => (
+    <svg 
+        className={cn("text-white", className)}
+        viewBox="0 0 24 24" 
+        fill="none" 
+        xmlns="http://www.w3.org/2000/svg"
+    >
+        <path fill="currentColor" d="M12.727 3.683L6.333 14.833h5.923l-3.328 5.484zM12.446 3.001l8.536 12.333h-7.07L17.554 21z"></path>
+    </svg>
+);
+
+export const GcpLogo = ({ className }: { className?: string }) => (
+    <svg 
+        className={cn("text-white", className)}
+        viewBox="0 0 24 24" 
+        fill="none" 
+        xmlns="http://www.w3.org/2000/svg"
+    >
+        <path fill="currentColor" d="M12.158 12.053c0-4.083 3.018-7.433 6.742-7.433v-3.002C13.883 1.618 9.17 5.53 9.17 12.053c0 6.512 4.713 10.435 9.73 10.435v-3.001c-3.724 0-6.742-3.36-6.742-7.434zM12.169 16.513H2.018v-3H12.17c.237 1.042.67 1.99 1.246 2.768a.5.5 0 0 1-.418.232zM12.169 7.513H2.018v3H12.17c.237-1.042.67-1.99 1.246-2.768a.5.5 0 0 0-.418-.232z"></path>
+    </svg>
+);
+
+export const DatabricksLogo = ({ className }: { className?: string }) => (
+    <svg
+        className={cn("text-white", className)}
+        viewBox="0 0 24 24" 
+        fill="none" 
+        xmlns="http://www.w3.org/2000/svg"
+    >
+        <path fill="currentColor" d="M12 1.333l-5.333 3.08v6.16L12 13.65l5.333-3.08v-6.16zm-4 3.66L12 7.427l4-2.434v4.867L12 12.294l-4-2.434zM12 14.71l-5.333-3.08v6.16L12 20.87l5.333-3.08v-6.16z"></path>
+    </svg>
+);
