@@ -1,6 +1,4 @@
 
-"use client";
-
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
@@ -10,63 +8,10 @@ import { motion } from 'framer-motion';
 import { notFound } from 'next/navigation';
 import Header from '@/components/layout/header';
 import Footer from '@/components/layout/footer';
+import { getPostData, getSortedPostsData } from '@/lib/posts';
+import { format } from 'date-fns';
 
-// Mock data - replace with your actual data fetching logic
-const allPosts = [
-  {
-    title: 'Scaling Data Pipelines with Snowflake: A Deep Dive',
-    slug: 'scaling-data-pipelines-with-snowflake',
-    excerpt: 'Explore advanced techniques for building and scaling high-throughput data pipelines using Snowflake’s powerful architecture.',
-    imageUrl: 'https://placehold.co/1200x600.png',
-    aiHint: 'data pipeline architecture',
-    publishDate: 'October 26, 2023',
-    content: `
-      <p>In the world of data engineering, scalability is king. As data volumes grow exponentially, the ability to process and analyze this data efficiently becomes a critical business advantage. This is where Snowflake shines. In this post, we'll take a deep dive into advanced techniques for building and scaling high-throughput data pipelines using Snowflake’s powerful architecture.</p>
-      <h3 class="text-2xl font-bold mt-8 mb-4">Understanding Snowflake's Architecture</h3>
-      <p>Snowflake's unique architecture separates compute from storage, allowing you to scale each independently. This means you can spin up virtual warehouses of various sizes to handle different workloads without affecting the underlying data. This is a game-changer for cost-efficiency and performance.</p>
-      <ul class="list-disc list-inside my-4 space-y-2">
-        <li><strong>Multi-cluster Warehouses:</strong> Automatically scale out to handle concurrency without performance degradation.</li>
-        <li><strong>Zero-Copy Cloning:</strong> Instantly create copies of your data for development and testing without duplicating storage.</li>
-        <li><strong>Time Travel:</strong> Query data as it existed at any point in the past, up to 90 days.</li>
-      </ul>
-      <h3 class="text-2xl font-bold mt-8 mb-4">Building a Scalable Pipeline</h3>
-      <p>Let's walk through a typical data pipeline architecture. We'll ingest data from various sources like S3 and Kafka, transform it using DBT, and load it into Snowflake for analytics. We will leverage Snowpipe for continuous data ingestion, which provides a serverless and cost-effective way to load data as soon as it arrives.</p>
-      <pre class="bg-gray-800 text-white p-4 rounded-md my-4 overflow-x-auto"><code>CREATE OR REPLACE PIPE my_pipe AUTO_INGEST = TRUE AS
-COPY INTO my_table
-FROM @my_stage
-FILE_FORMAT = (TYPE = 'JSON');</code></pre>
-      <p>By leveraging these features, you can build a robust, scalable, and cost-effective data platform that empowers your organization to make data-driven decisions faster than ever before.</p>
-    `,
-  },
-  {
-    title: 'Real-Time Analytics with Kafka and AWS Kinesis',
-    slug: 'real-time-analytics-with-kafka-and-aws-kinesis',
-    excerpt: 'A comprehensive guide to implementing a real-time analytics engine by integrating Apache Kafka with AWS Kinesis for live data streaming.',
-    imageUrl: 'https://placehold.co/1200x600.png',
-    aiHint: 'real time analytics',
-    publishDate: 'September 15, 2023',
-    content: `<p>Content for Real-Time Analytics with Kafka and AWS Kinesis.</p>`,
-  },
-  {
-    title: 'The Art of MLOps: Deploying Models at Scale',
-    slug: 'the-art-of-mlops-deploying-models-at-scale',
-    excerpt: 'From development to deployment, this post covers the best practices for operationalizing machine learning models.',
-    imageUrl: 'https://placehold.co/1200x600.png',
-    aiHint: 'machine learning deployment',
-    publishDate: 'August 05, 2023',
-    content: `<p>Content for The Art of MLOps: Deploying Models at Scale.</p>`,
-  },
-  {
-    title: 'Optimizing Data Warehouses for Performance',
-    slug: 'optimizing-data-warehouses-for-performance',
-    excerpt: 'Learn how to tune your data warehouse for maximum query performance and cost-efficiency in a cloud environment.',
-    imageUrl: 'https://placehold.co/1200x600.png',
-    aiHint: 'database performance graph',
-    publishDate: 'July 12, 2023',
-    content: `<p>Content for Optimizing Data Warehouses for Performance.</p>`,
-  },
-];
-
+const allPosts = getSortedPostsData();
 
 const RelatedPosts = ({ currentSlug }: { currentSlug: string }) => {
   const related = allPosts.filter(p => p.slug !== currentSlug).slice(0, 2);
@@ -90,14 +35,19 @@ const RelatedPosts = ({ currentSlug }: { currentSlug: string }) => {
   )
 }
 
-export default function BlogPostPage({ params }: { params: { slug: string } }) {
-  const post = allPosts.find((p) => p.slug === params.slug);
+export async function generateStaticParams() {
+  const paths = allPosts.map(p => ({ slug: p.slug }));
+  return paths;
+}
+
+export default async function BlogPostPage({ params }: { params: { slug: string } }) {
+  const post = await getPostData(params.slug);
 
   if (!post) {
     notFound();
   }
-
-  const shareUrl = typeof window !== 'undefined' ? window.location.href : '';
+  
+  const shareUrl = `https://your-domain.com/blog/${post.slug}`; // Replace with actual domain
   const shareTitle = encodeURIComponent(post.title);
 
   return (
@@ -124,7 +74,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
                         transition={{ duration: 0.5 }}
                     >
                         <h1 className="text-3xl md:text-4xl font-bold tracking-tight font-headline text-foreground mb-4">{post.title}</h1>
-                        <p className="text-muted-foreground mb-6">{post.publishDate}</p>
+                        <p className="text-muted-foreground mb-6">{format(new Date(post.publishDate), 'MMMM dd, yyyy')}</p>
                         
                         <div className="relative w-full h-64 md:h-96 mb-8 rounded-lg overflow-hidden shadow-lg">
                             <Image src={post.imageUrl} alt={post.title} fill className="object-cover" data-ai-hint={post.aiHint} loading="lazy" />
@@ -132,22 +82,22 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
 
                         <div 
                           className="prose prose-lg dark:prose-invert max-w-none text-foreground/90 space-y-4"
-                          dangerouslySetInnerHTML={{ __html: post.content }}
+                          dangerouslySetInnerHTML={{ __html: post.contentHtml || "" }}
                         />
                          <div className="mt-12 pt-8 border-t border-border/40">
                             <h3 className="text-xl font-bold mb-4">Share this post</h3>
                              <div className="flex items-center gap-4">
                                 <Button asChild variant="outline" aria-label="Share on Twitter">
-                                    <Link href={`https://twitter.com/intent/tweet?url=${shareUrl}&text=${shareTitle}`} target="_blank" rel="noopener noreferrer">
+                                    <a href={`https://twitter.com/intent/tweet?url=${shareUrl}&text=${shareTitle}`} target="_blank" rel="noopener noreferrer">
                                         <Twitter className="mr-2 h-5 w-5" />
                                         Twitter
-                                    </Link>
+                                    </a>
                                 </Button>
                                 <Button asChild variant="outline" aria-label="Share on LinkedIn">
-                                    <Link href={`https://www.linkedin.com/shareArticle?mini=true&url=${shareUrl}&title=${shareTitle}`} target="_blank" rel="noopener noreferrer">
+                                    <a href={`https://www.linkedin.com/shareArticle?mini=true&url=${shareUrl}&title=${shareTitle}`} target="_blank" rel="noopener noreferrer">
                                         <Linkedin className="mr-2 h-5 w-5" />
                                         LinkedIn
-                                    </Link>
+                                    </a>
                                 </Button>
                             </div>
                         </div>

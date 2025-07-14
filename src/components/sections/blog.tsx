@@ -1,4 +1,3 @@
-
 "use client";
 
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -8,39 +7,9 @@ import Image from 'next/image';
 import { ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { cardVariants, headerVariants } from '@/lib/motion';
+import type { PostData } from '@/lib/posts';
 
-const blogPosts = [
-  {
-    title: 'Scaling Data Pipelines with Snowflake: A Deep Dive',
-    slug: 'scaling-data-pipelines-with-snowflake',
-    excerpt: 'Explore advanced techniques for building and scaling high-throughput data pipelines using Snowflake’s powerful architecture.',
-    imageUrl: 'https://placehold.co/600x400.png',
-    aiHint: 'data pipeline illustration',
-  },
-  {
-    title: 'Real-Time Analytics with Kafka and AWS Kinesis',
-    slug: 'real-time-analytics-with-kafka-and-aws-kinesis',
-    excerpt: 'A comprehensive guide to implementing a real-time analytics engine by integrating Apache Kafka with AWS Kinesis for live data streaming.',
-    imageUrl: 'https://placehold.co/600x400.png',
-    aiHint: 'real-time data chart',
-  },
-  {
-    title: 'The Art of MLOps: Deploying Models at Scale',
-    slug: 'the-art-of-mlops-deploying-models-at-scale',
-    excerpt: 'From development to deployment, this post covers the best practices for operationalizing machine learning models.',
-    imageUrl: 'https://placehold.co/600x400.png',
-    aiHint: 'machine learning deployment',
-  },
-  {
-    title: 'Optimizing Data Warehouses for Performance',
-    slug: 'optimizing-data-warehouses-for-performance',
-    excerpt: 'Learn how to tune your data warehouse for maximum query performance and cost-efficiency in a cloud environment.',
-    imageUrl: 'https://placehold.co/600x400.png',
-    aiHint: 'database performance graph',
-  },
-];
-
-export default function Blog() {
+export default function Blog({ posts }: { posts: PostData[] }) {
   return (
     <section id="blog" className="w-full py-12 md:py-24 lg:py-32 bg-background overflow-hidden">
       <div className="container mx-auto px-4 md:px-6 max-w-7xl">
@@ -57,7 +26,7 @@ export default function Blog() {
           </p>
         </motion.div>
         <div className="grid gap-8 md:grid-cols-2">
-          {blogPosts.map((post, index) => (
+          {posts.slice(0, 4).map((post, index) => (
             <motion.div
               key={index}
               custom={index}

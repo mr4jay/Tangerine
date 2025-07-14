@@ -1,8 +1,4 @@
 
-"use client";
-
-import { useState, useEffect } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
 import Header from '@/components/layout/header';
 import Hero from '@/components/sections/hero';
 import About from '@/components/sections/about';
@@ -14,54 +10,28 @@ import Testimonials from '@/components/sections/testimonials';
 import Contact from '@/components/sections/contact';
 import Footer from '@/components/layout/footer';
 import BackToTopButton from '@/components/layout/back-to-top-button';
-import Preloader from '@/components/layout/preloader';
+import { getSortedPostsData } from '@/lib/posts';
+import HomeClient from './home-client';
+
 
 export default function Home() {
-  const [isLoading, setIsLoading] = useState(true);
-  const [isClient, setIsClient] = useState(false);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-      document.body.style.cursor = 'default';
-      window.scrollTo(0, 0);
-    }, 2000); // Simulate loading for 2 seconds
-
-    return () => clearTimeout(timer);
-  }, []);
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
+  const blogPosts = getSortedPostsData();
 
   return (
-    <>
-      <AnimatePresence>
-        {isLoading && <Preloader />}
-      </AnimatePresence>
-      
-      {!isLoading && isClient && (
-        <motion.div 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5 }}
-          className="flex min-h-screen flex-col bg-background"
-        >
-          <Header />
-          <main className="flex-1">
-            <Hero />
-            <div id="about"><About /></div>
-            <div id="projects"><Projects /></div>
-            <div id="blog"><Blog /></div>
-            <div id="skills"><Skills /></div>
-            <div id="certifications"><Certifications /></div>
-            <div id="testimonials"><Testimonials /></div>
-            <div id="contact"><Contact /></div>
-          </main>
-          <Footer />
-          <BackToTopButton />
-        </motion.div>
-      )}
-    </>
+    <HomeClient>
+        <Header />
+        <main className="flex-1">
+        <Hero />
+        <div id="about"><About /></div>
+        <div id="projects"><Projects /></div>
+        <div id="blog"><Blog posts={blogPosts} /></div>
+        <div id="skills"><Skills /></div>
+        <div id="certifications"><Certifications /></div>
+        <div id="testimonials"><Testimonials /></div>
+        <div id="contact"><Contact /></div>
+        </main>
+        <Footer />
+        <BackToTopButton />
+    </HomeClient>
   );
 }
