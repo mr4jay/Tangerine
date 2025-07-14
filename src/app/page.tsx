@@ -45,13 +45,13 @@ export default function Home() {
           <Header />
           <main className="flex-1">
             <Hero />
-            <About />
-            <Projects />
-            <Blog />
-            <Skills />
-            <Certifications />
-            <Testimonials />
-            <Contact />
+            <div id="about"><About /></div>
+            <div id="projects"><Projects /></div>
+            <div id="blog"><Blog /></div>
+            <div id="skills"><Skills /></div>
+            <div id="certifications"><Certifications /></div>
+            <div id="testimonials"><Testimonials /></div>
+            <div id="contact"><Contact /></div>
           </main>
           <Footer />
           <BackToTopButton />
