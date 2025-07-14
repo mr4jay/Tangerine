@@ -9,6 +9,7 @@ import Image from 'next/image';
 import { Github, ExternalLink } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { trackEvent } from '@/components/analytics';
+import ProjectTimeline from './project-timeline';
 
 const projects = [
   {
@@ -67,7 +68,10 @@ export default function Projects() {
             A selection of my work in data engineering, showcasing my skills in building scalable and efficient data systems.
           </p>
         </div>
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+        
+        <ProjectTimeline />
+
+        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 mt-16">
           {projects.map((project, index) => (
             <motion.div
               key={index}
