@@ -88,7 +88,14 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
                         </div>
                         
                         <div className="relative w-full h-64 md:h-96 mb-8 rounded-lg overflow-hidden shadow-lg">
-                            <Image src={post.imageUrl} alt={post.title} fill className="object-cover" data-ai-hint={post.aiHint} loading="lazy" />
+                            <Image 
+                                src={post.imageUrl} 
+                                alt={post.title} 
+                                fill 
+                                className="object-cover" 
+                                data-ai-hint={post.aiHint} 
+                                priority 
+                            />
                         </div>
 
                         <div 

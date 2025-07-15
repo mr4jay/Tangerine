@@ -1,3 +1,4 @@
+
 "use client";
 
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -42,7 +43,15 @@ export default function Blog({ posts }: { posts: PostData[] }) {
               <Card className="flex flex-col h-full overflow-hidden bg-card transition-shadow duration-300 ease-in-out hover:shadow-2xl hover:shadow-primary/40">
                 <CardHeader className="p-0">
                   <div className="relative w-full h-56">
-                      <Image src={post.imageUrl} alt={post.title} fill className="object-cover" data-ai-hint={post.aiHint} sizes="(max-width: 768px) 100vw, 50vw" loading="lazy" />
+                      <Image 
+                        src={post.imageUrl} 
+                        alt={post.title} 
+                        fill 
+                        className="object-cover" 
+                        data-ai-hint={post.aiHint} 
+                        sizes="(max-width: 768px) 100vw, 50vw" 
+                        loading="lazy" 
+                      />
                   </div>
                 </CardHeader>
                 <CardContent className="pt-6 flex-grow flex flex-col">
