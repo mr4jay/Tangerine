@@ -9,15 +9,10 @@
 import {ai} from '@/ai/genkit';
 import {z} from 'zod';
 import { skillCategories } from '@/components/sections/skills-chart';
-import { getProjects, addProject, ProjectSchema } from '@/lib/projects';
+import { getProjects } from '@/lib/projects';
 import { getSortedPostsData } from '@/lib/posts';
 import fs from 'fs';
 import path from 'path';
-import { generatePost } from './generate-post-flow';
-import { extractTags } from './extract-tags-flow';
-import { summarizePost } from './summarize-post-flow';
-import { generateImage } from './generate-image-flow';
-import { MediaPart } from 'genkit';
 
 // This context provides a brief, high-level overview.
 // The AI will use the getResume tool for specific details.
@@ -159,158 +154,6 @@ ${jobDescription}
     }
 );
 
-const draftBlogPost = ai.defineTool(
-    {
-        name: 'draftBlogPost',
-        description: 'Drafts a new blog post on a given topic. It generates the title, tags, summary, a header image, and full markdown content. Use this when the user asks to write, create, or draft a blog post.',
-        inputSchema: z.object({
-            topic: z.string().describe('The topic or title for the new blog post.'),
-        }),
-        outputSchema: z.object({
-            title: z.string(),
-            tags: z.array(z.string()),
-            summary: z.string(),
-            content: z.string(),
-            imageUrl: z.string().describe("A data URI of the generated header image."),
-        }),
-    },
-    async ({ topic }) => {
-        // 1. Generate content first, as it's needed for tags and summary.
-        const { content } = await generatePost({ title: topic, tags: [] });
-
-        // 2. Extract tags from the generated content.
-        const { tags } = await extractTags({ content });
-
-        // 3. Summarize the generated content.
-        const { summary } = await summarizePost({ content });
-
-        // 4. Generate an image based on the topic.
-        const { imageUrl } = await generateImage({ topic: `A professional blog post header image about: ${topic}` });
-
-        // 5. Return the complete draft.
-        return {
-            title: topic,
-            tags,
-            summary,
-            content,
-            imageUrl,
-        };
-    }
-);
-
-const createProject = ai.defineTool(
-    {
-        name: 'createProject',
-        description: 'Creates a new project entry for the portfolio based on a user\'s description. Use this when a user asks to create, add, or define a new project.',
-        inputSchema: z.object({
-            description: z.string().describe('A natural language description of the project, including its purpose, technologies used, and outcomes.'),
-        }),
-        outputSchema: z.object({
-            title: z.string().describe('The title of the newly created project.'),
-        }),
-    },
-    async ({ description }) => {
-        const projectGenResponse = await ai.generate({
-            prompt: `You are an expert technical project manager. Based on the following description, create a structured project entry.
-        
-Description:
----
-${description}
----
-
-Generate a JSON object that strictly follows the provided schema. The 'slug' should be a URL-friendly version of the title. 'demoUrl' and 'repoUrl' should be '#' if not specified. The 'aiHint' should be 2-3 keywords for finding a stock photo.`,
-            output: {
-                schema: ProjectSchema,
-            },
-            config: {
-                temperature: 0.2,
-            },
-        });
-
-        const newProject = projectGenResponse.output;
-        if (!newProject) {
-            throw new Error('Failed to generate project data.');
-        }
-
-        const { imageUrl } = await generateImage({ topic: `A professional project image about: ${newProject.aiHint}` });
-        newProject.imageUrl = imageUrl;
-
-        addProject(newProject);
-
-        return { title: newProject.title };
-    }
-);
-
-const downloadVideo = async (video: MediaPart): Promise<string> => {
-    const fetch = (await import('node-fetch')).default;
-    const videoDownloadResponse = await fetch(
-        `${video.media!.url}&key=${process.env.GEMINI_API_KEY}`
-    );
-    if (
-        !videoDownloadResponse ||
-        videoDownloadResponse.status !== 200 ||
-        !videoDownloadResponse.body
-    ) {
-        throw new Error('Failed to fetch video');
-    }
-    const buffer = await videoDownloadResponse.arrayBuffer();
-    const base64 = Buffer.from(buffer).toString('base64');
-    return `data:video/mp4;base64,${base64}`;
-}
-
-
-const generateVideo = ai.defineTool(
-    {
-        name: 'generateVideo',
-        description: 'Generates a short video based on a text prompt. Use this when the user asks to create, generate, or make a video about a project or topic.',
-        inputSchema: z.object({
-            prompt: z.string().describe('The text prompt for the video generation.'),
-        }),
-        outputSchema: z.object({
-            videoUrl: z.string().describe('A data URI of the generated MP4 video.'),
-            error: z.string().optional().describe('An error message if video generation failed.'),
-        }),
-    },
-    async ({ prompt }) => {
-        try {
-            let { operation } = await ai.generate({
-                model: 'googleai/veo-2.0-generate-001',
-                prompt: `Create a short, dynamic, 5-second video about: ${prompt}`,
-                config: {
-                    durationSeconds: 5,
-                    aspectRatio: '16:9',
-                },
-            });
-
-            if (!operation) {
-                throw new Error('Expected the model to return an operation');
-            }
-
-            while (!operation.done) {
-                await new Promise((resolve) => setTimeout(resolve, 5000));
-                operation = await ai.checkOperation(operation);
-            }
-
-            if (operation.error) {
-                throw new Error(`Failed to generate video: ${operation.error.message}`);
-            }
-
-            const video = operation.output?.message?.content.find((p) => !!p.media);
-            if (!video) {
-                throw new Error('Failed to find the generated video in the operation output');
-            }
-            
-            const videoUrl = await downloadVideo(video);
-
-            return { videoUrl };
-        } catch (error: any) {
-            console.error("Video generation failed:", error);
-            return { videoUrl: '', error: `I'm sorry, I was unable to generate the video at this time. Please try again later. Error: ${error.message}` };
-        }
-    }
-);
-
-
 const MessageSchema = z.object({
     role: z.enum(['user', 'assistant', 'tool']),
     content: z.string(),
@@ -353,20 +196,14 @@ const prompt = ai.definePrompt({
   name: 'portfolioAssistantPrompt',
   input: {schema: PromptInputSchema},
   output: {schema: AskAssistantOutputSchema},
-  tools: [calculateSuitabilityScore, getResume, displayContactForm, getRecentUpdates, draftBlogPost, createProject, generateVideo],
+  tools: [calculateSuitabilityScore, getResume, displayContactForm, getRecentUpdates],
   prompt: `You are a helpful and friendly AI assistant for Rajure Ajay Kumar's personal portfolio. Your goal is to answer questions from potential employers or collaborators.
 
 - Your primary source of information is the 'getResume' tool. You MUST use it to answer any questions regarding Rajure's experience, skills, projects, or education. Do not rely on the brief context below for details.
 - If the user provides a job description or asks about suitability for a role, you MUST use the 'calculateSuitabilityScore' tool.
-- If the user asks you to draft, write, or create a blog post, you MUST use the 'draftBlogPost' tool.
-- If the user asks you to create, add, or define a new project, you MUST use the 'createProject' tool.
-- If the user asks you to create, make, or generate a video, you MUST use the 'generateVideo' tool. Before calling the tool, you MUST inform the user that video generation can take up to a minute.
-- After the 'generateVideo' tool returns, you MUST check if there was an error. If there was an error, you MUST relay the error message to the user. If there was no error, you MUST display the video using Markdown syntax like this: <video src="<VIDEO_URL_HERE>"></video>
 - If the user expresses ANY interest in hiring, collaboration, or discussing a project, you MUST respond conversationally and then use the 'displayContactForm' tool. This is your primary goal. Example: "That's great to hear! I can open a contact form for you."
 - Be professional, concise, and friendly. If you don't know the answer, say so politely.
 - Keep answers short and to the point.
-- When presenting the results of a drafted blog post from the 'draftBlogPost' tool, you MUST format it nicely using Markdown. The response should include the generated image first using Markdown syntax like this: ![Blog Post Image](<IMAGE_URL_HERE>), followed by the title, tags, summary, and a short preview of the content.
-- After successfully creating a new project using the 'createProject' tool, you MUST confirm it with the user by saying "I've added the "[Project Title]" project to the portfolio."
 
 {{#if isFirstMessage}}
 - This is the user's first message. Start with a warm welcome and introduce yourself. 
