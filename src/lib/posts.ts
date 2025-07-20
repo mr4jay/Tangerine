@@ -20,6 +20,9 @@ export type PostData = {
   contentHtml?: string;
 };
 
+// Helper function to add a delay
+const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
 // Helper function to calculate reading time
 const calculateReadTime = (content: string): number => {
     const wordsPerMinute = 200;
@@ -31,7 +34,9 @@ const calculateReadTime = (content: string): number => {
 export async function getSortedPostsData(): Promise<PostData[]> {
   const fileNames = fs.readdirSync(postsDirectory);
   
-  const allPostsData = await Promise.all(fileNames.map(async (fileName) => {
+  const allPostsData: PostData[] = [];
+
+  for (const fileName of fileNames) {
     const slug = fileName.replace(/\.md$/, '');
     const fullPath = path.join(postsDirectory, fileName);
     const fileContents = fs.readFileSync(fullPath, 'utf8');
@@ -39,11 +44,13 @@ export async function getSortedPostsData(): Promise<PostData[]> {
 
     const readTime = calculateReadTime(matterResult.content);
 
-    // AI-generate the summary and tags
-    let summary = matterResult.data.excerpt; // Fallback to excerpt
-    let tags: string[] = matterResult.data.tags || []; // Fallback to frontmatter tags
+    let summary = matterResult.data.excerpt;
+    let tags: string[] = matterResult.data.tags || [];
 
     try {
+      // Add a delay to avoid hitting API rate limits
+      await delay(1000); 
+      
       const [summaryResult, tagsResult] = await Promise.all([
         summarizePost({ content: matterResult.content }),
         extractTags({ content: matterResult.content })
@@ -53,8 +60,8 @@ export async function getSortedPostsData(): Promise<PostData[]> {
     } catch (error) {
         console.error(`Failed to generate AI content for ${slug}:`, error);
     }
-
-    return {
+    
+    allPostsData.push({
       slug,
       excerpt: summary,
       tags,
@@ -65,8 +72,9 @@ export async function getSortedPostsData(): Promise<PostData[]> {
         aiHint: string; 
         publishDate: string; 
       }),
-    };
-  }));
+    });
+  }
+
 
   return allPostsData.sort((a, b) => {
     if (a.publishDate < b.publishDate) {
@@ -106,6 +114,8 @@ export async function getPostData(slug: string): Promise<PostData> {
   let tags: string[] = matterResult.data.tags || [];
 
   try {
+      // Add a small delay to be safe, although less likely to be an issue here.
+      await delay(500);
       const [summaryResult, tagsResult] = await Promise.all([
         summarizePost({ content: matterResult.content }),
         extractTags({ content: matterResult.content })
