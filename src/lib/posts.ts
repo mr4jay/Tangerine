@@ -4,6 +4,7 @@ import path from 'path';
 import matter from 'gray-matter';
 import { summarizePost } from '@/ai/flows/summarize-post-flow';
 import { extractTags } from '@/ai/flows/extract-tags-flow';
+import { generatePost } from '@/ai/flows/generate-post-flow';
 import { unified } from 'unified';
 import remarkParse from 'remark-parse';
 import remarkRehype from 'remark-rehype';
@@ -124,27 +125,34 @@ export async function getPostData(slug: string): Promise<PostData | null> {
   }
   const fileContents = fs.readFileSync(fullPath, 'utf8');
 
-  const matterResult = matter(fileContents);
+  let matterResult = matter(fileContents);
   
-  const contentReact = (await processor.process(matterResult.content)).result;
-
-  const readTime = calculateReadTime(matterResult.content);
-
   let summary = matterResult.data.excerpt;
   let tags: string[] = matterResult.data.tags || [];
-
-  // AI-generate summary if it's missing
-  if (!summary) {
-    console.log(`Generating summary for ${slug}...`);
-    const summaryResult = await summarizePost({ content: matterResult.content });
-    summary = summaryResult.summary;
-  }
 
   // AI-generate tags if they are missing
   if (!tags || tags.length === 0) {
     console.log(`Generating tags for ${slug}...`);
     const tagsResult = await extractTags({ content: matterResult.content });
     tags = tagsResult.tags;
+  }
+
+  // AI-generate content if it's missing or very short
+  if (!matterResult.content || matterResult.content.trim().length < 50) {
+      console.log(`Generating content for ${slug}...`);
+      const { content } = await generatePost({ title: matterResult.data.title, tags });
+      matterResult.content = content;
+  }
+
+  const contentReact = (await processor.process(matterResult.content)).result;
+
+  const readTime = calculateReadTime(matterResult.content);
+
+  // AI-generate summary if it's missing
+  if (!summary) {
+    console.log(`Generating summary for ${slug}...`);
+    const summaryResult = await summarizePost({ content: matterResult.content });
+    summary = summaryResult.summary;
   }
 
   return {
