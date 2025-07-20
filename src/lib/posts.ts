@@ -61,18 +61,27 @@ export async function getSortedPostsData(): Promise<PostData[]> {
     let summary = matterResult.data.excerpt;
     let tags: string[] = matterResult.data.tags || [];
 
-    try {
-      // Add a delay to avoid hitting API rate limits
-      await delay(1000); 
-      
-      const [summaryResult, tagsResult] = await Promise.all([
-        summarizePost({ content: matterResult.content }),
-        extractTags({ content: matterResult.content })
-      ]);
-      summary = summaryResult.summary;
-      tags = tagsResult.tags;
-    } catch (error) {
-        console.error(`Failed to generate AI content for ${slug}:`, error);
+    // Only generate if missing to avoid hitting rate limits
+    if (!summary || tags.length === 0) {
+      try {
+        await delay(1000); 
+        
+        const [summaryResult, tagsResult] = await Promise.all([
+          summarizePost({ content: matterResult.content }),
+          extractTags({ content: matterResult.content })
+        ]);
+        summary = summaryResult.summary;
+        tags = tagsResult.tags;
+
+        // NOTE: This does not save the generated content back to the file.
+        // For a permanent cache, you would need to write the new frontmatter
+        // back to the .md file.
+      } catch (error) {
+          console.error(`Failed to generate AI content for ${slug}:`, error);
+          // Fallback to defaults if API fails
+          summary = matterResult.data.excerpt || 'Read this post to learn more.';
+          tags = matterResult.data.tags || ['data'];
+      }
     }
     
     allPostsData.push({
@@ -120,21 +129,24 @@ export async function getPostData(slug: string): Promise<PostData> {
 
   const readTime = calculateReadTime(matterResult.content);
 
-  // AI-generate the summary and tags
-  let summary = matterResult.data.excerpt; // Fallback to excerpt
+  let summary = matterResult.data.excerpt;
   let tags: string[] = matterResult.data.tags || [];
 
-  try {
-      // Add a small delay to be safe, although less likely to be an issue here.
-      await delay(500);
-      const [summaryResult, tagsResult] = await Promise.all([
-        summarizePost({ content: matterResult.content }),
-        extractTags({ content: matterResult.content })
-      ]);
-      summary = summaryResult.summary;
-      tags = tagsResult.tags;
-  } catch (error) {
-      console.error(`Failed to generate AI content for ${slug}:`, error);
+  // Only generate if missing
+  if (!summary || tags.length === 0) {
+    try {
+        await delay(500);
+        const [summaryResult, tagsResult] = await Promise.all([
+          summarizePost({ content: matterResult.content }),
+          extractTags({ content: matterResult.content })
+        ]);
+        summary = summaryResult.summary;
+        tags = tagsResult.tags;
+    } catch (error) {
+        console.error(`Failed to generate AI content for ${slug}:`, error);
+        summary = matterResult.data.excerpt || 'Read this post to learn more.';
+        tags = matterResult.data.tags || ['data'];
+    }
   }
 
   return {
