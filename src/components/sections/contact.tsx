@@ -76,10 +76,11 @@ const HireMeModal = () => {
     });
 
     const onSubmit = async (values: z.infer<typeof hireMeFormSchema>) => {
-        console.log("Form submitted:", values);
-        // TODO: Implement backend submission logic here (e.g., send an email, save to DB).
-        // For example:
-        // await fetch('/api/contact', { method: 'POST', body: JSON.stringify(values) });
+        // This is where you would typically send the form data to a backend.
+        // For demonstration, we'll simulate a network request.
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        
+        console.log("Form submitted successfully:", values);
         
         toast({
             title: "Message Sent!",
@@ -147,7 +148,7 @@ const HireMeModal = () => {
                         />
                          <DialogFooter>
                             <DialogClose asChild>
-                                <Button type="button" variant="secondary">Cancel</Button>
+                                <Button type="button" variant="outline">Cancel</Button>
                             </DialogClose>
                             <Button type="submit" disabled={form.formState.isSubmitting}>
                                 {form.formState.isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Send className="mr-2 h-4 w-4" />}
@@ -169,6 +170,18 @@ const AIChatAssistant = () => {
     const scrollAreaRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
+        // Add an initial greeting from the assistant
+        setMessages([
+            {
+                id: Date.now(),
+                role: 'assistant',
+                content: "Hello! I'm Rajure's AI assistant. Feel free to ask me anything about his projects, skills, or experience.",
+                isAudioLoading: false
+            }
+        ]);
+    }, []);
+
+    useEffect(() => {
         if (scrollAreaRef.current) {
             scrollAreaRef.current.scrollTo({ top: scrollAreaRef.current.scrollHeight, behavior: 'smooth' });
         }
@@ -176,6 +189,13 @@ const AIChatAssistant = () => {
 
     const handleNewAudio = async (text: string, messageId: number) => {
         try {
+            setMessages((prev) =>
+                prev.map((m) =>
+                    m.id === messageId
+                        ? { ...m, isAudioLoading: true }
+                        : m
+                )
+            );
             const result = await textToSpeech({ text });
             setMessages((prev) =>
                 prev.map((m) =>
@@ -299,7 +319,7 @@ const AIChatAssistant = () => {
 export default function Contact() {
   return (
     <section id="contact" className="w-full py-12 md:py-24 lg:py-32 bg-background overflow-hidden">
-      <div className="container mx-auto px-4 md:px-6 max-w-4xl">
+      <div className="container mx-auto px-4 md:px-6 max-w-7xl">
         <motion.div 
             initial="hidden"
             whileInView="visible"
@@ -312,12 +332,13 @@ export default function Contact() {
             Have a question? Ask my AI assistant, or connect with me directly through social media.
           </p>
         </motion.div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
             <motion.div 
               variants={fadeIn('right', 'tween', 0.2, 0.6)}
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, amount: 0.5 }}
+              className="h-full"
             >
                 <AIChatAssistant />
             </motion.div>
