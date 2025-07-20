@@ -40,6 +40,7 @@ const processor = unified()
   .use(remarkRehype)
   .use(rehypeReact, {
     createElement: React.createElement,
+    Fragment: React.Fragment,
     components: {
       pre: CodeBlock,
     },
