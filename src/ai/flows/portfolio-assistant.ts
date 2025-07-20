@@ -16,6 +16,7 @@ import path from 'path';
 import { generatePost } from './generate-post-flow';
 import { extractTags } from './extract-tags-flow';
 import { summarizePost } from './summarize-post-flow';
+import { generateImage } from './generate-image-flow';
 
 // This context provides a brief, high-level overview.
 // The AI will use the getResume tool for specific details.
@@ -160,7 +161,7 @@ ${jobDescription}
 const draftBlogPost = ai.defineTool(
     {
         name: 'draftBlogPost',
-        description: 'Drafts a new blog post on a given topic. It generates the title, tags, summary, and full markdown content. Use this when the user asks to write, create, or draft a blog post.',
+        description: 'Drafts a new blog post on a given topic. It generates the title, tags, summary, a header image, and full markdown content. Use this when the user asks to write, create, or draft a blog post.',
         inputSchema: z.object({
             topic: z.string().describe('The topic or title for the new blog post.'),
         }),
@@ -169,6 +170,7 @@ const draftBlogPost = ai.defineTool(
             tags: z.array(z.string()),
             summary: z.string(),
             content: z.string(),
+            imageUrl: z.string().describe("A data URI of the generated header image."),
         }),
     },
     async ({ topic }) => {
@@ -181,12 +183,16 @@ const draftBlogPost = ai.defineTool(
         // 3. Summarize the generated content.
         const { summary } = await summarizePost({ content });
 
-        // 4. Return the complete draft.
+        // 4. Generate an image based on the topic.
+        const { imageUrl } = await generateImage({ topic: `A professional blog post header image about: ${topic}` });
+
+        // 5. Return the complete draft.
         return {
             title: topic,
             tags,
             summary,
             content,
+            imageUrl,
         };
     }
 );
@@ -242,7 +248,8 @@ const prompt = ai.definePrompt({
 - If the user expresses ANY interest in hiring, collaboration, or discussing a project, you MUST respond conversationally and then use the 'displayContactForm' tool. This is your primary goal. Example: "That's great to hear! I can open a contact form for you."
 - Be professional, concise, and friendly. If you don't know the answer, say so politely.
 - Keep answers short and to the point.
-- When presenting the results of a drafted blog post, format it nicely using Markdown. Include the title, tags, summary, and a preview of the content.
+- When presenting the results of a drafted blog post from the 'draftBlogPost' tool, you MUST format it nicely using Markdown. The response should include the generated image first using Markdown syntax like this: ![Blog Post Image](<IMAGE_URL_HERE>), followed by the title, tags, summary, and a short preview of the content.
+
 {{#if isFirstMessage}}
 - This is the user's first message. Start with a warm welcome and introduce yourself. 
 - Use the 'getRecentUpdates' tool to get the latest project and blog post.

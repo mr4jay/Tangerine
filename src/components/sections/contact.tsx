@@ -21,7 +21,13 @@ import * as z from "zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
-
+import { unified } from 'unified';
+import remarkParse from 'remark-parse';
+import remarkRehype from 'remark-rehype';
+import rehypeReact from 'rehype-react';
+import React from 'react';
+import { jsx, jsxs } from 'react/jsx-runtime';
+import Image from 'next/image';
 
 const socialLinks = [
     {
@@ -142,6 +148,25 @@ const HireMeForm = ({ onOpenChange }: { onOpenChange: (open: boolean) => void })
         </Form>
     );
 };
+
+
+// Custom Image component to handle data URIs
+const AssistantImage = (props: any) => {
+    return <Image {...props} alt={props.alt || "Generated Image"} width={400} height={200} className="rounded-md my-2" unoptimized />;
+};
+
+
+const processor = unified()
+    .use(remarkParse)
+    .use(remarkRehype, { allowDangerousHtml: true })
+    .use(rehypeReact, {
+        Fragment: React.Fragment,
+        jsx: jsx,
+        jsxs: jsxs,
+        components: {
+           img: AssistantImage,
+        },
+    });
 
 
 const AIChatAssistant = () => {
@@ -298,8 +323,8 @@ const AIChatAssistant = () => {
                                         <AvatarFallback><Bot className="h-5 w-5"/></AvatarFallback>
                                     </Avatar>
                                 )}
-                                <div className={cn("rounded-lg p-3 max-w-sm text-sm", message.role === 'user' ? 'bg-primary text-primary-foreground' : 'bg-secondary')}>
-                                    <p>{message.content}</p>
+                                <div className={cn("rounded-lg p-3 max-w-sm text-sm prose dark:prose-invert prose-p:my-0 prose-headings:my-1", message.role === 'user' ? 'bg-primary text-primary-foreground' : 'bg-secondary')}>
+                                     <div>{(processor.processSync(message.content)).result}</div>
                                     {message.role === 'assistant' && (
                                         <div className="mt-2">
                                             {message.isAudioLoading && <div className="flex items-center gap-2 text-xs text-muted-foreground"><Loader2 className="h-4 w-4 animate-spin" /> Generating audio...</div>}
