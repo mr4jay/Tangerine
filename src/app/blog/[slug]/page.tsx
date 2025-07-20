@@ -3,6 +3,8 @@ import { getPostData, getSortedPostsData, PostData } from '@/lib/posts';
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
 import ClientBlogContent from './client-blog-content';
+import Header from '@/components/layout/header';
+import Footer from '@/components/layout/footer';
 
 // This is now a pure Server Component.
 export default async function BlogPostPage({ params }: { params: { slug: string } }) {
@@ -12,7 +14,13 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
   }
   const allPosts = await getSortedPostsData();
 
-  return <ClientBlogContent post={post} allPosts={allPosts} />;
+  return (
+    <>
+      <Header />
+      <ClientBlogContent post={post} allPosts={allPosts} />
+      <Footer />
+    </>
+  );
 }
 
 

@@ -8,8 +8,6 @@ import Image from 'next/image';
 import { Linkedin, Twitter, ArrowLeft, Clock } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { notFound } from 'next/navigation';
-import Header from '@/components/layout/header';
-import Footer from '@/components/layout/footer';
 import { PostData } from '@/lib/posts';
 import { format } from 'date-fns';
 import { Badge } from '@/components/ui/badge';
@@ -22,7 +20,7 @@ export default function ClientBlogContent({ post, allPosts }: { post: PostData; 
     notFound();
   }
 
-  const portfolioUrl = "https://ajay-kumar-portfolio.vercel.app"; // Replace with your actual domain
+  const portfolioUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://ajay-kumar-portfolio.vercel.app";
   const shareUrl = `${portfolioUrl}/blog/${post.slug}`;
   const shareTitle = encodeURIComponent(post.title);
   const professionalHeadshotUrl = "https://images.unsplash.com/photo-1564564321837-a57b7070ac4f?q=80&w=1200&h=630&fit=crop&crop=faces";
