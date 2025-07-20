@@ -60,9 +60,9 @@ const getRecentUpdates = ai.defineTool(
     }
 );
 
-const hireMe = ai.defineTool(
+const displayContactForm = ai.defineTool(
     {
-        name: 'hireMe',
+        name: 'displayContactForm',
         description: 'Presents the user with a contact form to discuss a job opportunity, project, or collaboration. Use this tool *any* time the user expresses interest in hiring, offering a job, or discussing a potential project. Do not ask for their details yourself; use this tool to show them the form.',
         inputSchema: z.object({}),
         outputSchema: z.object({ success: z.boolean() }),
@@ -161,7 +161,10 @@ const PromptInputSchema = AskAssistantInputSchema.extend({
 
 const AskAssistantOutputSchema = z.object({
   answer: z.string().describe("The AI assistant's answer."),
-  shouldHire: z.boolean().optional().describe("True if the AI recommends using the 'hireMe' tool."),
+  toolCalls: z.array(z.object({
+      name: z.string(),
+      args: z.any(),
+  })).optional().describe("A list of tool calls made by the assistant."),
 });
 export type AskAssistantOutput = z.infer<typeof AskAssistantOutputSchema>;
 
@@ -173,12 +176,12 @@ const prompt = ai.definePrompt({
   name: 'portfolioAssistantPrompt',
   input: {schema: PromptInputSchema},
   output: {schema: AskAssistantOutputSchema},
-  tools: [calculateSuitabilityScore, getResume, hireMe, getRecentUpdates],
+  tools: [calculateSuitabilityScore, getResume, displayContactForm, getRecentUpdates],
   prompt: `You are a helpful and friendly AI assistant for Rajure Ajay Kumar's personal portfolio. Your goal is to answer questions from potential employers or collaborators.
 
 - Your primary source of information is the 'getResume' tool. You MUST use it to answer any questions regarding Rajure's experience, skills, projects, or education. Do not rely on the brief context below for details.
 - If the user asks about suitability for a job or provides a list of skills, you MUST use the 'calculateSuitabilityScore' tool.
-- If the user expresses ANY interest in hiring, collaboration, or discussing a project, you MUST use the 'hireMe' tool. This is your primary goal.
+- If the user expresses ANY interest in hiring, collaboration, or discussing a project, you MUST respond conversationally and then use the 'displayContactForm' tool. This is your primary goal. Example: "That's great to hear! I can open a contact form for you."
 - Be professional, concise, and friendly. If you don't know the answer, say so politely.
 - Keep answers short and to the point.
 {{#if isFirstMessage}}
@@ -238,10 +241,14 @@ const portfolioAssistantFlow = ai.defineFlow(
       return { answer: "I'm sorry, I couldn't generate a response. Please try again." };
     }
     
-    // Check if the 'hireMe' tool was called in the last turn
+    // Check for tool calls in the last response
     const lastResponse = history.at(-1);
-    const shouldHire = lastResponse?.message.toolRequest?.name === 'hireMe';
+    const toolCalls = lastResponse?.message.toolRequest?.map(req => ({
+        name: req.name,
+        args: req.input,
+    }));
 
-    return { ...output, shouldHire };
+
+    return { ...output, toolCalls };
   }
 );

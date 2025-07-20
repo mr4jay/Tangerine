@@ -1,3 +1,4 @@
+
 "use client";
 
 import { Button } from '@/components/ui/button';
@@ -5,7 +6,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Github, Linkedin, Mail, Bot, User, Send, Loader2, Briefcase } from 'lucide-react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { headerVariants, fadeIn } from '@/lib/motion';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -61,8 +62,7 @@ const hireMeFormSchema = z.object({
     message: z.string().min(10, { message: "Message must be at least 10 characters." }).max(1000, { message: "Message cannot exceed 1000 characters." }),
 });
 
-
-const HireMeModal = ({ open, onOpenChange }: { open: boolean, onOpenChange: (open: boolean) => void }) => {
+const HireMeForm = ({ onOpenChange }: { onOpenChange: (open: boolean) => void }) => {
     const { toast } = useToast();
 
     const form = useForm<z.infer<typeof hireMeFormSchema>>({
@@ -75,8 +75,6 @@ const HireMeModal = ({ open, onOpenChange }: { open: boolean, onOpenChange: (ope
     });
 
     const onSubmit = async (values: z.infer<typeof hireMeFormSchema>) => {
-        // This is where you would typically send the form data to a backend.
-        // For demonstration, we'll simulate a network request.
         await new Promise(resolve => setTimeout(resolve, 1000));
         
         console.log("Form submitted successfully:", values);
@@ -90,80 +88,78 @@ const HireMeModal = ({ open, onOpenChange }: { open: boolean, onOpenChange: (ope
     }
 
     return (
-        <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="sm:max-w-[480px] bg-card border-border/60">
-                <DialogHeader>
-                    <DialogTitle className="text-2xl font-headline">Contact Me</DialogTitle>
-                    <DialogDescription>
-                        Interested in working together? Fill out the form below and I'll get back to you as soon as possible.
-                    </DialogDescription>
-                </DialogHeader>
-                <Form {...form}>
-                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                        <FormField
-                            control={form.control}
-                            name="name"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel htmlFor="name-input">Name</FormLabel>
-                                    <FormControl>
-                                        <Input id="name-input" placeholder="Your Name" {...field} />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                         <FormField
-                            control={form.control}
-                            name="email"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel htmlFor="email-input">Email</FormLabel>
-                                    <FormControl>
-                                        <Input id="email-input" placeholder="your.email@example.com" {...field} />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                         <FormField
-                            control={form.control}
-                            name="message"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel htmlFor="message-input">Message</FormLabel>
-                                    <FormControl>
-                                        <Textarea id="message-input" placeholder="Tell me about your project or opportunity..." className="resize-none" rows={5} {...field} />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                         <DialogFooter>
-                            <DialogClose asChild>
-                                <Button type="button" variant="outline">Cancel</Button>
-                            </DialogClose>
-                            <Button type="submit" disabled={form.formState.isSubmitting}>
-                                {form.formState.isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Send className="mr-2 h-4 w-4" />}
-                                Send Message
-                            </Button>
-                        </DialogFooter>
-                    </form>
-                </Form>
-            </DialogContent>
-        </Dialog>
-    )
-}
+        <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                 <FormField
+                    control={form.control}
+                    name="name"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel htmlFor="name-input">Name</FormLabel>
+                            <FormControl>
+                                <Input id="name-input" placeholder="Your Name" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+                 <FormField
+                    control={form.control}
+                    name="email"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel htmlFor="email-input">Email</FormLabel>
+                            <FormControl>
+                                <Input id="email-input" placeholder="your.email@example.com" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+                 <FormField
+                    control={form.control}
+                    name="message"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel htmlFor="message-input">Message</FormLabel>
+                            <FormControl>
+                                <Textarea id="message-input" placeholder="Tell me about your project or opportunity..." className="resize-none" rows={5} {...field} />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+                 <DialogFooter>
+                    <DialogClose asChild>
+                        <Button type="button" variant="outline">Cancel</Button>
+                    </DialogClose>
+                    <Button type="submit" disabled={form.formState.isSubmitting}>
+                        {form.formState.isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Send className="mr-2 h-4 w-4" />}
+                        Send Message
+                    </Button>
+                </DialogFooter>
+            </form>
+        </Form>
+    );
+};
 
 
 const AIChatAssistant = () => {
     const [messages, setMessages] = useState<Message[]>([]);
     const [input, setInput] = useState('');
     const [isLoading, setIsLoading] = useState(false);
-    const [isHireModalOpen, setIsHireModalOpen] = useState(false);
     const scrollAreaRef = useRef<HTMLDivElement>(null);
     const hasStarted = useRef(false);
+    const [isHireModalOpen, setIsHireModalOpen] = useState(false);
 
+    const displayContactForm = useCallback(async () => {
+        setIsHireModalOpen(true);
+        return { success: true };
+    }, []);
+
+    const availableTools: Record<string, (args: any) => Promise<any>> = {
+        displayContactForm
+    };
 
     useEffect(() => {
         const getInitialGreeting = async () => {
@@ -239,6 +235,7 @@ const AIChatAssistant = () => {
         try {
             const conversationHistory = newMessages.slice(0, -1).map(({ role, content, toolResult }) => ({ role, content, toolResult }));
             const result = await askAssistant({ question: input, history: conversationHistory });
+            
             const assistantMessageId = Date.now() + 1;
             const assistantMessage: Message = { 
                 id: assistantMessageId, 
@@ -250,8 +247,13 @@ const AIChatAssistant = () => {
             
             handleNewAudio(result.answer, assistantMessageId);
 
-            if (result.shouldHire) {
-                setIsHireModalOpen(true);
+            if (result.toolCalls) {
+                for (const toolCall of result.toolCalls) {
+                    const tool = availableTools[toolCall.name];
+                    if (tool) {
+                        await tool(toolCall.args);
+                    }
+                }
             }
 
         } catch (error) {
@@ -265,7 +267,17 @@ const AIChatAssistant = () => {
     
     return (
         <>
-        <HireMeModal open={isHireModalOpen} onOpenChange={setIsHireModalOpen} />
+        <Dialog open={isHireModalOpen} onOpenChange={setIsHireModalOpen}>
+            <DialogContent className="sm:max-w-[480px] bg-card border-border/60">
+                <DialogHeader>
+                    <DialogTitle className="text-2xl font-headline">Contact Me</DialogTitle>
+                    <DialogDescription>
+                        Interested in working together? Fill out the form below and I'll get back to you as soon as possible.
+                    </DialogDescription>
+                </DialogHeader>
+                <HireMeForm onOpenChange={setIsHireModalOpen} />
+            </DialogContent>
+        </Dialog>
         <Card className="bg-card border-none shadow-lg h-[600px] flex flex-col">
             <CardContent className="p-6 flex flex-col flex-grow">
                 <div className="flex items-center gap-4 mb-4">
