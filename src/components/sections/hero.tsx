@@ -8,6 +8,7 @@ import { ArrowRight } from 'lucide-react';
 import { AwsLogo, SnowflakeLogo, PythonLogo, DataikuLogo } from './tech-logos';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef } from 'react';
+import { useTypingEffect } from '@/hooks/use-typing-effect';
 
 const techLogos = [
   { name: 'AWS', component: AwsLogo },
@@ -29,6 +30,9 @@ export default function Hero() {
   });
 
   const y = useTransform(scrollYProgress, [0, 1], ["0%", "10%"]);
+
+  const typedTitle = useTypingEffect("Marketing Science & Data Professional", 50);
+  const typedSubtitle = useTypingEffect("Streamlining DataOps Workflows", 50, 1500); // Start after a delay
 
   return (
     <section ref={targetRef} id="home" className="relative w-full min-h-screen flex flex-col items-center justify-center overflow-hidden py-24 sm:py-16">
@@ -56,12 +60,14 @@ export default function Hero() {
                     priority
                 />
             </motion.div>
-            <motion.h1 variants={fadeIn(0.2)} className="text-4xl md:text-5xl font-bold tracking-tight text-foreground">
-              Marketing Science & Data Professional
-            </motion.h1>
-            <motion.h2 variants={fadeIn(0.3)} className="text-3xl md:text-4xl font-bold tracking-tight text-primary mb-4">
-              Streamlining DataOps Workflows
-            </motion.h2>
+            <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-foreground h-24 md:h-16">
+              {typedTitle}
+              <span className="animate-pulse">|</span>
+            </h1>
+            <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-primary mb-4 h-20 md:h-12">
+              {typedSubtitle}
+              <span className="animate-pulse opacity-0 data-[active=true]:opacity-100" data-active={typedSubtitle.length > 0}>|</span>
+            </h2>
             <motion.p variants={fadeIn(0.4)} className="max-w-3xl mx-auto text-lg md:text-xl text-muted-foreground mb-8">
               6+ years of experience driving value with Datorama, Dataiku, and advanced marketing analytics.
             </motion.p>
