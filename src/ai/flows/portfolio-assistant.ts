@@ -13,6 +13,9 @@ import { getProjects } from '@/lib/projects';
 import { getSortedPostsData } from '@/lib/posts';
 import fs from 'fs';
 import path from 'path';
+import { generatePost } from './generate-post-flow';
+import { extractTags } from './extract-tags-flow';
+import { summarizePost } from './summarize-post-flow';
 
 // This context provides a brief, high-level overview.
 // The AI will use the getResume tool for specific details.
@@ -154,6 +157,40 @@ ${jobDescription}
     }
 );
 
+const draftBlogPost = ai.defineTool(
+    {
+        name: 'draftBlogPost',
+        description: 'Drafts a new blog post on a given topic. It generates the title, tags, summary, and full markdown content. Use this when the user asks to write, create, or draft a blog post.',
+        inputSchema: z.object({
+            topic: z.string().describe('The topic or title for the new blog post.'),
+        }),
+        outputSchema: z.object({
+            title: z.string(),
+            tags: z.array(z.string()),
+            summary: z.string(),
+            content: z.string(),
+        }),
+    },
+    async ({ topic }) => {
+        // 1. Generate content first, as it's needed for tags and summary.
+        const { content } = await generatePost({ title: topic, tags: [] });
+
+        // 2. Extract tags from the generated content.
+        const { tags } = await extractTags({ content });
+
+        // 3. Summarize the generated content.
+        const { summary } = await summarizePost({ content });
+
+        // 4. Return the complete draft.
+        return {
+            title: topic,
+            tags,
+            summary,
+            content,
+        };
+    }
+);
+
 const MessageSchema = z.object({
     role: z.enum(['user', 'assistant', 'tool']),
     content: z.string(),
@@ -196,14 +233,16 @@ const prompt = ai.definePrompt({
   name: 'portfolioAssistantPrompt',
   input: {schema: PromptInputSchema},
   output: {schema: AskAssistantOutputSchema},
-  tools: [calculateSuitabilityScore, getResume, displayContactForm, getRecentUpdates],
+  tools: [calculateSuitabilityScore, getResume, displayContactForm, getRecentUpdates, draftBlogPost],
   prompt: `You are a helpful and friendly AI assistant for Rajure Ajay Kumar's personal portfolio. Your goal is to answer questions from potential employers or collaborators.
 
 - Your primary source of information is the 'getResume' tool. You MUST use it to answer any questions regarding Rajure's experience, skills, projects, or education. Do not rely on the brief context below for details.
 - If the user provides a job description or asks about suitability for a role, you MUST use the 'calculateSuitabilityScore' tool.
+- If the user asks you to draft, write, or create a blog post, you MUST use the 'draftBlogPost' tool.
 - If the user expresses ANY interest in hiring, collaboration, or discussing a project, you MUST respond conversationally and then use the 'displayContactForm' tool. This is your primary goal. Example: "That's great to hear! I can open a contact form for you."
 - Be professional, concise, and friendly. If you don't know the answer, say so politely.
 - Keep answers short and to the point.
+- When presenting the results of a drafted blog post, format it nicely using Markdown. Include the title, tags, summary, and a preview of the content.
 {{#if isFirstMessage}}
 - This is the user's first message. Start with a warm welcome and introduce yourself. 
 - Use the 'getRecentUpdates' tool to get the latest project and blog post.
