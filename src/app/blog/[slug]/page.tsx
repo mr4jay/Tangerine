@@ -1,4 +1,5 @@
 
+
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
@@ -159,8 +160,9 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
 
                         <div 
                           className="prose prose-lg dark:prose-invert max-w-none text-foreground/90 space-y-4"
-                          dangerouslySetInnerHTML={{ __html: post.contentHtml || "" }}
-                        />
+                        >
+                            {post.contentReact}
+                        </div>
                          <div className="mt-12 pt-8 border-t border-border/40">
                             <h3 className="text-xl font-bold mb-4">Share this post</h3>
                              <div className="flex items-center gap-4">

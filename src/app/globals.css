@@ -86,6 +86,11 @@ body {
   body {
     @apply bg-background text-foreground;
   }
+  .prose {
+    pre {
+      @apply relative rounded-lg;
+    }
+  }
 }
 
 @layer utilities {

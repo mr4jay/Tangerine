@@ -1,10 +1,14 @@
 import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
-import { remark } from 'remark';
-import html from 'remark-html';
 import { summarizePost } from '@/ai/flows/summarize-post-flow';
 import { extractTags } from '@/ai/flows/extract-tags-flow';
+import { unified } from 'unified';
+import remarkParse from 'remark-parse';
+import remarkRehype from 'remark-rehype';
+import rehypeReact from 'rehype-react';
+import React from 'react';
+import { CodeBlock } from '@/components/blog/code-block';
 
 const postsDirectory = path.join(process.cwd(), 'posts');
 
@@ -17,7 +21,7 @@ export type PostData = {
   publishDate: string;
   tags: string[];
   readTime: number; // in minutes
-  contentHtml?: string;
+  contentReact?: React.ReactElement;
 };
 
 // Helper function to add a delay
@@ -30,6 +34,16 @@ const calculateReadTime = (content: string): number => {
     const readTime = Math.ceil(words / wordsPerMinute);
     return readTime;
 };
+
+const processor = unified()
+  .use(remarkParse)
+  .use(remarkRehype)
+  .use(rehypeReact, {
+    createElement: React.createElement,
+    components: {
+      pre: CodeBlock,
+    },
+  });
 
 export async function getSortedPostsData(): Promise<PostData[]> {
   const fileNames = fs.readdirSync(postsDirectory);
@@ -101,11 +115,8 @@ export async function getPostData(slug: string): Promise<PostData> {
   const fileContents = fs.readFileSync(fullPath, 'utf8');
 
   const matterResult = matter(fileContents);
-
-  const processedContent = await remark()
-    .use(html)
-    .process(matterResult.content);
-  const contentHtml = processedContent.toString();
+  
+  const contentReact = (await processor.process(matterResult.content)).result;
 
   const readTime = calculateReadTime(matterResult.content);
 
@@ -128,7 +139,7 @@ export async function getPostData(slug: string): Promise<PostData> {
 
   return {
     slug,
-    contentHtml,
+    contentReact,
     excerpt: summary,
     tags,
     readTime,
