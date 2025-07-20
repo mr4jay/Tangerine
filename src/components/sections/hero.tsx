@@ -22,6 +22,19 @@ const fadeIn = (delay: number) => ({
     visible: { opacity: 1, y: 0, transition: { duration: 0.5, delay } },
 });
 
+// Centralized content configuration
+const heroContent = {
+  imageUrl: "https://images.unsplash.com/photo-1564564321837-a57b7070ac4f?q=80&w=150&h=150&fit=crop&crop=faces",
+  imageAlt: "Rajure Ajay Kumar Headshot",
+  imageHint: "professional portrait",
+  title: "Data Professional",
+  subtitle: "with advanced analytics and reporting",
+  description: "6+ years of experience driving value with data-driven insights and building powerful reporting solutions.",
+  ctaText: "Explore My Work",
+  ctaLink: "#projects",
+};
+
+
 export default function Hero() {
   const targetRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
@@ -31,11 +44,8 @@ export default function Hero() {
 
   const y = useTransform(scrollYProgress, [0, 1], ["0%", "10%"]);
 
-  const titleText = "Data Professional";
-  const subtitleText = "with advanced analytics and reporting";
-
-  const typedTitle = useTypingEffect(titleText, 50);
-  const typedSubtitle = useTypingEffect(subtitleText, 50, (titleText.length * 50) + 500);
+  const typedTitle = useTypingEffect(heroContent.title, 50);
+  const typedSubtitle = useTypingEffect(heroContent.subtitle, 50, (heroContent.title.length * 50) + 500);
 
   return (
     <section ref={targetRef} id="home" className="relative w-full min-h-screen flex flex-col items-center justify-center overflow-hidden py-24 sm:py-16">
@@ -54,12 +64,12 @@ export default function Hero() {
         >
             <motion.div variants={fadeIn(0)} className="relative mb-6">
                 <Image
-                    src="https://images.unsplash.com/photo-1564564321837-a57b7070ac4f?q=80&w=150&h=150&fit=crop&crop=faces"
-                    alt="Rajure Ajay Kumar Headshot"
+                    src={heroContent.imageUrl}
+                    alt={heroContent.imageAlt}
                     width={150}
                     height={150}
                     className="rounded-full shadow-lg"
-                    data-ai-hint="professional portrait"
+                    data-ai-hint={heroContent.imageHint}
                     priority
                 />
             </motion.div>
@@ -72,12 +82,12 @@ export default function Hero() {
               <span className="animate-pulse opacity-0 data-[active=true]:opacity-100" data-active={typedSubtitle.length > 0}>|</span>
             </h2>
             <motion.p variants={fadeIn(0.4)} className="max-w-3xl mx-auto text-lg md:text-xl text-muted-foreground mb-8">
-              6+ years of experience driving value with data-driven insights and building powerful reporting solutions.
+              {heroContent.description}
             </motion.p>
             <motion.div variants={fadeIn(0.5)}>
               <Button asChild size="lg" className="group bg-primary hover:bg-primary/90 text-primary-foreground transition-all duration-300 ease-in-out">
-                <Link href="#projects" aria-label="Explore My Work">
-                  Explore My Work
+                <Link href={heroContent.ctaLink} aria-label={heroContent.ctaText}>
+                  {heroContent.ctaText}
                   <ArrowRight className="h-5 w-5 ml-2 transition-transform duration-300 group-hover:translate-x-1" />
                 </Link>
               </Button>
