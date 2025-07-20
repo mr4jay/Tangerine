@@ -44,6 +44,8 @@ export default function ClientBlogContent({ post, allPosts }: { post: PostData; 
   const portfolioUrl = "https://ajay-kumar-portfolio.vercel.app"; // Replace with your actual domain
   const shareUrl = `${portfolioUrl}/blog/${post.slug}`;
   const shareTitle = encodeURIComponent(post.title);
+  const professionalHeadshotUrl = "https://images.unsplash.com/photo-1564564321837-a57b7070ac4f?q=80&w=1200&h=630&fit=crop&crop=faces";
+
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -65,7 +67,7 @@ export default function ClientBlogContent({ post, allPosts }: { post: PostData; 
       'name': 'DataCraft Portfolio',
       'logo': {
         '@type': 'ImageObject',
-        'url': `${portfolioUrl}/professional-headshot.png`,
+        'url': professionalHeadshotUrl,
       },
     },
     'datePublished': post.publishDate,
