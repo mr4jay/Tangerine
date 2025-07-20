@@ -4,6 +4,7 @@
 import Script from 'next/script';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import type { Metric } from 'web-vitals';
 
 const GA_TRACKING_ID = process.env.NEXT_PUBLIC_GA_ID || "G-XXXXXXXXXX"; // Replace with your GA ID
 const COOKIE_CONSENT_KEY = 'cookie_consent_is_true';
@@ -24,6 +25,16 @@ export const trackEvent = (action: string, params: Omit<GTagEvent, 'action'>) =>
     window.gtag('event', action, params);
 };
 
+export function reportWebVitals(metric: Metric) {
+  if (typeof window.gtag === 'function') {
+      trackEvent('web_vitals', {
+        category: 'Web Vitals',
+        label: metric.id,
+        value: Math.round(metric.name === 'CLS' ? metric.value * 1000 : metric.value),
+        non_interaction: true,
+      });
+  }
+}
 
 const Analytics = () => {
   const [consent, setConsent] = useState(false);

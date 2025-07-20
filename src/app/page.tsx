@@ -21,14 +21,16 @@ export default async function Home() {
   return (
     <HomeClient>
         <Header />
-        <Hero />
-        <div id="about"><About /></div>
-        <div id="projects"><Projects /></div>
-        <div id="blog"><Blog posts={blogPosts} /></div>
-        <div id="skills"><Skills /></div>
-        <div id="certifications"><Certifications /></div>
-        <div id="testimonials"><Testimonials /></div>
-        <div id="contact"><Contact /></div>
+        <main>
+          <Hero />
+          <div id="about"><About /></div>
+          <div id="projects"><Projects /></div>
+          <div id="blog"><Blog posts={blogPosts} /></div>
+          <div id="skills"><Skills /></div>
+          <div id="certifications"><Certifications /></div>
+          <div id="testimonials"><Testimonials /></div>
+          <div id="contact"><Contact /></div>
+        </main>
         <Footer />
         <BackToTopButton />
     </HomeClient>

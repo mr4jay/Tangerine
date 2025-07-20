@@ -5,9 +5,8 @@ import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from '@/components/theme-provider';
 import { Inter } from 'next/font/google';
-import Analytics, { trackEvent } from '@/components/analytics';
+import Analytics from '@/components/analytics';
 import CookieConsent from '@/components/layout/cookie-consent';
-import type { Metric } from 'web-vitals';
 import { AppLayout } from '@/components/layout/header';
 
 
@@ -97,16 +96,6 @@ const jsonLd = {
   }
 };
 
-export function reportWebVitals(metric: Metric) {
-  if (typeof window.gtag === 'function') {
-      trackEvent('web_vitals', {
-        category: 'Web Vitals',
-        label: metric.id,
-        value: Math.round(metric.name === 'CLS' ? metric.value * 1000 : metric.value),
-        non_interaction: true,
-      });
-  }
-}
 
 export default function RootLayout({
   children,
