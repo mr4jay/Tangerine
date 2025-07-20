@@ -15,8 +15,8 @@ const inter = Inter({
   variable: '--font-inter',
 });
 
-const portfolioUrl = "https://ajay-kumar-portfolio.vercel.app"; // Replace with your actual domain
-const professionalHeadshotUrl = `${portfolioUrl}/professional-headshot.png`; // Using a local OG image
+const portfolioUrl = "https://ajay-kumar-portfolio.vercel.app";
+const professionalHeadshotUrl = `${portfolioUrl}/professional-headshot.png`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(portfolioUrl),
@@ -96,14 +96,12 @@ const jsonLd = {
 };
 
 export function reportWebVitals(metric: Metric) {
-  // Use `window.gtag` if you initialized Google Analytics as this example does.
-  // See https://github.com/googlesamples/web-vitals#send-the-results-to-google-analytics
   if (typeof window.gtag === 'function') {
       trackEvent('web_vitals', {
         category: 'Web Vitals',
-        label: metric.id, // A unique ID for this metric instance
-        value: Math.round(metric.name === 'CLS' ? metric.value * 1000 : metric.value), // CLS is a score, others are ms
-        non_interaction: true, // Mark as non-interaction event
+        label: metric.id,
+        value: Math.round(metric.name === 'CLS' ? metric.value * 1000 : metric.value),
+        non_interaction: true,
       });
   }
 }
