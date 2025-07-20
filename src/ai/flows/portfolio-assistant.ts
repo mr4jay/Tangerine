@@ -274,4 +274,3 @@ const portfolioAssistantFlow = ai.defineFlow(
     return { ...output, toolCalls };
   }
 );
-
