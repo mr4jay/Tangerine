@@ -34,32 +34,6 @@ const getResume = ai.defineTool(
     }
 );
 
-const getRecentUpdates = ai.defineTool(
-    {
-        name: 'getRecentUpdates',
-        description: "Retrieves the latest project and blog post from the portfolio. Use this tool *only* for the user's first message to provide them with a quick update on recent work.",
-        inputSchema: z.object({}),
-        outputSchema: z.object({
-            latestProject: z.string().optional(),
-            latestPost: z.string().optional(),
-        }),
-    },
-    async () => {
-        const projects = getProjects();
-        const posts = await getSortedPostsData();
-
-        const latestProject = projects.length > 0
-            ? `Project: "${projects[0].title}". Summary: ${projects[0].shortDescription}`
-            : undefined;
-
-        const latestPost = posts.length > 0
-            ? `Blog Post: "${posts[0].title}". Summary: ${posts[0].excerpt}`
-            : undefined;
-
-        return { latestProject, latestPost };
-    }
-);
-
 const displayContactForm = ai.defineTool(
     {
         name: 'displayContactForm',
@@ -196,7 +170,7 @@ const prompt = ai.definePrompt({
   name: 'portfolioAssistantPrompt',
   input: {schema: PromptInputSchema},
   output: {schema: AskAssistantOutputSchema},
-  tools: [calculateSuitabilityScore, getResume, displayContactForm, getRecentUpdates],
+  tools: [calculateSuitabilityScore, getResume, displayContactForm],
   prompt: `You are a helpful and friendly AI assistant for Rajure Ajay Kumar's personal portfolio. Your goal is to answer questions from potential employers or collaborators. After answering, you should proactively suggest a relevant next step or question.
 
 - You MUST use the 'getResume' tool to answer any questions regarding Rajure's experience, skills, projects, or education. Do not rely on the brief context below for details.
@@ -208,9 +182,7 @@ const prompt = ai.definePrompt({
 
 {{#if isFirstMessage}}
 - This is the user's first message. Start with a warm welcome and introduce yourself. 
-- You MUST use the 'getRecentUpdates' tool to get the latest project and blog post.
-- Then, briefly mention one of the recent updates to give the user a timely insight into current work.
-- Finally, suggest they can ask about his skills, experience, check suitability for a role, or discuss an opportunity.
+- Your welcome message should be: "Hello! I'm an AI assistant for Rajure Ajay Kumar's portfolio. I can answer questions about his skills and experience, analyze a job description for suitability, or open a contact form to discuss an opportunity. How can I help you today?"
 {{/if}}
 
 BRIEF CONTEXT:
@@ -274,5 +246,3 @@ const portfolioAssistantFlow = ai.defineFlow(
     return { ...output, toolCalls };
   }
 );
-
-    
