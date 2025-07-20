@@ -17,7 +17,7 @@ const inter = Inter({
 });
 
 const portfolioUrl = "https://ajay-kumar-portfolio.vercel.app";
-const professionalHeadshotUrl = `${portfolioUrl}/professional-headshot.png`;
+const professionalHeadshotUrl = "https://images.unsplash.com/photo-1564564321837-a57b7070ac4f?q=80&w=1200&h=630&fit=crop&crop=faces";
 
 export const metadata: Metadata = {
   metadataBase: new URL(portfolioUrl),
