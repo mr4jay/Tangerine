@@ -9,6 +9,8 @@
 import {ai} from '@/ai/genkit';
 import {z} from 'zod';
 import { skillCategories } from '@/components/sections/skills-chart';
+import { getProjects } from '@/lib/projects';
+import { getSortedPostsData } from '@/lib/posts';
 import fs from 'fs';
 import path from 'path';
 
@@ -29,6 +31,32 @@ const getResume = ai.defineTool(
     async () => {
         const resumePath = path.join(process.cwd(), 'resume.md');
         return fs.readFileSync(resumePath, 'utf8');
+    }
+);
+
+const getRecentUpdates = ai.defineTool(
+    {
+        name: 'getRecentUpdates',
+        description: "Retrieves the latest project and blog post from the portfolio. Use this tool *only* for the user's first message to provide them with a quick update on recent work.",
+        inputSchema: z.object({}),
+        outputSchema: z.object({
+            latestProject: z.string().optional(),
+            latestPost: z.string().optional(),
+        }),
+    },
+    async () => {
+        const projects = getProjects();
+        const posts = await getSortedPostsData();
+
+        const latestProject = projects.length > 0
+            ? `Project: "${projects[0].title}". Summary: ${projects[0].shortDescription}`
+            : undefined;
+
+        const latestPost = posts.length > 0
+            ? `Blog Post: "${posts[0].title}". Summary: ${posts[0].excerpt}`
+            : undefined;
+
+        return { latestProject, latestPost };
     }
 );
 
@@ -145,7 +173,7 @@ const prompt = ai.definePrompt({
   name: 'portfolioAssistantPrompt',
   input: {schema: PromptInputSchema},
   output: {schema: AskAssistantOutputSchema},
-  tools: [calculateSuitabilityScore, getResume, hireMe],
+  tools: [calculateSuitabilityScore, getResume, hireMe, getRecentUpdates],
   prompt: `You are a helpful and friendly AI assistant for Rajure Ajay Kumar's personal portfolio. Your goal is to answer questions from potential employers or collaborators.
 
 - Your primary source of information is the 'getResume' tool. You MUST use it to answer any questions regarding Rajure's experience, skills, projects, or education. Do not rely on the brief context below for details.
@@ -154,7 +182,10 @@ const prompt = ai.definePrompt({
 - Be professional, concise, and friendly. If you don't know the answer, say so politely.
 - Keep answers short and to the point.
 {{#if isFirstMessage}}
-- This is the user's first message. Start with a warm welcome and introduce yourself. Suggest they can ask about his skills, experience, check suitability for a role, or discuss an opportunity.
+- This is the user's first message. Start with a warm welcome and introduce yourself. 
+- Use the 'getRecentUpdates' tool to get the latest project and blog post.
+- Then, briefly mention one of the recent updates to give the user a timely insight into current work.
+- Finally, suggest they can ask about his skills, experience, check suitability for a role, or discuss an opportunity.
 {{/if}}
 
 BRIEF CONTEXT:
