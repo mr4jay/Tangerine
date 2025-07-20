@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { Home, User, Briefcase, Rss, FileText, MessageSquare, Code } from 'lucide-react';
 import { ThemeToggle } from './theme-toggle';
 import { usePathname } from 'next/navigation';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import {
   Sidebar,
   SidebarProvider,
@@ -35,51 +35,41 @@ const navLinks = [
 export function PortfolioSidebar() {
   const pathname = usePathname();
   const { setOpenMobile } = useSidebar();
-  const [activeLink, setActiveLink] = useState('/');
+  const [activeLink, setActiveLink] = useState(pathname);
+
+  const handleScroll = useCallback(() => {
+    const sections = navLinks
+      .map(link => (link.href.startsWith('/#') ? link.href.substring(2) : null))
+      .filter(Boolean)
+      .map(id => document.getElementById(id as string));
+
+    let currentSection = '/';
+    for (const section of sections) {
+        if (section && section.offsetTop <= window.scrollY + window.innerHeight / 2) {
+            currentSection = `/#${section.id}`;
+        }
+    }
+    setActiveLink(currentSection);
+  }, []);
+
 
   useEffect(() => {
-      if (pathname.startsWith('/blog') || pathname.startsWith('/projects/') || pathname.startsWith('/resume') || pathname.startsWith('/about')) {
-          const base_path = `/${pathname.split('/')[1]}`;
-          setActiveLink(base_path);
-          return;
-      }
-      
-      if(pathname === '/') {
-        const sections = navLinks
-          .map(link => link.href.split('#')[1])
-          .filter(Boolean)
-          .map(id => document.getElementById(id));
+    if (pathname === '/') {
+      window.addEventListener('scroll', handleScroll, { passive: true });
+      handleScroll();
+      return () => window.removeEventListener('scroll', handleScroll);
+    } else {
+      const base_path = `/${pathname.split('/')[1]}`;
+      setActiveLink(base_path);
+    }
+  }, [pathname, handleScroll]);
 
-        const handleScroll = () => {
-          const scrollPosition = window.scrollY + 100;
-          let currentSection = '/';
-          
-          for (const section of sections) {
-              if (section && section.offsetTop <= scrollPosition) {
-                  currentSection = `/#${section.id}`;
-              }
-          }
-          setActiveLink(currentSection);
-        }
-        
-        window.addEventListener('scroll', handleScroll, { passive: true });
-        handleScroll(); // Initial check
-        return () => window.removeEventListener('scroll', handleScroll);
-      }
-      
-  }, [pathname]);
 
   const getIsActive = (href: string) => {
-    // Exact match for pages like /about or /blog
-    if (['/about', '/blog', '/resume'].includes(href)) {
-        return activeLink.startsWith(href);
-    }
-    // Handle hash links for homepage
-    if (href.includes('#')) {
-        return activeLink === href;
-    }
-    // Handle homepage itself
-    return pathname === href && activeLink === href;
+    if (href === '/') return activeLink === '/';
+    if (href.startsWith('/#')) return activeLink === href;
+    if (href.startsWith('/')) return activeLink.startsWith(href);
+    return false;
   };
 
   return (

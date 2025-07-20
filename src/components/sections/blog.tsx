@@ -73,13 +73,7 @@ export default function Blog({ posts }: { posts: PostData[] }) {
                   <Button asChild variant="default" aria-label={`Read more about ${post.title}`} className="group">
                     <Link href={`/blog/${post.slug}`}>
                       Read More
-                      <motion.div
-                        className="inline-block ml-2"
-                        whileHover={{ x: 4 }}
-                        transition={{ type: "spring", stiffness: 400, damping: 10 }}
-                      >
-                        <ArrowRight className="h-4 w-4" />
-                      </motion.div>
+                      <ArrowRight className="h-4 w-4 ml-2 transition-transform duration-300 group-hover:translate-x-1" />
                     </Link>
                   </Button>
                 </CardFooter>

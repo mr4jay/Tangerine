@@ -69,13 +69,7 @@ export default function Hero() {
               <Button asChild size="lg" className="group bg-primary hover:bg-primary/90 text-primary-foreground transition-all duration-300 ease-in-out">
                 <Link href="#projects" aria-label="Explore My Work">
                   Explore My Work
-                  <motion.div
-                      className="inline-block ml-2"
-                      whileHover={{ x: 4 }}
-                      transition={{ type: "spring", stiffness: 400, damping: 10 }}
-                    >
-                      <ArrowRight className="h-5 w-5" />
-                    </motion.div>
+                  <ArrowRight className="h-5 w-5 ml-2 transition-transform duration-300 group-hover:translate-x-1" />
                 </Link>
               </Button>
             </motion.div>
