@@ -6,7 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Github, ExternalLink } from 'lucide-react';
+import { Github, ExternalLink, PlusCircle } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { trackEvent } from '@/components/analytics';
 import { cardVariants, headerVariants } from '@/lib/motion';
@@ -27,12 +27,20 @@ export default function Projects() {
           whileInView="visible"
           viewport={{ once: true, amount: 0.3 }}
           variants={headerVariants}
-          className="flex flex-col items-center justify-center space-y-4 text-center mb-12"
+          className="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0 text-center md:text-left mb-12"
         >
-          <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl font-headline">Projects Showcase</h2>
-          <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-            A selection of my detailed project work, demonstrating my skills in data engineering, AI, and MLOps.
-          </p>
+          <div className="flex-1">
+            <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl font-headline">Projects Showcase</h2>
+            <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+              A selection of my detailed project work, demonstrating my skills in data engineering, AI, and MLOps.
+            </p>
+          </div>
+          <Button asChild>
+            <Link href="/projects/new">
+              <PlusCircle className="mr-2 h-5 w-5" />
+              New Project with AI
+            </Link>
+          </Button>
         </motion.div>
 
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">

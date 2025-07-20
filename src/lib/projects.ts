@@ -130,4 +130,3 @@ export function addProject(project: Project) {
   // Add to the beginning of the array so it appears first
   projectsData.unshift(project);
 }
-    
