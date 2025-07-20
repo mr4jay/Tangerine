@@ -34,8 +34,8 @@ export default function Hero() {
   const titleText = "Marketing Science & Data Professional";
   const subtitleText = "Streamlining DataOps Workflows";
 
-  const typedTitle = useTypingEffect(titleText, 2000);
-  const typedSubtitle = useTypingEffect(subtitleText, 2000, (titleText.length * 2000) + 500); // Start after the title finishes
+  const typedTitle = useTypingEffect(titleText, 50);
+  const typedSubtitle = useTypingEffect(subtitleText, 50, (titleText.length * 50) + 500); // Start after the title finishes
 
   return (
     <section ref={targetRef} id="home" className="relative w-full min-h-screen flex flex-col items-center justify-center overflow-hidden py-24 sm:py-16">

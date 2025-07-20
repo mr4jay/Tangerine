@@ -9,9 +9,14 @@ const useTypingSound = () => {
 
   useEffect(() => {
     // Initialize AudioContext on the client-side
-    audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();
+    // This check is important because AudioContext is a browser-only feature.
+    if (typeof window !== 'undefined' && !audioContextRef.current) {
+      audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();
+    }
+    
     return () => {
       audioContextRef.current?.close();
+      audioContextRef.current = null;
     };
   }, []);
 
@@ -42,13 +47,20 @@ const useTypingSound = () => {
 export const useTypingEffect = (text: string, speed = 100, delay = 0) => {
   const [displayedText, setDisplayedText] = useState('');
   const playTypingSound = useTypingSound();
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+
 
   useEffect(() => {
-    setDisplayedText(''); // Reset on text change
-    let index = 0;
+    // Clear any running timers from previous renders
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    if (intervalRef.current) clearInterval(intervalRef.current);
+    
+    setDisplayedText('');
     
     const startTyping = () => {
-      const intervalId = setInterval(() => {
+      let index = 0;
+      intervalRef.current = setInterval(() => {
         if (index < text.length) {
           setDisplayedText((prev) => prev + text.charAt(index));
           if (text.charAt(index) !== ' ') {
@@ -56,18 +68,20 @@ export const useTypingEffect = (text: string, speed = 100, delay = 0) => {
           }
           index++;
         } else {
-          clearInterval(intervalId);
+          if (intervalRef.current) clearInterval(intervalRef.current);
         }
       }, speed);
-      
-      return () => clearInterval(intervalId);
-    }
-    
-    const timeoutId = setTimeout(startTyping, delay);
+    };
 
-    return () => clearTimeout(timeoutId);
+    timeoutRef.current = setTimeout(startTyping, delay);
 
-  }, [text, speed, delay, playTypingSound]);
+    return () => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+      if (intervalRef.current) clearInterval(intervalRef.current);
+    };
+  // The playTypingSound function is stable and doesn't need to be in the dependency array.
+  // Including it was causing the effect to re-run on every sound playback.
+  }, [text, speed, delay]);
 
   return displayedText;
 };
