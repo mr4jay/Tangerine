@@ -44,10 +44,10 @@ export default function Projects() {
               whileInView="visible"
               viewport={{ once: true, amount: 0.3 }}
               variants={cardVariants}
-              whileHover={{ y: -5, scale: 1.02, boxShadow: "0 10px 20px -5px hsl(var(--primary) / 0.4)", transition: { duration: 0.3, ease: 'easeOut' } }}
+              whileHover={{ y: -5, transition: { duration: 0.3, ease: 'easeOut' } }}
               className="h-full"
             >
-              <Card className="flex flex-col h-full overflow-hidden bg-card transition-shadow duration-300 ease-in-out">
+              <Card className="flex flex-col h-full overflow-hidden bg-card transition-shadow duration-300 ease-in-out hover:shadow-2xl hover:shadow-primary/40">
                 <CardHeader className="p-0">
                   <div className="relative w-full h-48">
                       <Image 
