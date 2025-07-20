@@ -67,10 +67,18 @@ export default function ClientBlogContent({ post, allPosts }: { post: PostData; 
       >
         <div className="container mx-auto px-4 md:px-6 max-w-7xl">
           <div className="mb-8">
-            <Link href="/blog" className="inline-flex items-center text-primary hover:underline">
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              Back to Blog
-            </Link>
+            <Button asChild variant="link" className="group p-0 text-base text-primary hover:no-underline">
+                <Link href="/blog" className="inline-flex items-center">
+                    <motion.div
+                        className="inline-block mr-2"
+                        whileHover={{ x: -4 }}
+                        transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                    >
+                        <ArrowLeft className="h-4 w-4" />
+                    </motion.div>
+                    Back to Blog
+                </Link>
+            </Button>
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-3 lg:gap-12">
             <article className="lg:col-span-2">

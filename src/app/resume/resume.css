@@ -1,4 +1,5 @@
 
+
 .resume-content {
     font-family: var(--font-tech-mono), monospace;
     color: hsl(var(--foreground));
@@ -59,4 +60,33 @@
 .resume-content strong {
     color: hsl(var(--foreground));
     font-weight: 600;
+}
+
+.resume-content a {
+    color: hsl(var(--primary));
+    text-decoration: none;
+    transition: all 0.2s ease-in-out;
+}
+
+.resume-content a:hover {
+    text-decoration: underline;
+    filter: brightness(1.2);
+}
+
+.prose h3 {
+    color: hsl(var(--primary));
+}
+
+.prose ul > li::marker {
+    color: hsl(var(--primary));
+}
+
+.prose a {
+    color: hsl(var(--primary));
+    transition: all 0.2s ease-in-out;
+}
+
+.prose a:hover {
+    text-decoration: underline;
+    filter: brightness(1.2);
 }
