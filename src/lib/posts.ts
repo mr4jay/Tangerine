@@ -64,29 +64,6 @@ export async function getSortedPostsData(): Promise<PostData[]> {
 
     let summary = matterResult.data.excerpt;
     let tags: string[] = matterResult.data.tags || [];
-
-    // Only generate if missing to avoid hitting rate limits
-    if (!summary || tags.length === 0) {
-      try {
-        await delay(1000); 
-        
-        const [summaryResult, tagsResult] = await Promise.all([
-          summarizePost({ content: matterResult.content }),
-          extractTags({ content: matterResult.content })
-        ]);
-        summary = summaryResult.summary;
-        tags = tagsResult.tags;
-
-        // NOTE: This does not save the generated content back to the file.
-        // For a permanent cache, you would need to write the new frontmatter
-        // back to the .md file.
-      } catch (error) {
-          console.error(`Failed to generate AI content for ${slug}:`, error);
-          // Fallback to defaults if API fails
-          summary = matterResult.data.excerpt || 'Read this post to learn more.';
-          tags = matterResult.data.tags || ['data'];
-      }
-    }
     
     allPostsData.push({
       slug,
@@ -123,8 +100,11 @@ export function getAllPostSlugs() {
   });
 }
 
-export async function getPostData(slug: string): Promise<PostData> {
+export async function getPostData(slug: string): Promise<PostData | null> {
   const fullPath = path.join(postsDirectory, `${slug}.md`);
+   if (!fs.existsSync(fullPath)) {
+    return null;
+  }
   const fileContents = fs.readFileSync(fullPath, 'utf8');
 
   const matterResult = matter(fileContents);
@@ -135,23 +115,6 @@ export async function getPostData(slug: string): Promise<PostData> {
 
   let summary = matterResult.data.excerpt;
   let tags: string[] = matterResult.data.tags || [];
-
-  // Only generate if missing
-  if (!summary || tags.length === 0) {
-    try {
-        await delay(500);
-        const [summaryResult, tagsResult] = await Promise.all([
-          summarizePost({ content: matterResult.content }),
-          extractTags({ content: matterResult.content })
-        ]);
-        summary = summaryResult.summary;
-        tags = tagsResult.tags;
-    } catch (error) {
-        console.error(`Failed to generate AI content for ${slug}:`, error);
-        summary = matterResult.data.excerpt || 'Read this post to learn more.';
-        tags = matterResult.data.tags || ['data'];
-    }
-  }
 
   return {
     slug,
