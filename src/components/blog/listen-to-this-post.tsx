@@ -17,6 +17,7 @@ const ListenToPost = ({ content }: { content: string }) => {
   const handleGenerateAudio = async () => {
     try {
       setIsLoading(true);
+      setAudioUrl(null); // Reset previous audio if any
       const result = await textToSpeech({ text: content.substring(0, 4000) }); // Limit text length for API
       setAudioUrl(result.audio);
     } catch (e) {
@@ -43,30 +44,25 @@ const ListenToPost = ({ content }: { content: string }) => {
       transition={{ duration: 0.5 }}
     >
         <AnimatePresence mode="wait">
-            {!audioUrl && !isLoading && (
+            {!audioUrl && (
                  <motion.div 
                     key="button" 
                     initial={{ opacity: 0, scale: 0.8 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.8 }}
                  >
-                    <Button onClick={handleGenerateAudio} variant="outline">
-                        <Volume2 className="mr-2 h-5 w-5" />
-                        Listen to this post
-                    </Button>
-                </motion.div>
-            )}
-
-            {isLoading && (
-                <motion.div 
-                    key="loading" 
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.8 }}
-                >
-                    <Button variant="outline" disabled>
-                        <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                        Generating audio...
+                    <Button onClick={handleGenerateAudio} variant="outline" disabled={isLoading}>
+                      {isLoading ? (
+                        <>
+                          <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                          Generating audio...
+                        </>
+                      ) : (
+                        <>
+                          <Volume2 className="mr-2 h-5 w-5" />
+                          Listen to this post
+                        </>
+                      )}
                     </Button>
                 </motion.div>
             )}
