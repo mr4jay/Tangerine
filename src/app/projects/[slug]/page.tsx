@@ -78,8 +78,7 @@ export default function ProjectDetailPage({ params }: { params: { slug: string }
       <motion.main
         variants={staggerContainer(0.1, 0.2)}
         initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.1 }}
+        animate="visible"
         className="w-full py-12 md:py-24 bg-background overflow-hidden"
         role="main"
       >
