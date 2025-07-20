@@ -27,17 +27,17 @@ const useTypingSound = () => {
     const oscillator = audioContext.createOscillator();
     const gainNode = audioContext.createGain();
 
-    // Sound properties for a "tick"
-    oscillator.type = 'square';
-    oscillator.frequency.setValueAtTime(1200, audioContext.currentTime);
-    gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
-    gainNode.gain.exponentialRampToValueAtTime(0.00001, audioContext.currentTime + 0.05);
+    // Sound properties for a softer "tick"
+    oscillator.type = 'sine'; // Changed from 'square' for a softer sound
+    oscillator.frequency.setValueAtTime(800, audioContext.currentTime); // Lowered frequency
+    gainNode.gain.setValueAtTime(0.05, audioContext.currentTime); // Reduced volume
+    gainNode.gain.exponentialRampToValueAtTime(0.00001, audioContext.currentTime + 0.08); // Slightly longer decay
 
     oscillator.connect(gainNode);
     gainNode.connect(audioContext.destination);
 
     oscillator.start(audioContext.currentTime);
-    oscillator.stop(audioContext.currentTime + 0.05);
+    oscillator.stop(audioContext.currentTime + 0.08);
   };
 
   return play;
@@ -80,7 +80,6 @@ export const useTypingEffect = (text: string, speed = 100, delay = 0) => {
       if (intervalRef.current) clearInterval(intervalRef.current);
     };
   // The playTypingSound function is stable and doesn't need to be in the dependency array.
-  // Including it was causing the effect to re-run on every sound playback.
   }, [text, speed, delay]);
 
   return displayedText;
