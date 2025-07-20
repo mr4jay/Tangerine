@@ -232,7 +232,7 @@ Generate a JSON object that strictly follows the provided schema. The 'slug' sho
             throw new Error('Failed to generate project data.');
         }
 
-        const { imageUrl } = await generateImage({ topic: `A professional project image about: ${newProject.title}` });
+        const { imageUrl } = await generateImage({ topic: `A professional project image about: ${newProject.aiHint}` });
         newProject.imageUrl = imageUrl;
 
         addProject(newProject);
@@ -436,3 +436,5 @@ const portfolioAssistantFlow = ai.defineFlow(
     return { ...output, toolCalls };
   }
 );
+
+    
