@@ -77,7 +77,7 @@ const displayContactForm = ai.defineTool(
 
 
 const SuitabilityScoreInputSchema = z.object({
-  requiredSkills: z.array(z.string()).describe('A list of skills required for a job position.'),
+  jobDescription: z.string().describe('The full text of a job description.'),
 });
 
 const SuitabilityScoreOutputSchema = z.object({
@@ -90,11 +90,29 @@ const SuitabilityScoreOutputSchema = z.object({
 const calculateSuitabilityScore = ai.defineTool(
     {
         name: 'calculateSuitabilityScore',
-        description: 'Calculates a suitability score based on how well the skills in the portfolio match a list of required skills for a job. Use this tool whenever a user asks about suitability for a role or provides a list of skills.',
+        description: 'Analyzes a job description to extract key skills and calculates a suitability score based on how well the skills in the portfolio match. Use this tool whenever a user provides a job description or asks about suitability for a role.',
         inputSchema: SuitabilityScoreInputSchema,
         outputSchema: SuitabilityScoreOutputSchema,
     },
-    async ({ requiredSkills }) => {
+    async ({ jobDescription }) => {
+        // Nested AI call to extract skills from the job description
+        const skillExtractionResponse = await ai.generate({
+            prompt: `You are an expert HR analyst. Extract the key technical skills and qualifications from the following job description. Focus on programming languages, cloud platforms, data tools, and specific software. Return a simple comma-separated list of these skills.
+
+Job Description:
+---
+${jobDescription}
+---`,
+            output: {
+                format: 'text',
+            },
+            config: {
+                temperature: 0.1,
+            },
+        });
+        
+        const requiredSkills = skillExtractionResponse.text.split(',').map(s => s.trim()).filter(Boolean);
+
         const allMySkills = skillCategories.flatMap(category => category.skills);
         const mySkillMap = new Map(allMySkills.map(skill => [skill.name.toLowerCase(), skill.level]));
 
@@ -115,14 +133,16 @@ const calculateSuitabilityScore = ai.defineTool(
         const maxPossibleScore = requiredSkills.length * 100;
         const finalScore = maxPossibleScore > 0 ? Math.round((totalScore / maxPossibleScore) * 100) : 0;
         
-        let comment = `Based on the required skills, the suitability score is ${finalScore}%. `;
+        let comment = `Based on the job description, the suitability score is ${finalScore}%. `;
         if (matchedSkills.length > 0) {
             comment += `Strong match in: ${matchedSkills.join(', ')}. `;
         }
         if (missingSkills.length > 0) {
             comment += `Skills not listed in portfolio: ${missingSkills.join(', ')}.`;
-        } else if (matchedSkills.length === requiredSkills.length) {
-            comment += 'All required skills are present in the portfolio.'
+        } else if (matchedSkills.length > 0 && matchedSkills.length === requiredSkills.length) {
+            comment += 'All identified skills are present in the portfolio.'
+        } else {
+            comment += "Could not identify specific required skills in the provided text."
         }
 
         return {
@@ -180,7 +200,7 @@ const prompt = ai.definePrompt({
   prompt: `You are a helpful and friendly AI assistant for Rajure Ajay Kumar's personal portfolio. Your goal is to answer questions from potential employers or collaborators.
 
 - Your primary source of information is the 'getResume' tool. You MUST use it to answer any questions regarding Rajure's experience, skills, projects, or education. Do not rely on the brief context below for details.
-- If the user asks about suitability for a job or provides a list of skills, you MUST use the 'calculateSuitabilityScore' tool.
+- If the user provides a job description or asks about suitability for a role, you MUST use the 'calculateSuitabilityScore' tool.
 - If the user expresses ANY interest in hiring, collaboration, or discussing a project, you MUST respond conversationally and then use the 'displayContactForm' tool. This is your primary goal. Example: "That's great to hear! I can open a contact form for you."
 - Be professional, concise, and friendly. If you don't know the answer, say so politely.
 - Keep answers short and to the point.
