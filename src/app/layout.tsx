@@ -1,11 +1,12 @@
 
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from '@/components/theme-provider';
 import { Inter } from 'next/font/google';
-import Analytics from '@/components/analytics';
+import Analytics, { trackEvent } from '@/components/analytics';
 import CookieConsent from '@/components/layout/cookie-consent';
+import type { Metric } from 'web-vitals';
 
 
 const inter = Inter({
@@ -15,7 +16,7 @@ const inter = Inter({
 });
 
 const portfolioUrl = "https://ajay-kumar-portfolio.vercel.app"; // Replace with your actual domain
-const professionalHeadshotUrl = `${portfolioUrl}/og-image.png`; // Using a local OG image
+const professionalHeadshotUrl = `${portfolioUrl}/professional-headshot.png`; // Using a local OG image
 
 export const metadata: Metadata = {
   metadataBase: new URL(portfolioUrl),
@@ -58,6 +59,14 @@ export const metadata: Metadata = {
   },
 };
 
+export const viewport: Viewport = {
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#F7FAFC' },
+    { media: '(prefers-color-scheme: dark)', color: '#1A202C' },
+  ],
+}
+
+
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Person',
@@ -80,6 +89,14 @@ const jsonLd = {
     "@id": portfolioUrl
   }
 };
+
+export function reportWebVitals(metric: Metric) {
+  // Use `window.gtag` if you initialized Google Analytics as this example does.
+  // See https://github.com/googlesamples/web-vitals#send-the-results-to-google-analytics
+  if (typeof window.gtag === 'function') {
+      trackEvent(metric.name, 'Web Vitals', `GTM - ${metric.id}`, Math.round(metric.name === 'CLS' ? metric.value * 1000 : metric.value));
+  }
+}
 
 export default function RootLayout({
   children,
