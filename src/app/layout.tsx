@@ -14,10 +14,11 @@ const inter = Inter({
   variable: '--font-inter',
 });
 
-const professionalHeadshotUrl = "https://placehold.co/1200x630.png";
-const portfolioUrl = "https://ajay-kumar-portfolio.vercel.app";
+const portfolioUrl = "https://ajay-kumar-portfolio.vercel.app"; // Replace with your actual domain
+const professionalHeadshotUrl = `${portfolioUrl}/og-image.png`; // Using a local OG image
 
 export const metadata: Metadata = {
+  metadataBase: new URL(portfolioUrl),
   title: 'Rajure Ajay Kumar | Senior Data Engineer Portfolio',
   description: '6+ years as a Senior Data Engineer delivering $5M+ in savings and revenue growth with AWS, Snowflake, and Dataiku DSS. Explore my projects and skills.',
   keywords: ['data engineer portfolio', 'Rajure Ajay Kumar', 'Senior Data Engineer', 'Hyderabad', 'AWS', 'Snowflake', 'Dataiku DSS', 'Python', 'MLOps', 'AWS certified', 'Snowflake expert', 'data engineering projects', 'data engineer hyderabad', 'data engineering blog', 'fast data engineer portfolio', 'accessible data engineer portfolio', 'interactive data engineer portfolio'],
