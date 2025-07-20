@@ -49,10 +49,11 @@ const socialLinks = [
 
 type Message = {
     id: number;
-    role: 'user' | 'assistant';
+    role: 'user' | 'assistant' | 'tool';
     content: string;
     audioUrl?: string;
     isAudioLoading?: boolean;
+    toolResult?: any;
 };
 
 const hireMeFormSchema = z.object({
@@ -62,8 +63,7 @@ const hireMeFormSchema = z.object({
 });
 
 
-const HireMeModal = () => {
-    const [open, setOpen] = useState(false);
+const HireMeModal = ({ open, onOpenChange }: { open: boolean, onOpenChange: (open: boolean) => void }) => {
     const { toast } = useToast();
 
     const form = useForm<z.infer<typeof hireMeFormSchema>>({
@@ -87,17 +87,11 @@ const HireMeModal = () => {
             description: "Thank you for reaching out. I'll get back to you shortly.",
         });
         form.reset();
-        setOpen(false);
+        onOpenChange(false);
     }
 
     return (
-        <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger asChild>
-                <Button size="lg" className="w-full mt-6 group">
-                    <Briefcase className="mr-2 h-5 w-5" />
-                    Hire Me
-                </Button>
-            </DialogTrigger>
+        <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="sm:max-w-[480px] bg-card border-border/60">
                 <DialogHeader>
                     <DialogTitle className="text-2xl font-headline">Contact Me</DialogTitle>
@@ -167,6 +161,7 @@ const AIChatAssistant = () => {
     const [messages, setMessages] = useState<Message[]>([]);
     const [input, setInput] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const [isHireModalOpen, setIsHireModalOpen] = useState(false);
     const scrollAreaRef = useRef<HTMLDivElement>(null);
     const hasStarted = useRef(false);
 
@@ -243,7 +238,7 @@ const AIChatAssistant = () => {
         setIsLoading(true);
 
         try {
-            const conversationHistory = newMessages.slice(0, -1).map(({ role, content }) => ({ role, content }));
+            const conversationHistory = newMessages.slice(0, -1).map(({ role, content, toolResult }) => ({ role, content, toolResult }));
             const result = await askAssistant({ question: input, history: conversationHistory });
             const assistantMessageId = Date.now() + 1;
             const assistantMessage: Message = { 
@@ -256,6 +251,10 @@ const AIChatAssistant = () => {
             
             handleNewAudio(result.answer, assistantMessageId);
 
+            if (result.shouldHire) {
+                setIsHireModalOpen(true);
+            }
+
         } catch (error) {
             console.error("AI Assistant Error:", error);
             const errorMessage: Message = { id: Date.now() + 1, role: 'assistant', content: "Sorry, I'm having trouble connecting. Please try again later." };
@@ -266,6 +265,8 @@ const AIChatAssistant = () => {
     };
     
     return (
+        <>
+        <HireMeModal open={isHireModalOpen} onOpenChange={setIsHireModalOpen} />
         <Card className="bg-card border-none shadow-lg h-[600px] flex flex-col">
             <CardContent className="p-6 flex flex-col flex-grow">
                 <div className="flex items-center gap-4 mb-4">
@@ -322,7 +323,7 @@ const AIChatAssistant = () => {
                     <Input
                         value={input}
                         onChange={(e) => setInput(e.target.value)}
-                        placeholder="e.g., What is his experience with Snowflake?"
+                        placeholder="e.g., Let's discuss a project"
                         className="bg-background border-border/60 flex-grow"
                         disabled={isLoading}
                         aria-label="Ask the AI assistant a question"
@@ -333,6 +334,7 @@ const AIChatAssistant = () => {
                 </form>
             </CardContent>
         </Card>
+        </>
     )
 }
 
@@ -349,7 +351,7 @@ export default function Contact() {
         >
           <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl font-headline">Get In Touch</h2>
           <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-            Have a question? Ask my AI assistant, or connect with me directly through social media.
+            Have a question or an opportunity? Ask my AI assistant, or connect with me directly.
           </p>
         </motion.div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
@@ -382,7 +384,6 @@ export default function Contact() {
                         </Link>
                     </Card>
                 ))}
-                <HireMeModal />
             </motion.div>
         </div>
       </div>

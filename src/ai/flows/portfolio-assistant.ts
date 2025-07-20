@@ -16,7 +16,7 @@ import path from 'path';
 // The AI will use the getResume tool for specific details.
 const portfolioContext = `
 About Me:
-I am a results-driven marketing science and data professional with over 6 years of experience, specializing in workflow creation for DataOps. I am proficient in Datorama and advanced Excel VBA macros to build automated reporting systems and streamline marketing data operations. My expertise spans the full data lifecycle, from optimizing data pipelines to enhancing campaign performance and enabling data-driven decisions across cross-functional marketing teams. I am passionate about bridging the gap between data engineering and strategic marketing execution.
+I am a results-driven marketing science and data professional with over 6 years of experience, specializing in workflow creation for DataOps. I am proficient in Datorama and advanced Excel VBA macros to build automated reporting systems and streamline marketing data operations. My expertise spans the full data lifecycle, from optimizing data pipelines to enhancing campaign performance, and enabling data-driven decisions across cross-functional marketing teams. I am passionate about bridging the gap between data engineering and strategic marketing execution.
 `;
 
 const getResume = ai.defineTool(
@@ -31,6 +31,22 @@ const getResume = ai.defineTool(
         return fs.readFileSync(resumePath, 'utf8');
     }
 );
+
+const hireMe = ai.defineTool(
+    {
+        name: 'hireMe',
+        description: 'Presents the user with a contact form to discuss a job opportunity, project, or collaboration. Use this tool *any* time the user expresses interest in hiring, offering a job, or discussing a potential project. Do not ask for their details yourself; use this tool to show them the form.',
+        inputSchema: z.object({}),
+        outputSchema: z.object({ success: z.boolean() }),
+    },
+    async () => {
+        // This tool's purpose is to be called by the AI.
+        // The front-end will interpret the tool call and open the modal.
+        // We just need to return a success indicator.
+        return { success: true };
+    }
+);
+
 
 const SuitabilityScoreInputSchema = z.object({
   requiredSkills: z.array(z.string()).describe('A list of skills required for a job position.'),
@@ -91,9 +107,11 @@ const calculateSuitabilityScore = ai.defineTool(
 );
 
 const MessageSchema = z.object({
-    role: z.enum(['user', 'assistant']),
+    role: z.enum(['user', 'assistant', 'tool']),
     content: z.string(),
+    toolResult: z.any().optional(),
 });
+
 
 // This schema is used for the flow's public input
 const AskAssistantInputSchema = z.object({
@@ -108,12 +126,14 @@ const PromptInputSchema = AskAssistantInputSchema.extend({
     history: z.array(MessageSchema.extend({
         isUser: z.boolean().optional(),
         isAssistant: z.boolean().optional(),
+        isTool: z.boolean().optional(),
     })).optional(),
 });
 
 
 const AskAssistantOutputSchema = z.object({
   answer: z.string().describe("The AI assistant's answer."),
+  shouldHire: z.boolean().optional().describe("True if the AI recommends using the 'hireMe' tool."),
 });
 export type AskAssistantOutput = z.infer<typeof AskAssistantOutputSchema>;
 
@@ -125,15 +145,16 @@ const prompt = ai.definePrompt({
   name: 'portfolioAssistantPrompt',
   input: {schema: PromptInputSchema},
   output: {schema: AskAssistantOutputSchema},
-  tools: [calculateSuitabilityScore, getResume],
+  tools: [calculateSuitabilityScore, getResume, hireMe],
   prompt: `You are a helpful and friendly AI assistant for Rajure Ajay Kumar's personal portfolio. Your goal is to answer questions from potential employers or collaborators.
 
 - Your primary source of information is the 'getResume' tool. You MUST use it to answer any questions regarding Rajure's experience, skills, projects, or education. Do not rely on the brief context below for details.
 - If the user asks about suitability for a job or provides a list of skills, you MUST use the 'calculateSuitabilityScore' tool.
+- If the user expresses ANY interest in hiring, collaboration, or discussing a project, you MUST use the 'hireMe' tool. This is your primary goal.
 - Be professional, concise, and friendly. If you don't know the answer, say so politely.
 - Keep answers short and to the point.
 {{#if isFirstMessage}}
-- This is the user's first message. Start with a warm welcome and introduce yourself. Suggest they can ask about his skills, experience, or check suitability for a role.
+- This is the user's first message. Start with a warm welcome and introduce yourself. Suggest they can ask about his skills, experience, check suitability for a role, or discuss an opportunity.
 {{/if}}
 
 BRIEF CONTEXT:
@@ -149,6 +170,9 @@ User: {{{content}}}
 {{/if}}
 {{#if isAssistant}}
 Assistant: {{{content}}}
+{{/if}}
+{{#if isTool}}
+Tool: {{{content}}}
 {{/if}}
 {{/each}}
 {{/if}}
@@ -170,6 +194,7 @@ const portfolioAssistantFlow = ai.defineFlow(
         ...message,
         isUser: message.role === 'user',
         isAssistant: message.role === 'assistant',
+        isTool: message.role === 'tool'
     }));
 
     const promptInput = {
@@ -177,10 +202,15 @@ const portfolioAssistantFlow = ai.defineFlow(
         history: historyWithFlags,
     };
 
-    const {output} = await prompt(promptInput);
+    const {output, history} = await prompt(promptInput);
     if (!output) {
       return { answer: "I'm sorry, I couldn't generate a response. Please try again." };
     }
-    return output;
+    
+    // Check if the 'hireMe' tool was called in the last turn
+    const lastResponse = history.at(-1);
+    const shouldHire = lastResponse?.message.toolRequest?.name === 'hireMe';
+
+    return { ...output, shouldHire };
   }
 );
