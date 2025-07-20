@@ -13,36 +13,9 @@ import { cardVariants, headerVariants } from '@/lib/motion';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { cn } from '@/lib/utils';
+import { getProjects } from '@/lib/projects';
 
-const projects = [
-  {
-    title: 'Enterprise Data Platform',
-    description: 'Architected and deployed a scalable enterprise-level data platform at Novartis, achieving over $3M in cost savings and reducing data processing latency by 45%.',
-    tags: ['AWS', 'Snowflake', 'DBT', 'Airflow', 'Kinesis'],
-    imageUrl: 'https://placehold.co/600x400.png',
-    aiHint: 'data platform architecture',
-    demoUrl: '#',
-    repoUrl: '#',
-  },
-  {
-    title: 'Customer Churn Prediction Model',
-    description: 'Developed and deployed a machine learning model at Spoors to predict customer churn, directly contributing to a $1.2M increase in retained revenue.',
-    tags: ['Dataiku DSS', 'Python', 'Scikit-learn', 'MLOps'],
-    imageUrl: 'https://placehold.co/600x400.png',
-    aiHint: 'predictive model graph',
-    demoUrl: '#',
-    repoUrl: '#',
-  },
-  {
-    title: 'Real-time Analytics Dashboard',
-    description: 'Built a real-time analytics dashboard using AWS Kinesis and Lambda to process millions of events per second, enabling live KPI monitoring for business stakeholders.',
-    tags: ['AWS Kinesis', 'Lambda', 'Snowflake', 'React'],
-    imageUrl: 'https://placehold.co/600x400.png',
-    aiHint: 'analytics dashboard',
-    demoUrl: '#',
-    repoUrl: '#',
-  },
-];
+const projects = getProjects();
 
 const timelineData = [
   {
@@ -54,7 +27,7 @@ const timelineData = [
   },
   {
     company: 'Novartis',
-    period: '2021 – Present',
+    period: '2021 – 2022',
     title: 'Enterprise Data Platform',
     impact: '$3M+ cost savings',
     description: 'Architected and deployed a scalable enterprise-level data platform, achieving substantial cost savings and reducing data processing latency by 45%.',
@@ -211,7 +184,7 @@ export default function Projects() {
                       </Badge>
                     ))}
                   </div>
-                  <CardDescription className="flex-grow text-base text-muted-foreground">{project.description}</CardDescription>
+                  <CardDescription className="flex-grow text-base text-muted-foreground">{project.shortDescription}</CardDescription>
                 </CardContent>
                 <CardFooter className="flex justify-start gap-4 pt-4">
                   <Button asChild variant="outline" aria-label={`View GitHub repository for ${project.title}`} onClick={() => handleProjectClick(`${project.title} - GitHub`)}>
@@ -221,7 +194,7 @@ export default function Projects() {
                     </Link>
                   </Button>
                   <Button asChild aria-label={`View details for ${project.title}`} onClick={() => handleProjectClick(`${project.title} - Details`)}>
-                    <Link href={project.demoUrl} target="_blank" rel="noopener noreferrer">
+                    <Link href={`/projects/${project.slug}`}>
                       <ExternalLink className="mr-2 h-4 w-4" />
                       View Details
                     </Link>
