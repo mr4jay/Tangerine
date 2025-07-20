@@ -325,7 +325,7 @@ const AIChatAssistant = () => {
                                         <div className="mt-2">
                                             {message.isAudioLoading && <div className="flex items-center gap-2 text-xs text-muted-foreground"><Loader2 className="h-4 w-4 animate-spin" /> Generating audio...</div>}
                                             {message.audioUrl && (
-                                                <audio controls src={message.audioUrl} className="w-full h-8" />
+                                                <audio controls src={message.audioUrl} className="w-full h-8" autoPlay />
                                             )}
                                         </div>
                                     )}
