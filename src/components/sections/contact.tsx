@@ -142,6 +142,8 @@ const HireMeForm = ({ onOpenChange }: { onOpenChange: (open: boolean) => void })
     );
 };
 
+const sampleJobDescription = "We are looking for a Senior Data Engineer with experience in building scalable data pipelines. The ideal candidate will have strong skills in Python and SQL, and experience with cloud platforms like AWS or Azure. You should be proficient with tools like Snowflake, Airflow, and Apache Spark. Experience with dbt is a plus.";
+
 
 const AIChatAssistant = () => {
     const [messages, setMessages] = useState<Message[]>([]);
@@ -341,6 +343,11 @@ const AIChatAssistant = () => {
                         <Send className="h-5 w-5"/>
                     </Button>
                 </form>
+                 <div className="pt-2 text-center">
+                    <Button variant="link" size="sm" onClick={() => setInput(`Here is a job description, can you tell me how well I match? ${sampleJobDescription}`)}>
+                        Test: Analyze a Job Description
+                    </Button>
+                </div>
             </CardContent>
         </Card>
         </>
