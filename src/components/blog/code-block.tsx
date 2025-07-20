@@ -21,7 +21,7 @@ export function CodeBlock({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="relative group">
-        <pre ref={codeRef} className="bg-card p-4 rounded-lg overflow-x-auto text-sm my-4 border border-border/60">
+        <pre ref={codeRef} className="bg-card/50 p-4 rounded-lg overflow-x-auto text-sm my-4 border border-border/60">
             {children}
         </pre>
       <AnimatePresence>
