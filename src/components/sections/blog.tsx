@@ -14,7 +14,7 @@ import { format } from 'date-fns';
 
 export default function Blog({ posts }: { posts: PostData[] }) {
   return (
-    <section id="blog" className="w-full py-12 md:py-24 lg:py-32 bg-background overflow-hidden">
+    <section id="blog" className="w-full py-12 md:py-24 lg:py-32 bg-secondary/20 overflow-hidden">
       <div className="container mx-auto px-4 md:px-6 max-w-7xl">
         <motion.div
           initial="hidden"
