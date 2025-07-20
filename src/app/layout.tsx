@@ -21,13 +21,13 @@ const professionalHeadshotUrl = `${portfolioUrl}/professional-headshot.png`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(portfolioUrl),
-  title: 'Rajure Ajay Kumar | Senior Data Engineer Portfolio',
-  description: '6+ years as a Senior Data Engineer delivering $5M+ in savings and revenue growth with AWS, Snowflake, and Dataiku DSS. Explore my projects and skills.',
-  keywords: ['data engineer portfolio', 'Rajure Ajay Kumar', 'Senior Data Engineer', 'Hyderabad', 'AWS', 'Snowflake', 'Dataiku DSS', 'Python', 'MLOps', 'AWS certified', 'Snowflake expert', 'data engineering projects', 'data engineer hyderabad', 'data engineering blog', 'fast data engineer portfolio', 'accessible data engineer portfolio', 'interactive data engineer portfolio', 'data engineer sitemap', 'data engineer performance monitoring', 'optimized data engineer portfolio', 'data engineer rich snippets'],
+  title: 'Rajure Ajay Kumar | Marketing Science and Data Professional Portfolio',
+  description: '6+ years as a Marketing Science and Data Professional delivering value with Datorama, and advanced Excel VBA macros. Explore my projects and skills.',
+  keywords: ['data professional portfolio', 'Rajure Ajay Kumar', 'Marketing Science', 'Hyderabad', 'Datorama', 'Excel VBA', 'Dataiku DSS', 'Python', 'MLOps', 'DataOps', 'data professional hyderabad', 'data engineering blog', 'fast data engineer portfolio', 'accessible data engineer portfolio', 'interactive data engineer portfolio', 'data engineer sitemap', 'data engineer performance monitoring', 'optimized data engineer portfolio', 'data engineer rich snippets'],
   authors: [{ name: 'Rajure Ajay Kumar' }],
   openGraph: {
-    title: 'Rajure Ajay Kumar | Senior Data Engineer Portfolio',
-    description: 'Explore the portfolio of Rajure Ajay Kumar, a Senior Data Engineer with expertise in building scalable data solutions using AWS, Snowflake, and AI.',
+    title: 'Rajure Ajay Kumar | Marketing Science and Data Professional Portfolio',
+    description: 'Explore the portfolio of Rajure Ajay Kumar, a professional with expertise in building scalable data solutions using Datorama, and AI.',
     url: portfolioUrl,
     siteName: 'DataCraft Portfolio',
     images: [
@@ -35,7 +35,7 @@ export const metadata: Metadata = {
         url: professionalHeadshotUrl,
         width: 1200,
         height: 630,
-        alt: 'Rajure Ajay Kumar, Senior Data Engineer',
+        alt: 'Rajure Ajay Kumar, Marketing Science and Data Professional',
       },
     ],
     locale: 'en_US',
@@ -43,8 +43,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Rajure Ajay Kumar | Senior Data Engineer Portfolio',
-    description: 'Expert in AWS, Snowflake, and Dataiku DSS. Check out my work.',
+    title: 'Rajure Ajay Kumar | Marketing Science and Data Professional Portfolio',
+    description: 'Expert in Datorama and Dataiku DSS. Check out my work.',
     images: [professionalHeadshotUrl],
   },
   robots: {
@@ -74,18 +74,18 @@ const jsonLd = {
   name: 'Rajure Ajay Kumar',
   url: portfolioUrl,
   image: professionalHeadshotUrl,
-  jobTitle: 'Senior Data Engineer',
+  jobTitle: 'Marketing Science and Data Professional',
   alumniOf: [
     {
       '@type': 'Organization',
-      name: 'Novartis',
+      name: 'Omnicom Media Group',
     },
     {
       '@type': 'Organization',
       name: 'Spoors',
     }
   ],
-  knowsAbout: ['Data Engineering', 'AWS', 'Snowflake', 'Dataiku DSS', 'Python', 'MLOps', 'SQL', 'Data Pipelines', 'Cloud Architecture'],
+  knowsAbout: ['Data Engineering', 'Datorama', 'Dataiku DSS', 'Python', 'MLOps', 'SQL', 'Data Pipelines', 'Excel VBA'],
   sameAs: [
     'https://linkedin.com/in/rajure-ajay-kumar',
     'https://github.com/rajure-ajay',

@@ -2,7 +2,7 @@
 export type ProjectMetric = {
   label: string;
   value: number;
-  unit: 'USD' | 'percentage' | 'hours';
+  unit: 'USD' | 'percentage' | 'hours' | 'default';
   description: string;
 };
 
@@ -23,85 +23,84 @@ export type Project = {
 
 const projectsData: Project[] = [
   {
-    slug: 'enterprise-data-platform',
-    title: 'Enterprise Data Platform',
-    shortDescription: 'Architected and deployed a scalable enterprise-level data platform at Novartis, achieving over $3M in cost savings and reducing data processing latency by 45%.',
-    longDescription: 'At Novartis, I led the architecture and deployment of a new enterprise-level data platform from the ground up. The system was designed to handle petabytes of data from various sources, including R&D, clinical trials, and sales. By leveraging a modern cloud-native stack, we were able to create a highly scalable, reliable, and cost-effective solution that served as the single source of truth for the entire organization. The platform empowered data scientists and analysts to derive insights faster, leading to significant business impact.',
-    tags: ['AWS', 'Snowflake', 'DBT', 'Airflow', 'Kinesis'],
+    slug: 'enterprise-reporting-ecosystem',
+    title: 'Enterprise Reporting Ecosystem',
+    shortDescription: 'Architected and maintained enterprise-grade reporting ecosystems at Omnicom Media Group using Salesforce Datorama, reducing report turnaround time by 70%.',
+    longDescription: 'At Omnicom Media Group, I architected and maintained enterprise-grade reporting ecosystems using Salesforce Datorama, supporting real-time insights for over 800 marketing campaigns. The system was designed to handle data from diverse sources such as Google Ads, Meta, and Amazon. By leveraging Datorama\'s capabilities, we were able to create a highly scalable, reliable, and cost-effective solution that served as the single source of truth for marketing analytics across multiple brands.',
+    tags: ['Datorama', 'SQL', 'Marketing Analytics', 'Data Integration'],
     imageUrl: 'https://placehold.co/1200x600.png',
     aiHint: 'data platform architecture',
     demoUrl: '#',
     repoUrl: '#',
     keyOutcomes: [
-      'Achieved over $3M in annual cost savings through optimized infrastructure and data processing workflows.',
-      'Reduced data processing latency by 45%, enabling faster time-to-insight for business stakeholders.',
-      'Successfully migrated over 50 legacy data pipelines to the new platform with zero downtime.',
-      'Established a robust data governance framework, improving data quality and compliance.'
+      'Reduced report turnaround time by 70% through automation and optimized data workflows.',
+      'Led the full implementation cycle of Datorama solutions, from data source mapping to final dashboard delivery.',
+      'Standardized data with Harmonization Center, unifying disparate campaign naming conventions and KPI structures.',
+      'Designed dynamic dashboards for stakeholders across media planning, client services, and strategy teams.'
     ],
     techStack: [
-      { category: 'Cloud', items: ['AWS S3', 'AWS Glue', 'AWS EMR', 'AWS Kinesis'] },
-      { category: 'Data Warehouse', items: ['Snowflake'] },
-      { category: 'Data Transformation', items: ['DBT'] },
-      { category: 'Orchestration', items: ['Apache Airflow'] },
-      { category: 'Languages', items: ['Python', 'SQL'] }
+      { category: 'Marketing Cloud', items: ['Salesforce Datorama'] },
+      { category: 'Data Integration', items: ['TotalConnect', 'LiteConnect', 'API'] },
+      { category: 'Data Modeling', items: ['Data Model Editor', 'Harmonization Center'] },
+      { category: 'Languages', items: ['SQL'] }
     ],
     metrics: [
-        { label: 'Cost Savings', value: 3000000, unit: 'USD', description: 'Annual cost savings achieved through infrastructure optimization.' },
-        { label: 'Latency Reduction', value: 45, unit: 'percentage', description: 'Reduction in data processing latency across key pipelines.' }
+        { label: 'Report Turnaround Reduction', value: 70, unit: 'percentage', description: 'Reduction in time to deliver reports to stakeholders.' },
+        { label: 'Campaigns Supported', value: 800, unit: 'default', description: 'Number of marketing campaigns supported by the system.' }
     ]
   },
   {
-    slug: 'customer-churn-prediction',
-    title: 'Customer Churn Prediction Model',
-    shortDescription: 'Developed and deployed a machine learning model at Spoors to predict customer churn, directly contributing to a $1.2M increase in retained revenue.',
-    longDescription: 'At Spoors, I developed a machine learning model to predict customer churn with high accuracy. The project involved the entire MLOps lifecycle, from data exploration and feature engineering to model training, validation, and deployment. The model was integrated into the company\'s CRM system, providing the customer success team with a prioritized list of at-risk customers and enabling proactive retention efforts. The system was built using Dataiku DSS, which streamlined the development process and allowed for rapid iteration.',
+    slug: 'customer-retention-models',
+    title: 'Customer Retention Models',
+    shortDescription: 'Developed and deployed predictive models at Novartis (via Team Lease), resulting in a 20% increase in customer retention rates.',
+    longDescription: 'While at Novartis, I developed and deployed predictive models to identify at-risk customers. The project involved exploring, developing, and evaluating customer-centric digital innovation solutions. The resulting models were integrated into business workflows, enabling proactive outreach and improving customer retention rates significantly. This work was primarily executed using Dataiku DSS, which facilitated rapid development and deployment.',
     tags: ['Dataiku DSS', 'Python', 'Scikit-learn', 'MLOps'],
     imageUrl: 'https://placehold.co/1200x600.png',
     aiHint: 'predictive model graph',
     demoUrl: '#',
     repoUrl: '#',
     keyOutcomes: [
-      'Increased retained revenue by $1.2M in the first year of deployment.',
-      'Improved churn prediction accuracy by 25% compared to the previous rule-based system.',
-      'Reduced customer support workload by allowing targeted, proactive interventions.',
-      'Automated the end-to-end model retraining and deployment pipeline using MLOps best practices.'
+      'Increased customer retention rates by 20% through proactive interventions.',
+      'Successfully migrated Alteryx workflows to Dataiku DSS, improving workflow efficiency by 70%.',
+      'Managed planning and development of metrics reports for three major brands.',
+      'Collaborated with data engineering teams to optimize data storage and retrieval processes.'
     ],
      techStack: [
       { category: 'AI/ML Platform', items: ['Dataiku DSS'] },
+      { category: 'Data Migration', items: ['Alteryx'] },
       { category: 'Languages', items: ['Python'] },
-      { category: 'Libraries', items: ['Scikit-learn', 'Pandas', 'NumPy'] },
-      { category: 'Deployment', items: ['MLOps CI/CD', 'REST API'] }
+      { category: 'Libraries', items: ['Scikit-learn', 'Pandas', 'NumPy'] }
     ],
     metrics: [
-        { label: 'Retained Revenue', value: 1200000, unit: 'USD', description: 'Increased retained revenue in the first year.' },
-        { label: 'Accuracy Improvement', value: 25, unit: 'percentage', description: 'Improvement in churn prediction accuracy.' }
+        { label: 'Customer Retention Increase', value: 20, unit: 'percentage', description: 'Increase in customer retention rates post-deployment.' },
+        { label: 'Workflow Efficiency Gain', value: 70, unit: 'percentage', description: 'Efficiency improvement from migrating Alteryx to Dataiku DSS.' }
     ]
   },
   {
-    slug: 'real-time-analytics-dashboard',
-    title: 'Real-time Analytics Dashboard',
-    shortDescription: 'Built a real-time analytics dashboard using AWS Kinesis and Lambda to process millions of events per second, enabling live KPI monitoring.',
-    longDescription: 'I designed and built a serverless, real-time analytics dashboard to provide live monitoring of key business KPIs. The system ingests millions of events per second from mobile and web applications using AWS Kinesis. A series of AWS Lambda functions process, aggregate, and enrich the data in real-time before loading it into Snowflake. The final dashboard, built with React, visualizes the live data, allowing business stakeholders to make informed decisions based on up-to-the-second information.',
-    tags: ['AWS Kinesis', 'Lambda', 'Snowflake', 'React'],
+    slug: 'analytical-reporting-optimization',
+    title: 'Analytical Reporting Optimization',
+    shortDescription: 'Created analytical reports using Alteryx at Spoors Technologies, improving data accuracy by 25% and reducing report generation time by 20%.',
+    longDescription: 'At Spoors Technologies, I was responsible for creating analytical reports and optimizing data collection procedures. By leveraging Alteryx for data preparation and analysis, I was able to improve the accuracy of our reports by 25%. I also streamlined data collection processes, which resulted in a 20% reduction in the time required to generate key business reports. This allowed for more timely and reliable data-driven decision-making across the organization.',
+    tags: ['Alteryx', 'SQL', 'Data Profiling', 'Reporting'],
     imageUrl: 'https://placehold.co/1200x600.png',
     aiHint: 'analytics dashboard',
     demoUrl: '#',
     repoUrl: '#',
     keyOutcomes: [
-      'Enabled live monitoring of business KPIs with sub-second data latency.',
-      'Processed over 1 million events per second during peak traffic.',
-      'Provided a 360-degree view of user activity, leading to a 15% improvement in user engagement metrics.',
-      'Built a cost-effective, serverless architecture that scales automatically with demand.'
+      'Improved data accuracy in analytical reports by 25%.',
+      'Reduced report generation time by 20% through optimized data collection.',
+      'Delivered customized reports and ad-hoc analyses, enhancing data-driven decision-making.',
+      'Created custom SQL queries and scripts to ensure data integrity and accuracy.'
     ],
     techStack: [
-      { category: 'Data Streaming', items: ['AWS Kinesis'] },
-      { category: 'Serverless Compute', items: ['AWS Lambda'] },
-      { category: 'Data Warehouse', items: ['Snowflake'] },
-      { category: 'Frontend', items: ['React', 'Recharts'] },
-      { category: 'Languages', items: ['Python', 'JavaScript'] }
+      { category: 'Data Analytics', items: ['Alteryx DSS'] },
+      { category: 'Database', items: ['SQL'] },
+      { category: 'BI', items: ['Tableau'] },
+      { category: 'Languages', items: ['Python'] }
     ],
     metrics: [
-        { label: 'User Engagement', value: 15, unit: 'percentage', description: 'Improvement in user engagement metrics post-launch.' },
+        { label: 'Data Accuracy Improvement', value: 25, unit: 'percentage', description: 'Improvement in data accuracy for key analytical reports.' },
+        { label: 'Report Generation Time Reduction', value: 20, unit: 'percentage', description: 'Reduction in time taken to generate reports.' },
     ]
   },
 ];

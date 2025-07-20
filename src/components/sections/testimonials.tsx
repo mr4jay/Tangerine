@@ -10,16 +10,16 @@ import { cardVariants, headerVariants } from '@/lib/motion';
 
 const testimonials = [
   {
-    quote: "Ajay's work on our enterprise data platform was transformative. His architectural vision and execution led to over $3M in cost savings and a 45% reduction in data processing latency. He is a top-tier data engineer.",
+    quote: "Ajay's work on our enterprise reporting ecosystems was transformative. His architectural vision for Datorama and execution led to a 70% reduction in report turnaround time. He is a top-tier analyst.",
     author: 'John Doe',
-    role: 'Director of Engineering, Novartis',
+    role: 'Director of Analytics, Omnicom Media Group',
     avatarUrl: 'https://placehold.co/100x100.png',
     aiHint: 'male portrait',
   },
   {
-    quote: "The customer churn prediction model Ajay developed was a game-changer for our retention strategy, directly contributing to a $1.2M increase in retained revenue. His machine learning skills are exceptional.",
+    quote: "The customer churn prediction model Ajay developed was a game-changer for our retention strategy, directly contributing to a 20% increase in customer retention. His machine learning skills are exceptional.",
     author: 'Jane Smith',
-    role: 'Product Manager, Spoors',
+    role: 'Product Manager, Spoors Technologies',
     avatarUrl: 'https://placehold.co/100x100.png',
     aiHint: 'female portrait',
   },
@@ -31,9 +31,9 @@ const testimonials = [
     aiHint: 'male portrait professional',
   },
     {
-    quote: "Ajay consistently delivers high-quality work, and his attention to detail is remarkable. He built our real-time analytics dashboard, which has become an indispensable tool for monitoring our KPIs.",
+    quote: "Ajay consistently delivers high-quality work, and his attention to detail is remarkable. He optimized our data collection procedures, reducing report generation time by 20%.",
     author: 'Priya Patel',
-    role: 'Senior Analyst, Spoors',
+    role: 'Senior Analyst, Spoors Technologies',
     avatarUrl: 'https://placehold.co/100x100.png',
     aiHint: 'female portrait professional',
   },

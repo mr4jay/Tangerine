@@ -50,7 +50,17 @@ const careerTimeline = [
     period: 'Sep 2023 - Feb 2025',
   },
   {
-    company: 'Novartis',
+    company: 'Freelance',
+    role: 'Data Analyst',
+    period: 'Oct 2022 - Jul 2023',
+  },
+  {
+    company: 'Technvision Ventures',
+    role: 'Software Engineer',
+    period: 'Jun 2022 - Sep 2022',
+  },
+  {
+    company: 'Novartis (via Team Lease)',
     role: 'Data Scientist',
     period: 'May 2021 - May 2022',
   },
