@@ -25,8 +25,8 @@ const projectsData: Project[] = [
   {
     slug: 'enterprise-reporting-ecosystem',
     title: 'Enterprise Reporting Ecosystem',
-    shortDescription: 'Architected and maintained enterprise-grade reporting ecosystems at Omnicom Media Group using Salesforce Datorama, reducing report turnaround time by 70%.',
-    longDescription: 'At Omnicom Media Group, I architected and maintained enterprise-grade reporting ecosystems using Salesforce Datorama, supporting real-time insights for over 800 marketing campaigns. The system was designed to handle data from diverse sources such as Google Ads, Meta, and Amazon. By leveraging Datorama\'s capabilities, we were able to create a highly scalable, reliable, and cost-effective solution that served as the single source of truth for marketing analytics across multiple brands.',
+    shortDescription: 'Architected reporting ecosystems for major clients like Omnicom Media Group, using Salesforce Datorama to reduce report turnaround time by 70%.',
+    longDescription: 'As a data professional, I architected and maintained enterprise-grade reporting ecosystems using Salesforce Datorama, supporting real-time insights for over 800 marketing campaigns for clients like Omnicom Media Group. The system was designed to handle data from diverse sources such as Google Ads, Meta, and Amazon. By leveraging Datorama\'s capabilities, we were able to create a highly scalable, reliable, and cost-effective solution that served as the single source of truth for marketing analytics across multiple brands.',
     tags: ['Datorama', 'SQL', 'Marketing Analytics', 'Data Integration'],
     imageUrl: 'https://placehold.co/1200x600.png',
     aiHint: 'data platform architecture',

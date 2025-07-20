@@ -84,7 +84,7 @@ const HireMeModal = ({ open, onOpenChange }: { open: boolean, onOpenChange: (ope
         
         toast({
             title: "Message Sent!",
-            description: "Thank you for reaching out. I'll get back to you shortly.",
+            description: "Thank you for reaching out. I'll get back to you at rajaykumar5555@gmail.com shortly.",
         });
         form.reset();
         onOpenChange(false);
