@@ -49,7 +49,7 @@ export default function Blog({ posts }: { posts: PostData[] }) {
                         fill 
                         className="object-cover" 
                         data-ai-hint={post.aiHint} 
-                        sizes="(max-width: 768px) 100vw, 50vw" 
+                        sizes="(max-width: 768px) 100vw, 50vw"
                         loading="lazy" 
                       />
                   </div>

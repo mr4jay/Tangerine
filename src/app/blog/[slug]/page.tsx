@@ -94,7 +94,8 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
                                 fill 
                                 className="object-cover" 
                                 data-ai-hint={post.aiHint} 
-                                priority 
+                                priority
+                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 75vw, 66vw"
                             />
                         </div>
 
