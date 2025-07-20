@@ -4,7 +4,7 @@ import { getSortedPostsData } from '@/lib/posts'
 import { getProjects } from '@/lib/projects'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://ajay-kumar-portfolio.vercel.app';
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
   
   const posts = await getSortedPostsData();
   const postEntries: MetadataRoute.Sitemap = posts.map(post => ({

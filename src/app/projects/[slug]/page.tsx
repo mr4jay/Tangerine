@@ -46,7 +46,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 
 export default function ProjectDetailPage({ params }: { params: { slug: string } }) {
   const project = getProjectBySlug(params.slug);
-  const portfolioUrl = "https://ajay-kumar-portfolio.vercel.app";
+  const portfolioUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 
   if (!project) {
     notFound();

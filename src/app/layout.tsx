@@ -15,7 +15,7 @@ const inter = Inter({
   variable: '--font-inter',
 });
 
-const portfolioUrl = "https://ajay-kumar-portfolio.vercel.app";
+const portfolioUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 const professionalHeadshotUrl = "https://images.unsplash.com/photo-1564564321837-a57b7070ac4f?q=80&w=1200&h=630&fit=crop&crop=faces";
 
 export const metadata: Metadata = {
