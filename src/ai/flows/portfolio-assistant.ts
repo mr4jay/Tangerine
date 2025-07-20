@@ -16,8 +16,10 @@ About Me:
 I am a results-driven Senior Data Engineer with over 6 years of experience in designing, developing, and deploying scalable data solutions. My work has generated over $5M in cost savings and revenue growth for leading companies. My expertise spans the full data lifecycle, from ingestion and processing to warehousing and analytics, leveraging cutting-edge technologies like AWS, Snowflake, and Dataiku DSS. I am passionate about transforming complex datasets into actionable insights and building robust data infrastructures that empower data-driven decision-making.
 
 Career Timeline:
-- Senior Data Engineer at Novartis (May 2021 - May 2022)
-- Data Engineer at Spoors (2019 - 2021)
+- Senior Analyst at Omnicom Media Group (Sep 2023 - Feb 2025)
+- Data Scientist at Novartis (May 2021 - May 2022)
+- Data Analyst at Spoors Technologies (Sep 2018 - Mar 2021)
+
 
 Featured Projects:
 1. Enterprise Data Platform (Novartis): Architected and deployed a scalable enterprise-level data platform, achieving over $3M in cost savings and reducing data processing latency by 45%. Technologies: AWS, Snowflake, DBT, Airflow, Kinesis.
