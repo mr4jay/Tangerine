@@ -1,3 +1,4 @@
+
 'use server';
 /**
  * @fileOverview A text-to-speech AI flow.
@@ -11,6 +12,8 @@ import wav from 'wav';
 
 const TextToSpeechInputSchema = z.object({
   text: z.string().describe('The text to convert to speech.'),
+  // Example of how you might structure for multi-speaker
+  // speakers: z.array(z.object({ speaker: z.string(), text: z.string() })).optional(),
 });
 
 type TextToSpeechInput = z.infer<typeof TextToSpeechInputSchema>;
@@ -55,18 +58,46 @@ const textToSpeechFlow = ai.defineFlow(
     outputSchema: TextToSpeechOutputSchema,
   },
   async ({text}) => {
+    // This is the configuration for a single, professional voice.
     const {media} = await ai.generate({
       model: 'googleai/gemini-2.5-flash-preview-tts',
       config: {
         responseModalities: ['AUDIO'],
         speechConfig: {
           voiceConfig: {
-            prebuiltVoiceConfig: {voiceName: 'Algenib'},
+            prebuiltVoiceConfig: {voiceName: 'Algenib'}, // Using a more professional voice
           },
         },
       },
       prompt: text,
     });
+    
+    /* 
+    // EXAMPLE: How you would configure for MULTI-SPEAKER TTS
+    // This would require the prompt to be formatted like: "Speaker1: Hello. Speaker2: Hi there."
+    const {media: multiSpeakerMedia} = await ai.generate({
+      model: 'googleai/gemini-2.5-flash-preview-tts',
+      config: {
+        responseModalities: ['AUDIO'],
+        speechConfig: {
+          multiSpeakerVoiceConfig: {
+            speakerVoiceConfigs: [
+              {
+                speaker: 'Speaker1',
+                voiceConfig: { prebuiltVoiceConfig: { voiceName: 'Algenib' } },
+              },
+              {
+                speaker: 'Speaker2',
+                voiceConfig: { prebuiltVoiceConfig: { voiceName: 'Achernar' } },
+              },
+            ],
+          },
+        },
+      },
+      prompt: yourFormattedMultiSpeakerText,
+    });
+    */
+
     if (!media) {
       throw new Error('No media returned from TTS model.');
     }
