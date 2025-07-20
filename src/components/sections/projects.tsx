@@ -84,7 +84,13 @@ export default function Projects() {
                   <Button asChild aria-label={`View details for ${project.title}`} onClick={() => handleProjectClick(`${project.title} - Details`)} className="group">
                     <Link href={`/projects/${project.slug}`}>
                       View Details
-                      <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                      <motion.div
+                        className="inline-block ml-2"
+                        whileHover={{ x: 4 }}
+                        transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                      >
+                        <ArrowRight className="h-4 w-4" />
+                      </motion.div>
                     </Link>
                   </Button>
                   <Button asChild variant="outline" aria-label={`View GitHub repository for ${project.title}`} onClick={() => handleProjectClick(`${project.title} - GitHub`)}>

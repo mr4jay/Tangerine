@@ -87,6 +87,9 @@ body {
   body {
     @apply bg-background text-foreground;
   }
+  .dark body {
+    background-image: radial-gradient(circle at top, hsl(220, 20%, 10%) 0%, hsl(var(--background)) 50%);
+  }
   .prose {
     pre {
       @apply relative rounded-lg;
