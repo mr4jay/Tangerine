@@ -38,11 +38,14 @@ const ListenToPost = ({ content }: { content: string }) => {
 
   return (
     <motion.div 
-      className="mb-8"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
+        <h3 className="text-2xl font-bold font-headline text-primary flex items-center gap-2 mb-4">
+            <Volume2 className="h-6 w-6" />
+            Listen to this Post
+        </h3>
         <AnimatePresence mode="wait">
             {!audioUrl && (
                  <motion.div 
@@ -51,7 +54,7 @@ const ListenToPost = ({ content }: { content: string }) => {
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.8 }}
                  >
-                    <Button onClick={handleGenerateAudio} variant="outline" disabled={isLoading}>
+                    <Button onClick={handleGenerateAudio} variant="outline" disabled={isLoading} className="w-full">
                       {isLoading ? (
                         <>
                           <Loader2 className="mr-2 h-5 w-5 animate-spin" />
@@ -59,8 +62,7 @@ const ListenToPost = ({ content }: { content: string }) => {
                         </>
                       ) : (
                         <>
-                          <Volume2 className="mr-2 h-5 w-5" />
-                          Listen to this post
+                          Generate Audio
                         </>
                       )}
                     </Button>
@@ -74,7 +76,7 @@ const ListenToPost = ({ content }: { content: string }) => {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -20 }}
                 >
-                     <Card className="bg-secondary/50 border-border/60">
+                     <Card className="bg-card/50 border-border/60">
                         <CardContent className="p-4 flex items-center gap-4">
                            <audio controls src={audioUrl} className="w-full h-10" autoPlay>
                                 Your browser does not support the audio element.

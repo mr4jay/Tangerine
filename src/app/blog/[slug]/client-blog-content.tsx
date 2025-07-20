@@ -112,13 +112,9 @@ export default function ClientBlogContent({ post, allPosts }: { post: PostData; 
                   />
                 </div>
 
-                {post.content && <ListenToPost content={post.content} />}
-
                 <div className="prose prose-lg dark:prose-invert max-w-none text-foreground/90 space-y-4">
                   {post.contentReact}
                 </div>
-
-                {post.content && <KeyTakeaways content={post.content} />}
 
                 <div className="mt-12 pt-8 border-t border-border/40">
                   <h3 className="text-xl font-bold mb-4">Share this post</h3>
@@ -142,6 +138,8 @@ export default function ClientBlogContent({ post, allPosts }: { post: PostData; 
             </article>
             <aside className="mt-12 lg:mt-0">
               <div className="sticky top-24 space-y-8">
+                {post.content && <ListenToPost content={post.content} />}
+                {post.content && <KeyTakeaways content={post.content} />}
                 <AIRelatedPosts currentPost={post} allPosts={allPosts} />
               </div>
             </aside>

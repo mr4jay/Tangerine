@@ -1,12 +1,12 @@
 
 
 .resume-content {
-    font-family: var(--font-tech-mono), monospace;
+    font-family: var(--font-inter), sans-serif;
     color: hsl(var(--foreground));
 }
 
 .resume-content h1, .resume-content h2, .resume-content h3 {
-    font-family: var(--font-tech-mono), monospace;
+    font-family: var(--font-inter), sans-serif;
     color: hsl(var(--primary));
     border-bottom: 2px solid hsl(var(--border));
     padding-bottom: 0.5rem;
