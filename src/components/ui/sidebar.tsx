@@ -567,10 +567,10 @@ const SidebarMenuButton = React.forwardRef<
         className={cn(sidebarMenuButtonVariants({ variant, size }), className)}
         {...props}
       >
-        <>
+        <span className="flex w-full items-center gap-2">
           {children}
           <div className="absolute bottom-1 left-1/2 -translate-x-1/2 h-0.5 bg-sidebar-primary-foreground w-0 data-[active=true]:w-4 transition-all duration-300 ease-in-out"></div>
-        </>
+        </span>
       </Comp>
     )
 
