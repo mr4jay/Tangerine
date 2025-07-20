@@ -1,4 +1,5 @@
 
+
 import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
@@ -7,6 +8,7 @@ import { Inter } from 'next/font/google';
 import Analytics, { trackEvent } from '@/components/analytics';
 import CookieConsent from '@/components/layout/cookie-consent';
 import type { Metric } from 'web-vitals';
+import { AppLayout } from '@/components/layout/header';
 
 
 const inter = Inter({
@@ -126,7 +128,9 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {children}
+          <AppLayout>
+            {children}
+          </AppLayout>
           <Toaster />
           <CookieConsent />
           <Analytics />

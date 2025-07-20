@@ -1,4 +1,5 @@
 
+
 import Header from '@/components/layout/header';
 import Hero from '@/components/sections/hero';
 import About from '@/components/sections/about';
@@ -20,7 +21,6 @@ export default async function Home() {
   return (
     <HomeClient>
         <Header />
-        <main className="flex-1" role="main">
         <Hero />
         <div id="about"><About /></div>
         <div id="projects"><Projects /></div>
@@ -29,7 +29,6 @@ export default async function Home() {
         <div id="certifications"><Certifications /></div>
         <div id="testimonials"><Testimonials /></div>
         <div id="contact"><Contact /></div>
-        </main>
         <Footer />
         <BackToTopButton />
     </HomeClient>

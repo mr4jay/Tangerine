@@ -11,7 +11,6 @@ export default function HomeClient({
   children: React.ReactNode;
 }) {
   const [isLoading, setIsLoading] = useState(true);
-  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -23,9 +22,6 @@ export default function HomeClient({
     return () => clearTimeout(timer);
   }, []);
 
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
 
   return (
     <>
@@ -33,7 +29,7 @@ export default function HomeClient({
         {isLoading && <Preloader />}
       </AnimatePresence>
       
-      {!isLoading && isClient && (
+      {!isLoading && (
         <motion.div 
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}

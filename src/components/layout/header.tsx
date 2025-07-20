@@ -9,84 +9,43 @@ import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { cn } from '@/lib/utils';
 import { ThemeToggle } from './theme-toggle';
 import { usePathname } from 'next/navigation';
+import {
+  Sidebar,
+  SidebarProvider,
+  SidebarTrigger,
+  SidebarContent,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuItem,
+  SidebarMenuButton,
+  SidebarFooter,
+  useSidebar,
+} from '@/components/ui/sidebar';
 
 const navLinks = [
-  { name: 'Home', href: '/' },
-  { name: 'About', href: '/#about' },
-  { name: 'Projects', href: '/#projects' },
-  { name: 'Blog', href: '/blog' },
-  { name: 'Skills', href: '/#skills' },
-  { name: 'Resume', href: '/resume' },
-  { name: 'Certifications', href: '/#certifications' },
-  { name: 'Testimonials', href: '/#testimonials' },
-  { name: 'Contact', href: '/#contact' },
+  { name: 'Home', href: '/', icon: Code },
+  { name: 'About', href: '/#about', icon: Code },
+  { name: 'Projects', href: '/#projects', icon: Code },
+  { name: 'Blog', href: '/blog', icon: Code },
+  { name: 'Skills', href: '/#skills', icon: Code },
+  { name: 'Resume', href: '/resume', icon: Code },
+  { name: 'Certifications', href: '/#certifications', icon: Code },
+  { name: 'Testimonials', href: '/#testimonials', icon: Code },
+  { name: 'Contact', href: '/#contact', icon: Code },
 ];
 
 export default function Header() {
-  const [isOpen, setIsOpen] = useState(false);
   const [hasScrolled, setHasScrolled] = useState(false);
-  const [activeLink, setActiveLink] = useState('/');
   const pathname = usePathname();
 
   useEffect(() => {
     const handleScroll = () => {
       setHasScrolled(window.scrollY > 10);
-      
-      if (pathname.startsWith('/blog')) {
-          setActiveLink('/blog');
-          return;
-      }
-      if (pathname.startsWith('/resume')) {
-          setActiveLink('/resume');
-          return;
-      }
-      
-      const sections = navLinks
-        .filter(link => link.href.includes('/#'))
-        .map(link => document.getElementById(link.href.substring(2)))
-        .filter(Boolean);
-
-      let current = '/';
-      for (const section of sections) {
-        if (section && section.offsetTop <= window.scrollY + 100) {
-          current = `/#${section.id}`;
-        }
-      }
-      setActiveLink(current);
     };
 
     window.addEventListener('scroll', handleScroll);
-    
-    // Set initial active link
-    if (pathname.startsWith('/blog')) {
-        setActiveLink('/blog');
-    } else if (pathname.startsWith('/resume')) {
-        setActiveLink('/resume');
-    } else {
-        setActiveLink('/');
-    }
-
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [pathname]);
-
-  const getLinkClass = (href: string) => {
-    const isActive = href === '/' ? activeLink === href : pathname.startsWith(href) || activeLink.includes(href);
-
-    if (href.includes('/#')) {
-       const isSectionActive = activeLink === href;
-       return cn(
-        "text-sm font-semibold text-foreground/80 transition-all duration-300 hover:text-primary hover:scale-105 hover:opacity-90",
-        "relative after:content-[''] after:absolute after:left-0 after:bottom-[-4px] after:w-full after:h-[2px] after:bg-primary after:scale-x-0 after:transition-transform after:duration-300 after:origin-center",
-        isSectionActive && "text-primary after:scale-x-100"
-      );
-    }
-    
-    return cn(
-        "text-sm font-semibold text-foreground/80 transition-all duration-300 hover:text-primary hover:scale-105 hover:opacity-90",
-        "relative after:content-[''] after:absolute after:left-0 after:bottom-[-4px] after:w-full after:h-[2px] after:bg-primary after:scale-x-0 after:transition-transform after:duration-300 after:origin-center",
-        isActive && "text-primary after:scale-x-100"
-    );
-  }
+  }, []);
 
   return (
     <header className={cn(
@@ -94,53 +53,100 @@ export default function Header() {
       hasScrolled ? "border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60" : "bg-transparent"
     )}>
       <div className="container mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        <Link href="/" className="flex items-center gap-2">
-          <Code className="h-6 w-6 text-primary" />
-          <span className="text-lg font-bold">DataCraft Portfolio</span>
-        </Link>
+        <div className="flex items-center gap-2">
+           <div className="md:hidden">
+            <SidebarTrigger />
+           </div>
+          <Link href="/" className="flex items-center gap-2">
+            <Code className="h-6 w-6 text-primary" />
+            <span className="text-lg font-bold">DataCraft Portfolio</span>
+          </Link>
+        </div>
 
         <div className="flex items-center gap-4">
-          <nav className="hidden md:flex items-center space-x-6">
-            {navLinks.map((link) => (
-              <Link key={link.href} href={link.href} className={getLinkClass(link.href)}>
-                {link.name}
-              </Link>
-            ))}
-          </nav>
-          
           <ThemeToggle />
-
-          <Sheet open={isOpen} onOpenChange={setIsOpen}>
-            <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className="md:hidden">
-                <Menu className="h-6 w-6" />
-                <span className="sr-only">Open menu</span>
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="right" className="w-[300px] sm:w-[400px] bg-background">
-              <nav className="flex flex-col h-full">
-                <div className="flex items-center justify-between p-4 border-b">
-                   <Link href="/" className="flex items-center gap-2" onClick={() => setIsOpen(false)}>
-                      <Code className="h-6 w-6 text-primary" />
-                      <span className="text-lg font-bold">DataCraft</span>
-                   </Link>
-                   <Button variant="ghost" size="icon" onClick={() => setIsOpen(false)}>
-                      <X className="h-6 w-6" />
-                      <span className="sr-only">Close menu</span>
-                   </Button>
-                </div>
-                <div className="flex flex-col p-4 space-y-4">
-                  {navLinks.map((link) => (
-                    <Link key={link.href} href={link.href} className="text-lg font-semibold text-foreground hover:text-primary" onClick={() => setIsOpen(false)}>
-                      {link.name}
-                    </Link>
-                  ))}
-                </div>
-              </nav>
-            </SheetContent>
-          </Sheet>
         </div>
       </div>
     </header>
   );
+}
+
+export function PortfolioSidebar() {
+  const pathname = usePathname();
+  const { setOpenMobile } = useSidebar();
+  const [activeLink, setActiveLink] = useState('/');
+
+  useEffect(() => {
+      if (pathname === '/') {
+          const sections = navLinks
+            .filter(link => link.href.includes('/#'))
+            .map(link => document.getElementById(link.href.substring(2)))
+            .filter(Boolean);
+
+          const handleScroll = () => {
+            let current = '/';
+            for (const section of sections) {
+              if (section && section.offsetTop <= window.scrollY + 100) {
+                current = `/#${section.id}`;
+              }
+            }
+            setActiveLink(current);
+          }
+          
+          window.addEventListener('scroll', handleScroll, { passive: true });
+          handleScroll();
+          return () => window.removeEventListener('scroll', handleScroll);
+      } else {
+          setActiveLink(pathname);
+      }
+
+  }, [pathname]);
+
+  const getIsActive = (href: string) => {
+    if (href === '/') return activeLink === '/';
+    return activeLink.startsWith(href)
+  };
+
+  return (
+      <Sidebar>
+        <SidebarContent>
+          <SidebarHeader>
+              <Link href="/" className="flex items-center gap-2" onClick={() => setOpenMobile(false)}>
+                  <Code className="h-6 w-6 text-primary" />
+                  <span className="text-lg font-bold">DataCraft</span>
+              </Link>
+          </SidebarHeader>
+          <SidebarMenu>
+            {navLinks.map((link) => (
+              <SidebarMenuItem key={link.href}>
+                 <Link href={link.href} passHref legacyBehavior>
+                    <SidebarMenuButton 
+                      onClick={() => setOpenMobile(false)}
+                      isActive={getIsActive(link.href)}
+                      tooltip={link.name}
+                    >
+                      <link.icon />
+                      <span>{link.name}</span>
+                    </SidebarMenuButton>
+                 </Link>
+              </SidebarMenuItem>
+            ))}
+          </SidebarMenu>
+        </SidebarContent>
+        <SidebarFooter>
+           <ThemeToggle />
+        </SidebarFooter>
+      </Sidebar>
+  )
+}
+
+export function AppLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <SidebarProvider>
+      <PortfolioSidebar />
+      <main className="flex-1 peer-[[data-sidebar]]:md:pl-[--sidebar-width-icon]" role="main">
+        {children}
+      </main>
+    </SidebarProvider>
+  )
 }
