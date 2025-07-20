@@ -100,7 +100,7 @@ const AIRelatedPosts = ({ currentPost, allPosts }: { currentPost: PostData; allP
                 >
                     {relatedPosts.map(post => (
                         <motion.div key={post.slug} variants={itemVariants}>
-                            <Card className="bg-card border-border/60 transition-all hover:border-primary/80 hover:-translate-y-1">
+                            <Card className="bg-card/50 border-border/60 transition-all hover:border-primary/80 hover:-translate-y-1">
                             <Link href={`/blog/${post.slug}`} aria-label={`Read ${post.title}`}>
                                 <CardHeader>
                                 <CardTitle className="text-lg font-semibold">{post.title}</CardTitle>

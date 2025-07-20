@@ -54,7 +54,7 @@ const KeyTakeaways = ({ content }: { content: string }) => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.2 }}
     >
-      <Card className="bg-secondary/50 border-border/60">
+      <Card className="bg-card/50 border-border/60">
         <CardHeader className="flex flex-row items-center gap-3">
           <Lightbulb className="h-6 w-6 text-primary" />
           <CardTitle className="text-2xl font-headline">Key Takeaways</CardTitle>
