@@ -60,13 +60,34 @@ const fadeIn = (direction: 'up' | 'down' | 'left' | 'right', delay: number) => (
 
 export default function ProjectDetailPage({ params }: { params: { slug: string } }) {
   const project = getProjectBySlug(params.slug);
+  const portfolioUrl = "https://ajay-kumar-portfolio.vercel.app";
 
   if (!project) {
     notFound();
   }
+  
+  const projectUrl = `${portfolioUrl}/projects/${project.slug}`;
+
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'CreativeWork',
+    'name': project.title,
+    'description': project.longDescription,
+    'url': projectUrl,
+    'author': {
+      '@type': 'Person',
+      'name': 'Rajure Ajay Kumar',
+      'url': portfolioUrl,
+    },
+    'keywords': project.tags.join(', ')
+  };
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <Header />
       <motion.main
         initial="hidden"
