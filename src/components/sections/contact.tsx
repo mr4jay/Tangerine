@@ -1,3 +1,4 @@
+
 "use client";
 
 import { Button } from '@/components/ui/button';
@@ -26,8 +27,8 @@ const socialLinks = [
     {
         icon: Mail,
         name: 'Email',
-        value: 'rajure.ajay.kumar@email.com',
-        href: 'mailto:rajure.ajay.kumar@email.com',
+        value: 'rajaykumar5555@gmail.com',
+        href: 'mailto:rajaykumar5555@gmail.com',
         cta: 'Send an email'
     },
     {
