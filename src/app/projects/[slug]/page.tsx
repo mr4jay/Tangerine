@@ -12,7 +12,7 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ProjectMetricsChart } from '@/components/projects/project-metrics-chart';
-import { fadeIn } from '@/lib/motion';
+import { staggerContainer, fadeIn } from '@/lib/motion';
 
 
 export async function generateStaticParams() {
@@ -76,6 +76,7 @@ export default function ProjectDetailPage({ params }: { params: { slug: string }
       />
       <Header />
       <motion.main
+        variants={staggerContainer(0.1, 0.1)}
         initial="hidden"
         animate="visible"
         className="w-full py-12 md:py-24 bg-background"
@@ -104,7 +105,7 @@ export default function ProjectDetailPage({ params }: { params: { slug: string }
           </motion.p>
           
           <motion.div 
-            variants={fadeIn('down', 'tween', 0.3, 0.5)} 
+            variants={fadeIn('up', 'tween', 0.3, 0.5)} 
             className="relative w-full h-64 md:h-96 mb-12 rounded-lg overflow-hidden shadow-lg"
           >
             <Image
@@ -157,7 +158,7 @@ export default function ProjectDetailPage({ params }: { params: { slug: string }
                          <h4 className="font-semibold mb-2 text-muted-foreground">{tech.category}</h4>
                          <div className="flex flex-wrap gap-2">
                            {tech.items.map(item => (
-                             <Badge key={item} variant="default" className="bg-primary/20 text-primary border-primary/40">
+                             <Badge key={item} variant="outline" className="border-primary/30 text-primary">
                                {item}
                              </Badge>
                            ))}

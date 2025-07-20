@@ -21,8 +21,8 @@ const containerVariants = {
 };
 
 const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" } },
+  hidden: { opacity: 0, x: -20 },
+  visible: { opacity: 1, x: 0, transition: { duration: 0.4, ease: "easeOut" } },
 };
 
 const KeyTakeaways = ({ content }: { content: string }) => {
@@ -52,7 +52,7 @@ const KeyTakeaways = ({ content }: { content: string }) => {
       className="mt-12"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
+      transition={{ duration: 0.5, delay: 0.2 }}
     >
       <Card className="bg-secondary/50 border-border/60">
         <CardHeader className="flex flex-row items-center gap-3">

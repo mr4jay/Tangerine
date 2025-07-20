@@ -93,7 +93,7 @@ const AIRelatedPosts = ({ currentPost, allPosts }: { currentPost: PostData; allP
             {!isLoading && !error && relatedPosts.length > 0 && (
                 <motion.div 
                     key="related-posts" 
-                    className="space-y-8"
+                    className="space-y-4"
                     variants={containerVariants}
                     initial="hidden"
                     animate="visible"
