@@ -39,42 +39,34 @@ const TimelineNode = ({ item, index, isMobile }: { item: typeof timelineData[0],
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: isMobile ? 50 : 0, x: isMobile ? 0 : 50 }}
+      initial={{ opacity: 0, y: isMobile ? 50 : 0, x: isMobile ? 0 : isEven ? -50 : 50 }}
       whileInView={{ opacity: 1, y: 0, x: 0 }}
       viewport={{ once: true, amount: 0.5 }}
       transition={{ duration: 0.5, delay: index * 0.2 }}
-      className={cn("relative w-full flex justify-center", !isMobile && "w-1/2", isMobile ? "min-h-[120px]" : "")}
+      className={cn("relative w-full flex", isMobile ? "justify-start pl-12" : (isEven ? "justify-end pr-8" : "justify-start pl-8"), "min-h-[150px]")}
     >
-      {!isMobile && (
-        <div className={cn("absolute top-5 h-0.5 w-full",
-          index === 0 ? "right-1/2 bg-gradient-to-l from-primary to-transparent" : "left-1/2 bg-gradient-to-r from-primary to-transparent"
-        )} />
-      )}
-      {isMobile && (
-        <div className="absolute left-5 top-5 h-full w-0.5 bg-primary/30" />
-      )}
+      <div className={cn("absolute h-full w-0.5 bg-primary/30", isMobile ? "left-5" : "left-1/2 -translate-x-1/2")} />
+      
       <Popover>
         <PopoverTrigger asChild>
           <motion.button
             whileHover={{ scale: 1.2, transition: { duration: 0.2 } }}
             className={cn("absolute z-10 flex h-10 w-10 items-center justify-center rounded-full bg-primary text-primary-foreground ring-4 ring-background focus:outline-none focus:ring-ring",
-              isMobile ? "left-0 -translate-x-1/2 top-5" : "top-0 -translate-y-1/2"
+              isMobile ? "left-5 -translate-x-1/2 top-5" : "top-1/2 -translate-y-1/2",
+              !isMobile && (isEven ? 'right-0 translate-x-1/2' : 'left-0 -translate-x-1/2')
             )}
             aria-label={`View details for ${item.title}`}
           >
             <Briefcase className="h-5 w-5" />
           </motion.button>
         </PopoverTrigger>
-        <div className={cn(
-          "relative w-full rounded-lg bg-card p-4 transition-shadow hover:shadow-lg",
-          isMobile ? 'ml-12' : 'flex flex-col items-center',
-           !isMobile && isEven && "top-10",
-           !isMobile && !isEven && "bottom-10"
-        )}>
+        
+        <div className={cn("w-full max-w-sm rounded-lg bg-card p-4 transition-shadow hover:shadow-lg", isMobile ? 'mt-0' : 'mt-auto mb-auto')}>
           <p className="text-sm font-semibold text-primary">{item.period}</p>
           <h4 className="text-lg font-bold">{item.title}</h4>
           <p className="text-muted-foreground text-sm">{item.company}</p>
         </div>
+
         <PopoverContent className="w-80 bg-card border-border/80 shadow-2xl">
           <div className="space-y-4">
             <div>
@@ -115,8 +107,8 @@ const ProjectTimeline = () => {
 
   return (
     <div className="relative w-full py-16">
-      <div className="absolute left-0 top-1/2 h-0.5 w-full -translate-y-1/2 bg-primary/30" />
-      <div className="relative flex w-full justify-between">
+      <div className="absolute left-1/2 top-0 h-full w-0.5 -translate-x-1/2 bg-primary/30" />
+      <div className="relative flex flex-col w-full items-center">
         {timelineData.map((item, index) => (
           <TimelineNode key={index} item={item} index={index} isMobile={false} />
         ))}
@@ -141,9 +133,9 @@ export default function Projects() {
           variants={headerVariants}
           className="flex flex-col items-center justify-center space-y-4 text-center mb-12"
         >
-          <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl font-headline">Featured Projects</h2>
+          <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl font-headline">Career Highlights & Projects</h2>
           <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-            A selection of my work in data engineering, showcasing my skills in building scalable and efficient data systems.
+            A visual timeline of my key achievements, followed by a selection of my detailed project work.
           </p>
         </motion.div>
         
@@ -158,7 +150,7 @@ export default function Projects() {
               whileInView="visible"
               viewport={{ once: true, amount: 0.3 }}
               variants={cardVariants}
-              whileHover={{ y: -5, scale: 1.05, boxShadow: "0 10px 20px -5px hsl(var(--primary) / 0.4)", transition: { duration: 0.3, ease: 'easeOut' } }}
+              whileHover={{ y: -5, scale: 1.02, boxShadow: "0 10px 20px -5px hsl(var(--primary) / 0.4)", transition: { duration: 0.3, ease: 'easeOut' } }}
               className="h-full"
             >
               <Card className="flex flex-col h-full overflow-hidden bg-card transition-shadow duration-300 ease-in-out hover:shadow-2xl hover:shadow-primary/40">
