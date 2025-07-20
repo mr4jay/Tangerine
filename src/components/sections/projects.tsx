@@ -35,12 +35,6 @@ export default function Projects() {
               A selection of my detailed project work, demonstrating my skills in data engineering, AI, and MLOps.
             </p>
           </div>
-          <Button asChild>
-            <Link href="/projects/new">
-              <PlusCircle className="mr-2 h-5 w-5" />
-              New Project with AI
-            </Link>
-          </Button>
         </motion.div>
 
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">

@@ -20,15 +20,6 @@ export default async function BlogPage() {
             </p>
           </div>
 
-          <div className="mb-8 flex justify-end">
-            <Button asChild>
-              <Link href="/blog/new">
-                <PlusCircle className="mr-2 h-5 w-5" />
-                New Post with AI
-              </Link>
-            </Button>
-          </div>
-
           <BlogClientPage posts={allPosts} />
           
         </div>
