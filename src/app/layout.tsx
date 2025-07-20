@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(portfolioUrl),
   title: 'Rajure Ajay Kumar | Senior Data Engineer Portfolio',
   description: '6+ years as a Senior Data Engineer delivering $5M+ in savings and revenue growth with AWS, Snowflake, and Dataiku DSS. Explore my projects and skills.',
-  keywords: ['data engineer portfolio', 'Rajure Ajay Kumar', 'Senior Data Engineer', 'Hyderabad', 'AWS', 'Snowflake', 'Dataiku DSS', 'Python', 'MLOps', 'AWS certified', 'Snowflake expert', 'data engineering projects', 'data engineer hyderabad', 'data engineering blog', 'fast data engineer portfolio', 'accessible data engineer portfolio', 'interactive data engineer portfolio'],
+  keywords: ['data engineer portfolio', 'Rajure Ajay Kumar', 'Senior Data Engineer', 'Hyderabad', 'AWS', 'Snowflake', 'Dataiku DSS', 'Python', 'MLOps', 'AWS certified', 'Snowflake expert', 'data engineering projects', 'data engineer hyderabad', 'data engineering blog', 'fast data engineer portfolio', 'accessible data engineer portfolio', 'interactive data engineer portfolio', 'data engineer sitemap', 'data engineer performance monitoring', 'optimized data engineer portfolio', 'data engineer rich snippets'],
   authors: [{ name: 'Rajure Ajay Kumar' }],
   openGraph: {
     title: 'Rajure Ajay Kumar | Senior Data Engineer Portfolio',
@@ -74,12 +74,17 @@ const jsonLd = {
   url: portfolioUrl,
   image: professionalHeadshotUrl,
   jobTitle: 'Senior Data Engineer',
-  worksFor: {
-    '@type': 'Organization',
-    name: 'Novartis',
-  },
-  alumniOf: 'Hyderabad',
-  knowsAbout: ['Data Engineering', 'AWS', 'Snowflake', 'Dataiku DSS', 'Python', 'MLOps', 'SQL'],
+  alumniOf: [
+    {
+      '@type': 'Organization',
+      name: 'Novartis',
+    },
+    {
+      '@type': 'Organization',
+      name: 'Spoors',
+    }
+  ],
+  knowsAbout: ['Data Engineering', 'AWS', 'Snowflake', 'Dataiku DSS', 'Python', 'MLOps', 'SQL', 'Data Pipelines', 'Cloud Architecture'],
   sameAs: [
     'https://linkedin.com/in/rajure-ajay-kumar',
     'https://github.com/rajure-ajay',

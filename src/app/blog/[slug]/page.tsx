@@ -11,6 +11,7 @@ import Footer from '@/components/layout/footer';
 import { getPostData, getSortedPostsData } from '@/lib/posts';
 import { format } from 'date-fns';
 import { Badge } from '@/components/ui/badge';
+import { Metadata } from 'next';
 
 const allPosts = await getSortedPostsData();
 
@@ -41,6 +42,32 @@ export async function generateStaticParams() {
   return paths;
 }
 
+export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+  const post = await getPostData(params.slug);
+  if (!post) {
+    return {};
+  }
+  return {
+    title: `${post.title} | Blog`,
+    description: post.excerpt,
+    openGraph: {
+      title: post.title,
+      description: post.excerpt,
+      images: [post.imageUrl],
+      type: 'article',
+      publishedTime: post.publishDate,
+      authors: ['Rajure Ajay Kumar'],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: post.title,
+      description: post.excerpt,
+      images: [post.imageUrl],
+    },
+  };
+}
+
+
 export default async function BlogPostPage({ params }: { params: { slug: string } }) {
   const post = await getPostData(params.slug);
 
@@ -48,11 +75,42 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
     notFound();
   }
   
-  const shareUrl = `https://your-domain.com/blog/${post.slug}`; // Replace with actual domain
+  const portfolioUrl = "https://ajay-kumar-portfolio.vercel.app"; // Replace with your actual domain
+  const shareUrl = `${portfolioUrl}/blog/${post.slug}`;
   const shareTitle = encodeURIComponent(post.title);
+
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    'mainEntityOfPage': {
+      '@type': 'WebPage',
+      '@id': shareUrl,
+    },
+    'headline': post.title,
+    'description': post.excerpt,
+    'image': post.imageUrl,
+    'author': {
+      '@type': 'Person',
+      'name': 'Rajure Ajay Kumar',
+      'url': portfolioUrl,
+    },
+    'publisher': {
+      '@type': 'Organization',
+      'name': 'DataCraft Portfolio',
+      'logo': {
+        '@type': 'ImageObject',
+        'url': `${portfolioUrl}/professional-headshot.png`,
+      },
+    },
+    'datePublished': post.publishDate,
+  };
 
   return (
     <>
+      <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <Header />
       <motion.main
         initial={{ opacity: 0 }}
