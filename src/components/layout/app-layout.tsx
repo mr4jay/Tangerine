@@ -17,6 +17,8 @@ import {
   SidebarFooter,
   useSidebar,
 } from '@/components/ui/sidebar';
+import Preloader from './preloader';
+import { AnimatePresence } from 'framer-motion';
 
 
 const navLinks = [
@@ -114,8 +116,23 @@ export function PortfolioSidebar() {
 }
 
 export function AppLayout({ children }: { children: React.ReactNode }) {
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+      document.body.style.cursor = 'default';
+      window.scrollTo(0,0);
+    }, 1200);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <SidebarProvider>
+      <AnimatePresence mode="wait">
+        {isLoading && <Preloader />}
+      </AnimatePresence>
       <PortfolioSidebar />
       <div className="flex-1 peer-[[data-sidebar]]:md:pl-[--sidebar-width-icon]" role="main">
         {children}
