@@ -1,4 +1,5 @@
 
+
 "use client";
 
 import Link from 'next/link';
@@ -133,9 +134,11 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
       <AnimatePresence mode="wait">
         {isLoading && <Preloader />}
       </AnimatePresence>
-      <PortfolioSidebar />
-      <div className="flex-1 peer-[[data-sidebar]]:md:pl-[--sidebar-width-icon]" role="main">
-        {children}
+      <div className="flex">
+        <PortfolioSidebar />
+        <main className="flex-1" role="main">
+          {children}
+        </main>
       </div>
     </SidebarProvider>
   )

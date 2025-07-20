@@ -136,7 +136,13 @@ export default function About() {
             </Button>
             <Button asChild size="lg" variant="outline" className="group">
                 <Link href="/#contact" aria-label="Contact me">
-                  <MessageSquare className="mr-2 h-5 w-5 transition-transform group-hover:scale-110" />
+                   <motion.div
+                      className="inline-block mr-2"
+                      whileHover={{ scale: 1.2, rotate: 10 }}
+                      transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                    >
+                      <MessageSquare className="h-5 w-5" />
+                    </motion.div>
                   Hire Me
                 </Link>
             </Button>
