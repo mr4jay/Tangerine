@@ -1,3 +1,4 @@
+
 import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
@@ -8,6 +9,7 @@ import remarkParse from 'remark-parse';
 import remarkRehype from 'remark-rehype';
 import rehypeReact from 'rehype-react';
 import React from 'react';
+import { jsx, jsxs } from 'react/jsx-runtime';
 import { CodeBlock } from '@/components/blog/code-block';
 
 const postsDirectory = path.join(process.cwd(), 'posts');
@@ -39,8 +41,9 @@ const processor = unified()
   .use(remarkParse)
   .use(remarkRehype)
   .use(rehypeReact, {
-    createElement: React.createElement,
     Fragment: React.Fragment,
+    jsx: jsx,
+    jsxs: jsxs,
     components: {
       pre: CodeBlock,
     },
