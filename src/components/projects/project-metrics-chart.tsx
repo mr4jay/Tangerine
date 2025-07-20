@@ -1,7 +1,7 @@
 
 "use client";
 
-import { Bar, BarChart, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer, LabelList } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { ChartTooltipContent } from "@/components/ui/chart";
 import type { ProjectMetric } from "@/lib/projects";
@@ -30,6 +30,7 @@ const fadeIn = {
     opacity: 1,
     y: 0,
     transition: {
+      staggerChildren: 0.2,
       duration: 0.5,
       ease: "easeOut",
     },
@@ -54,7 +55,7 @@ export function ProjectMetricsChart({ metrics }: { metrics: ProjectMetric[] }) {
         <CardContent>
           <div className="h-80 w-full">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={chartData} layout="vertical" margin={{ left: 20, right: 20 }}>
+              <BarChart data={chartData} layout="vertical" margin={{ left: 20, right: 40, top: 10, bottom: 10 }}>
                 <CartesianGrid strokeDasharray="3 3" horizontal={false} />
                 <XAxis type="number" hide />
                 <YAxis
@@ -63,8 +64,9 @@ export function ProjectMetricsChart({ metrics }: { metrics: ProjectMetric[] }) {
                   tickLine={false}
                   axisLine={false}
                   tickMargin={10}
-                  className="text-sm text-muted-foreground"
+                  className="text-sm text-muted-foreground fill-muted-foreground"
                   width={120}
+                  
                 />
                 <Tooltip
                   cursor={{ fill: 'hsl(var(--secondary))' }}
@@ -82,17 +84,16 @@ export function ProjectMetricsChart({ metrics }: { metrics: ProjectMetric[] }) {
                   }
                 />
                 <Bar dataKey="value" fill="var(--color-value)" radius={4}>
-                  {chartData.map((entry, index) => (
-                     <text
-                        key={`label-${index}`}
-                        x={10} 
-                        y={0}
-                        fill="hsl(var(--primary-foreground))"
-                        className="text-sm font-medium"
-                      >
-                       {formatValue(entry.value, entry.unit)}
-                     </text>
-                  ))}
+                    <LabelList
+                        dataKey="value"
+                        position="right"
+                        offset={10}
+                        className="fill-foreground font-medium"
+                        formatter={(value: number) => {
+                            const entry = chartData.find(d => d.value === value);
+                            return entry ? formatValue(value, entry.unit) : value;
+                        }}
+                    />
                 </Bar>
               </BarChart>
             </ResponsiveContainer>
