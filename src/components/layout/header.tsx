@@ -27,7 +27,6 @@ const navLinks = [
   { name: 'About', href: '/#about', icon: User },
   { name: 'Projects', href: '/#projects', icon: Briefcase },
   { name: 'Blog', href: '/blog', icon: Rss },
-  { name: 'Skills', href: '/#skills', icon: Wrench },
   { name: 'Resume', href: '/resume', icon: FileText },
   { name: 'Certifications', href: '/#certifications', icon: Award },
   { name: 'Testimonials', href: '/#testimonials', icon: Star },
