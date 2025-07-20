@@ -94,7 +94,12 @@ export function reportWebVitals(metric: Metric) {
   // Use `window.gtag` if you initialized Google Analytics as this example does.
   // See https://github.com/googlesamples/web-vitals#send-the-results-to-google-analytics
   if (typeof window.gtag === 'function') {
-      trackEvent(metric.name, 'Web Vitals', `GTM - ${metric.id}`, Math.round(metric.name === 'CLS' ? metric.value * 1000 : metric.value));
+      trackEvent('web_vitals', {
+        category: 'Web Vitals',
+        label: metric.id, // A unique ID for this metric instance
+        value: Math.round(metric.name === 'CLS' ? metric.value * 1000 : metric.value), // CLS is a score, others are ms
+        non_interaction: true, // Mark as non-interaction event
+      });
   }
 }
 

@@ -8,16 +8,20 @@ import { useEffect, useState } from 'react';
 const GA_TRACKING_ID = process.env.NEXT_PUBLIC_GA_ID || "G-XXXXXXXXXX"; // Replace with your GA ID
 const COOKIE_CONSENT_KEY = 'cookie_consent_is_true';
 
+type GTagEvent = {
+  action: string;
+  category?: string;
+  label?: string;
+  value?: number;
+  non_interaction?: boolean;
+};
+
 // Centralized function to send events to Google Analytics
-export const trackEvent = (action: string, category: string, label: string, value?: number) => {
+export const trackEvent = (action: string, params: Omit<GTagEvent, 'action'>) => {
     if (typeof window.gtag !== 'function' || localStorage.getItem(COOKIE_CONSENT_KEY) !== 'true') {
         return;
     }
-    window.gtag('event', action, {
-        event_category: category,
-        event_label: label,
-        value: value,
-    });
+    window.gtag('event', action, params);
 };
 
 
