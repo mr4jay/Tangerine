@@ -6,3 +6,4 @@ import './flows/summarize-post-flow';
 import './flows/extract-tags-flow';
 import './flows/generate-post-flow';
 import './flows/key-takeaways-flow';
+import './flows/find-related-posts-flow';

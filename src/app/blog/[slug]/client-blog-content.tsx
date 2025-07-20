@@ -14,28 +14,7 @@ import { PostData } from '@/lib/posts';
 import { format } from 'date-fns';
 import { Badge } from '@/components/ui/badge';
 import KeyTakeaways from '@/components/blog/key-takeaways';
-
-const RelatedPosts = ({ currentSlug, allPosts }: { currentSlug: string; allPosts: PostData[] }) => {
-  const related = allPosts.filter(p => p.slug !== currentSlug).slice(0, 2);
-
-  return (
-    <div className="space-y-8">
-      <h3 className="text-2xl font-bold font-headline text-primary">Related Posts</h3>
-      {related.map(post => (
-        <Card key={post.slug} className="bg-card border-border/60 transition-transform hover:scale-105">
-          <Link href={`/blog/${post.slug}`} aria-label={`Read ${post.title}`}>
-            <CardHeader>
-              <CardTitle className="text-lg font-semibold">{post.title}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground text-sm line-clamp-2">{post.excerpt}</p>
-            </CardContent>
-          </Link>
-        </Card>
-      ))}
-    </div>
-  );
-};
+import AIRelatedPosts from '@/components/blog/ai-related-posts';
 
 export default function ClientBlogContent({ post, allPosts }: { post: PostData; allPosts: PostData[] }) {
   if (!post) {
@@ -155,7 +134,7 @@ export default function ClientBlogContent({ post, allPosts }: { post: PostData; 
             </article>
             <aside className="mt-12 lg:mt-0">
               <div className="sticky top-24 space-y-8">
-                <RelatedPosts currentSlug={post.slug} allPosts={allPosts} />
+                <AIRelatedPosts currentPost={post} allPosts={allPosts} />
               </div>
             </aside>
           </div>
