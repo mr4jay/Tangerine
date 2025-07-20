@@ -14,7 +14,7 @@ import { Badge } from '@/components/ui/badge';
 import KeyTakeaways from '@/components/blog/key-takeaways';
 import AIRelatedPosts from '@/components/blog/ai-related-posts';
 import ListenToPost from '@/components/blog/listen-to-this-post';
-import './blog-post.css';
+import '../blog-post.css';
 
 export default function ClientBlogContent({ post, allPosts }: { post: PostData; allPosts: PostData[] }) {
   if (!post) {
