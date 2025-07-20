@@ -104,10 +104,10 @@ export default function About() {
           </motion.div>
            <motion.div variants={fadeIn('right', 'tween', 0.4, 0.6)}>
             <Button asChild size="lg" className="group" onClick={handleResumeDownload}>
-                <a href="/resume.pdf" download="Rajure_Ajay_Kumar_Resume.pdf" aria-label="Download my resume">
-                  Download Resume
+                <Link href="/resume" aria-label="View my interactive resume">
+                  View Online Resume
                   <Download className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
-                </a>
+                </Link>
               </Button>
            </motion.div>
         </div>

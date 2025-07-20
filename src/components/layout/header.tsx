@@ -16,6 +16,7 @@ const navLinks = [
   { name: 'Projects', href: '/#projects' },
   { name: 'Blog', href: '/blog' },
   { name: 'Skills', href: '/#skills' },
+  { name: 'Resume', href: '/resume' },
   { name: 'Certifications', href: '/#certifications' },
   { name: 'Testimonials', href: '/#testimonials' },
   { name: 'Contact', href: '/#contact' },
@@ -33,6 +34,10 @@ export default function Header() {
       
       if (pathname.startsWith('/blog')) {
           setActiveLink('/blog');
+          return;
+      }
+      if (pathname.startsWith('/resume')) {
+          setActiveLink('/resume');
           return;
       }
       
@@ -55,6 +60,8 @@ export default function Header() {
     // Set initial active link
     if (pathname.startsWith('/blog')) {
         setActiveLink('/blog');
+    } else if (pathname.startsWith('/resume')) {
+        setActiveLink('/resume');
     } else {
         setActiveLink('/');
     }
@@ -63,7 +70,17 @@ export default function Header() {
   }, [pathname]);
 
   const getLinkClass = (href: string) => {
-    const isActive = href === '/' ? activeLink === href : activeLink.includes(href);
+    const isActive = href === '/' ? activeLink === href : pathname.startsWith(href) || activeLink.includes(href);
+
+    if (href.includes('/#')) {
+       const isSectionActive = activeLink === href;
+       return cn(
+        "text-sm font-semibold text-foreground/80 transition-all duration-300 hover:text-primary hover:scale-105 hover:opacity-90",
+        "relative after:content-[''] after:absolute after:left-0 after:bottom-[-4px] after:w-full after:h-[2px] after:bg-primary after:scale-x-0 after:transition-transform after:duration-300 after:origin-center",
+        isSectionActive && "text-primary after:scale-x-100"
+      );
+    }
+    
     return cn(
         "text-sm font-semibold text-foreground/80 transition-all duration-300 hover:text-primary hover:scale-105 hover:opacity-90",
         "relative after:content-[''] after:absolute after:left-0 after:bottom-[-4px] after:w-full after:h-[2px] after:bg-primary after:scale-x-0 after:transition-transform after:duration-300 after:origin-center",
