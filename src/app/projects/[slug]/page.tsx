@@ -76,10 +76,11 @@ export default function ProjectDetailPage({ params }: { params: { slug: string }
       />
       <Header />
       <motion.main
-        variants={staggerContainer(0.1, 0.1)}
+        variants={staggerContainer(0.1, 0.2)}
         initial="hidden"
-        animate="visible"
-        className="w-full py-12 md:py-24 bg-background"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.1 }}
+        className="w-full py-12 md:py-24 bg-background overflow-hidden"
         role="main"
       >
         <div className="container mx-auto px-4 md:px-6 max-w-5xl">
@@ -137,10 +138,14 @@ export default function ProjectDetailPage({ params }: { params: { slug: string }
                 <h2 className="text-3xl font-bold font-headline mb-4 text-primary">Key Outcomes</h2>
                 <ul className="space-y-3">
                   {project.keyOutcomes.map((outcome, index) => (
-                    <li key={index} className="flex items-start gap-3">
+                    <motion.li 
+                      key={index} 
+                      variants={fadeIn('up', 'tween', 0.7 + index * 0.1, 0.5)}
+                      className="flex items-start gap-3"
+                    >
                       <CheckCircle className="h-6 w-6 text-green-500 mt-1 flex-shrink-0" />
                       <span className="text-foreground/90">{outcome}</span>
-                    </li>
+                    </motion.li>
                   ))}
                 </ul>
               </motion.div>
@@ -153,8 +158,11 @@ export default function ProjectDetailPage({ params }: { params: { slug: string }
                      <CardTitle>Tech Stack</CardTitle>
                    </CardHeader>
                    <CardContent className="space-y-4">
-                     {project.techStack.map(tech => (
-                       <div key={tech.category}>
+                     {project.techStack.map((tech, techIndex) => (
+                       <motion.div 
+                          key={tech.category}
+                          variants={fadeIn('up', 'tween', 0.8 + techIndex * 0.1, 0.5)}
+                       >
                          <h4 className="font-semibold mb-2 text-muted-foreground">{tech.category}</h4>
                          <div className="flex flex-wrap gap-2">
                            {tech.items.map(item => (
@@ -163,12 +171,15 @@ export default function ProjectDetailPage({ params }: { params: { slug: string }
                              </Badge>
                            ))}
                          </div>
-                       </div>
+                       </motion.div>
                      ))}
                    </CardContent>
                  </Card>
                </motion.div>
-                <motion.div variants={fadeIn('up', 'tween', 0.8, 0.5)} className="flex flex-col gap-4">
+                <motion.div 
+                  variants={fadeIn('up', 'tween', 0.9, 0.5)} 
+                  className="flex flex-col gap-4"
+                >
                      <Button asChild variant="outline" size="lg">
                         <Link href={project.repoUrl} target="_blank" rel="noopener noreferrer">
                           <Github className="mr-2 h-5 w-5" />
