@@ -31,8 +31,11 @@ export default function Hero() {
 
   const y = useTransform(scrollYProgress, [0, 1], ["0%", "10%"]);
 
-  const typedTitle = useTypingEffect("Marketing Science & Data Professional", 10);
-  const typedSubtitle = useTypingEffect("Streamlining DataOps Workflows", 10, 4500); // Start after a delay
+  const titleText = "Marketing Science & Data Professional";
+  const subtitleText = "Streamlining DataOps Workflows";
+
+  const typedTitle = useTypingEffect(titleText, 2000);
+  const typedSubtitle = useTypingEffect(subtitleText, 2000, (titleText.length * 2000) + 500); // Start after the title finishes
 
   return (
     <section ref={targetRef} id="home" className="relative w-full min-h-screen flex flex-col items-center justify-center overflow-hidden py-24 sm:py-16">
