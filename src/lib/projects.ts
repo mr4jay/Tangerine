@@ -52,8 +52,8 @@ const projectsData: Project[] = [
   {
     slug: 'customer-retention-models',
     title: 'Customer Retention Models',
-    shortDescription: 'Developed and deployed predictive models at Novartis (via Team Lease), resulting in a 20% increase in customer retention rates.',
-    longDescription: 'While at Novartis, I developed and deployed predictive models to identify at-risk customers. The project involved exploring, developing, and evaluating customer-centric digital innovation solutions. The resulting models were integrated into business workflows, enabling proactive outreach and improving customer retention rates significantly. This work was primarily executed using Dataiku DSS, which facilitated rapid development and deployment.',
+    shortDescription: 'Developed and deployed predictive models for Novartis (while at Team Lease), resulting in a 20% increase in customer retention rates.',
+    longDescription: 'While engaged with Novartis, I developed and deployed predictive models to identify at-risk customers. The project involved exploring, developing, and evaluating customer-centric digital innovation solutions. The resulting models were integrated into business workflows, enabling proactive outreach and improving customer retention rates significantly. This work was primarily executed using Dataiku DSS, which facilitated rapid development and deployment.',
     tags: ['Dataiku DSS', 'Python', 'Scikit-learn', 'MLOps'],
     imageUrl: 'https://placehold.co/1200x600.png',
     aiHint: 'predictive model graph',

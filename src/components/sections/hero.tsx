@@ -57,13 +57,13 @@ export default function Hero() {
                 />
             </motion.div>
             <motion.h1 variants={fadeIn(0.2)} className="text-4xl md:text-5xl font-bold tracking-tight text-foreground">
-              Senior Data Engineer
+              Marketing Science & Data Professional
             </motion.h1>
             <motion.h2 variants={fadeIn(0.3)} className="text-3xl md:text-4xl font-bold tracking-tight text-primary mb-4">
-              Building Scalable Data Solutions
+              Streamlining DataOps Workflows
             </motion.h2>
             <motion.p variants={fadeIn(0.4)} className="max-w-3xl mx-auto text-lg md:text-xl text-muted-foreground mb-8">
-              6+ years driving impact with AWS, Snowflake, and AI
+              6+ years of experience driving value with Datorama, Dataiku, and advanced marketing analytics.
             </motion.p>
             <motion.div variants={fadeIn(0.5)}>
               <Button asChild size="lg" className="group bg-primary hover:bg-primary/90 text-primary-foreground transition-all duration-300 ease-in-out">
