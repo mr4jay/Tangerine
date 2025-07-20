@@ -14,7 +14,7 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { askAssistant } from '@/ai/flows/portfolio-assistant';
 import { textToSpeech } from '@/ai/flows/tts-flow';
 import { cn } from '@/lib/utils';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogClose } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter, DialogClose } from '@/components/ui/dialog';
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -74,13 +74,12 @@ const HireMeForm = ({ onOpenChange }: { onOpenChange: (open: boolean) => void })
     });
 
     const onSubmit = async (values: z.infer<typeof hireMeFormSchema>) => {
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        
+        // In a real app, you would send this to an API endpoint
         console.log("Form submitted successfully:", values);
         
         toast({
             title: "Message Sent!",
-            description: "Thank you for reaching out. I'll get back to you at rajaykumar5555@gmail.com shortly.",
+            description: "Thank you for reaching out. I'll get back to you shortly.",
         });
         form.reset();
         onOpenChange(false);
@@ -201,7 +200,10 @@ const AIChatAssistant = () => {
 
     useEffect(() => {
         if (scrollAreaRef.current) {
-            scrollAreaRef.current.scrollTo({ top: scrollAreaRef.current.scrollHeight, behavior: 'smooth' });
+            const scrollDiv = scrollAreaRef.current.querySelector('div[data-radix-scroll-area-viewport]');
+            if (scrollDiv) {
+                scrollDiv.scrollTo({ top: scrollDiv.scrollHeight, behavior: 'smooth' });
+            }
         }
     }, [messages]);
 
@@ -243,14 +245,15 @@ const AIChatAssistant = () => {
         setIsLoading(true);
 
         try {
-            const conversationHistory = newMessages.slice(0, -1).map(({ role, content, toolResult }) => ({ role, content, toolResult }));
-            const result = await askAssistant({ question: input, history: conversationHistory });
+            const conversationHistory = newMessages.slice(0, -1).map(({ role, content, toolResult }) => ({ role, content, toolResult: toolResult || null }));
+            const result = await askAssistant({ question: input, history: conversationHistory as any });
             
             const assistantMessageId = Date.now() + 1;
             const assistantMessage: Message = { 
                 id: assistantMessageId, 
                 role: 'assistant', 
-                content: result.answer 
+                content: result.answer,
+                isAudioLoading: true,
             };
             setMessages((prev) => [...prev, assistantMessage]);
             
@@ -290,9 +293,9 @@ const AIChatAssistant = () => {
                 <HireMeForm onOpenChange={setIsHireModalOpen} />
             </DialogContent>
         </Dialog>
-        <Card className="bg-card border-primary/20 h-[600px] flex flex-col shadow-lg shadow-primary/10">
-            <CardContent className="p-6 flex flex-col flex-grow">
-                <div className="flex items-center gap-4 mb-4">
+        <Card className="bg-card/80 border-primary/20 h-[600px] flex flex-col shadow-lg shadow-primary/10 backdrop-blur-sm">
+            <CardContent className="p-4 flex flex-col flex-grow">
+                <div className="flex items-center gap-4 mb-4 border-b border-border/60 pb-4">
                     <Avatar className='border-2 border-primary'>
                         <AvatarFallback className='bg-transparent'><Bot className='text-primary'/></AvatarFallback>
                     </Avatar>
@@ -304,13 +307,19 @@ const AIChatAssistant = () => {
                 <ScrollArea className="flex-grow pr-4 -mr-4 mb-4" ref={scrollAreaRef}>
                     <div className="space-y-6">
                         {messages.map((message, index) => (
-                            <div key={index} className={cn("flex items-start gap-3", message.role === 'user' ? 'justify-end' : '')}>
+                            <motion.div 
+                                key={index} 
+                                className={cn("flex items-start gap-3", message.role === 'user' ? 'justify-end' : '')}
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.3 }}
+                            >
                                 {message.role === 'assistant' && (
-                                    <Avatar className="h-8 w-8 border-2 border-primary">
-                                        <AvatarFallback className='bg-transparent'><Bot className="h-5 w-5 text-primary"/></AvatarFallback>
+                                    <Avatar className="h-8 w-8 border-2 border-primary/50">
+                                        <AvatarFallback className='bg-transparent'><Bot className="h-5 w-5 text-primary/80"/></AvatarFallback>
                                     </Avatar>
                                 )}
-                                <div className={cn("rounded-lg p-3 max-w-sm text-sm", message.role === 'user' ? 'bg-primary text-primary-foreground' : 'bg-secondary')}>
+                                <div className={cn("rounded-lg p-3 max-w-sm text-sm shadow-md", message.role === 'user' ? 'bg-primary text-primary-foreground' : 'bg-secondary')}>
                                     {message.content}
                                     {message.role === 'assistant' && (
                                         <div className="mt-2">
@@ -326,23 +335,28 @@ const AIChatAssistant = () => {
                                         <AvatarFallback><User className="h-5 w-5"/></AvatarFallback>
                                     </Avatar>
                                 )}
-                            </div>
+                            </motion.div>
                         ))}
                          {isLoading && messages.length > 0 && (
-                            <div className="flex items-start gap-3">
-                                <Avatar className="h-8 w-8">
-                                    <AvatarFallback><Bot className="h-5 w-5"/></AvatarFallback>
+                            <motion.div 
+                                className="flex items-start gap-3"
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.3 }}
+                            >
+                                <Avatar className="h-8 w-8 border-2 border-primary/50">
+                                    <AvatarFallback className='bg-transparent'><Bot className="h-5 w-5 text-primary/80"/></AvatarFallback>
                                 </Avatar>
-                                <div className="rounded-lg p-3 bg-secondary flex items-center space-x-2">
+                                <div className="rounded-lg p-3 bg-secondary flex items-center space-x-2 shadow-md">
                                     <span className="h-2 w-2 bg-muted-foreground rounded-full animate-pulse [animation-delay:-0.3s]"></span>
                                     <span className="h-2 w-2 bg-muted-foreground rounded-full animate-pulse [animation-delay:-0.15s]"></span>
                                     <span className="h-2 w-2 bg-muted-foreground rounded-full animate-pulse"></span>
                                 </div>
-                            </div>
+                            </motion.div>
                         )}
                     </div>
                 </ScrollArea>
-                 <form onSubmit={handleSubmit} className="flex items-center gap-2 border-t pt-4">
+                 <form onSubmit={handleSubmit} className="flex items-center gap-2 border-t border-border/60 pt-4">
                     <Input
                         value={input}
                         onChange={(e) => setInput(e.target.value)}
@@ -404,7 +418,7 @@ export default function Contact() {
                       key={link.name}
                       whileHover={{ y: -5, transition: { duration: 0.3, ease: 'easeOut' } }}
                     >
-                      <Card className="bg-card border-primary/20 p-4 transition-all duration-300 ease-in-out border hover:border-primary/80 hover:shadow-2xl hover:shadow-primary/20">
+                      <Card className="bg-card/80 border-primary/20 p-4 transition-all duration-300 ease-in-out border hover:border-primary/80 hover:shadow-2xl hover:shadow-primary/20 backdrop-blur-sm">
                           <Link href={link.href} target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 group" aria-label={`Connect via ${link.name}`}>
                               <link.icon className="h-8 w-8 text-primary" />
                               <div>
@@ -423,3 +437,5 @@ export default function Contact() {
     </section>
   );
 }
+
+    

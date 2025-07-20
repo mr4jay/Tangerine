@@ -265,7 +265,7 @@ const portfolioAssistantFlow = ai.defineFlow(
     
     // Check for tool calls in the last response
     const lastResponse = history.at(-1);
-    const toolCalls = lastResponse?.message.toolRequest?.map(req => ({
+    const toolCalls = lastResponse?.message.toolRequest?.calls.map(req => ({
         name: req.name,
         args: req.input,
     }));
@@ -274,3 +274,5 @@ const portfolioAssistantFlow = ai.defineFlow(
     return { ...output, toolCalls };
   }
 );
+
+    
