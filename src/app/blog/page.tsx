@@ -1,5 +1,4 @@
 
-import Header from '@/components/layout/header';
 import Footer from '@/components/layout/footer';
 import { getSortedPostsData } from '@/lib/posts';
 import BlogClientPage from './blog-client-page';
@@ -12,7 +11,6 @@ export default async function BlogPage() {
 
   return (
     <>
-      <Header />
       <main className="w-full py-12 md:py-24 lg:py-32 bg-background" role="main">
         <div className="container mx-auto px-4 md:px-6 max-w-7xl">
           <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12">

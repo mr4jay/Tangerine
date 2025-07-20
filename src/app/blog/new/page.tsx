@@ -13,7 +13,6 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { useToast } from '@/hooks/use-toast';
 import { createPost } from '@/lib/posts';
 import { BrainCircuit, Loader2 } from 'lucide-react';
-import Header from '@/components/layout/header';
 import Footer from '@/components/layout/footer';
 
 const formSchema = z.object({
@@ -68,7 +67,6 @@ export default function NewPostPage() {
 
   return (
     <>
-      <Header />
       <main className="w-full py-12 md:py-24 lg:py-32 bg-background">
         <div className="container mx-auto px-4 md:px-6 max-w-2xl">
           <Card>

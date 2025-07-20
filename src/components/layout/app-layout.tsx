@@ -1,5 +1,4 @@
 
-
 "use client";
 
 import Link from 'next/link';
@@ -17,9 +16,11 @@ import {
   SidebarMenuButton,
   SidebarFooter,
   useSidebar,
+  SidebarTrigger,
 } from '@/components/ui/sidebar';
 import Preloader from './preloader';
 import { AnimatePresence } from 'framer-motion';
+import { cn } from '@/lib/utils';
 
 
 const navLinks = [
@@ -34,7 +35,7 @@ const navLinks = [
 
 export function PortfolioSidebar() {
   const pathname = usePathname();
-  const { setOpenMobile } = useSidebar();
+  const { setOpenMobile, isMobile } = useSidebar();
   const [activeLink, setActiveLink] = useState(pathname);
 
   const handleScroll = useCallback(() => {
@@ -44,8 +45,11 @@ export function PortfolioSidebar() {
       .map(id => document.getElementById(id as string));
 
     let currentSection = '/';
+    // Add a bit of offset to trigger the active link earlier
+    const scrollOffset = window.innerHeight / 3;
+
     for (const section of sections) {
-        if (section && section.offsetTop <= window.scrollY + window.innerHeight / 2) {
+        if (section && section.offsetTop <= window.scrollY + scrollOffset) {
             currentSection = `/#${section.id}`;
         }
     }
@@ -56,9 +60,10 @@ export function PortfolioSidebar() {
   useEffect(() => {
     if (pathname === '/') {
       window.addEventListener('scroll', handleScroll, { passive: true });
-      handleScroll();
+      handleScroll(); // Call on mount to set initial state
       return () => window.removeEventListener('scroll', handleScroll);
     } else {
+      // For other pages, just match the base path
       const base_path = `/${pathname.split('/')[1]}`;
       setActiveLink(base_path);
     }
@@ -66,19 +71,35 @@ export function PortfolioSidebar() {
 
 
   const getIsActive = (href: string) => {
-    if (href === '/') return activeLink === '/';
-    if (href.startsWith('/#')) return activeLink === href;
-    if (href.startsWith('/')) return activeLink.startsWith(href);
-    return false;
+    if (href.startsWith('/#')) {
+        return activeLink === href;
+    }
+    if (href === '/') {
+        return activeLink === '/';
+    }
+    // For nested pages like /blog/some-post
+    return activeLink.startsWith(href) && href !== '/';
   };
+
+  const handleClick = (href: string) => {
+    if (isMobile) {
+        setOpenMobile(false);
+    }
+    if (href.startsWith('/#')) {
+        setActiveLink(href);
+    }
+  };
+
 
   return (
       <Sidebar>
         <SidebarContent>
-          <SidebarHeader>
-              <Link href="/" className="flex items-center gap-2" onClick={() => setOpenMobile(false)}>
+          <SidebarHeader className="p-4">
+              <Link href="/" className="flex items-center gap-2" onClick={() => handleClick('/')}>
                   <Code className="h-6 w-6 text-primary" />
-                  <span className="text-sm font-bold">Turning Data into Insight</span>
+                  <span className="text-lg font-bold group-data-[collapsible=icon]:hidden">
+                    Turning Data into Insight
+                  </span>
               </Link>
           </SidebarHeader>
           <SidebarMenu>
@@ -86,7 +107,7 @@ export function PortfolioSidebar() {
               <SidebarMenuItem key={link.href}>
                 <SidebarMenuButton 
                   asChild
-                  onClick={() => setOpenMobile(false)}
+                  onClick={() => handleClick(link.href)}
                   isActive={getIsActive(link.href)}
                   tooltip={link.name}
                 >
@@ -104,6 +125,23 @@ export function PortfolioSidebar() {
         </SidebarFooter>
       </Sidebar>
   )
+}
+
+function MainContentHeader() {
+    return (
+        <header className={cn(
+            "sticky top-0 z-40 w-full bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60",
+            "border-b border-border/40 h-14 flex items-center px-4 md:hidden"
+        )}>
+            <div className="flex items-center gap-2">
+                <SidebarTrigger />
+                <Link href="/" className="flex items-center gap-2">
+                    <Code className="h-6 w-6 text-primary" />
+                    <span className="font-bold">Turning Data into Insight</span>
+                </Link>
+            </div>
+        </header>
+    )
 }
 
 export function AppLayout({ children }: { children: React.ReactNode }) {
@@ -124,11 +162,14 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
       <AnimatePresence mode="wait">
         {isLoading && <Preloader />}
       </AnimatePresence>
-      <div className="flex">
+      <div className="flex min-h-screen">
         <PortfolioSidebar />
-        <main className="flex-1" role="main">
-          {children}
-        </main>
+        <div className="flex-1 flex flex-col">
+          <MainContentHeader />
+          <main role="main" className="flex-1">
+            {children}
+          </main>
+        </div>
       </div>
     </SidebarProvider>
   )

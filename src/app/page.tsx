@@ -1,6 +1,4 @@
 
-
-import Header from '@/components/layout/header';
 import Hero from '@/components/sections/hero';
 import Projects from '@/components/sections/projects';
 import Blog from '@/components/sections/blog';
@@ -15,7 +13,6 @@ export default async function Home() {
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
-        <Header />
         <main>
           <Hero />
           <div id="projects"><Projects /></div>

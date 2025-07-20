@@ -1,5 +1,4 @@
 
-import Header from '@/components/layout/header';
 import Footer from '@/components/layout/footer';
 import About from '@/components/sections/about';
 import Certifications from '@/components/sections/certifications';
@@ -9,7 +8,6 @@ import BackToTopButton from '@/components/layout/back-to-top-button';
 export default function AboutPage() {
   return (
     <div className="flex min-h-screen flex-col bg-background">
-        <Header />
         <main>
           <div id="about"><About /></div>
           <div id="certifications"><Certifications /></div>

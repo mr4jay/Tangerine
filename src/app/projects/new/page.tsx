@@ -7,7 +7,6 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
@@ -15,7 +14,6 @@ import { useToast } from '@/hooks/use-toast';
 import { generateProject } from '@/ai/flows/generate-project-flow';
 import { addProject } from '@/lib/projects';
 import { BrainCircuit, Loader2 } from 'lucide-react';
-import Header from '@/components/layout/header';
 import Footer from '@/components/layout/footer';
 
 const formSchema = z.object({
@@ -70,7 +68,6 @@ export default function NewProjectPage() {
 
   return (
     <>
-      <Header />
       <main className="w-full py-12 md:py-24 lg:py-32 bg-background">
         <div className="container mx-auto px-4 md:px-6 max-w-2xl">
           <Card>

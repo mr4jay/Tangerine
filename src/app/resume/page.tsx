@@ -1,6 +1,5 @@
 
 import { getResumeData } from '@/lib/resume';
-import Header from '@/components/layout/header';
 import Footer from '@/components/layout/footer';
 import { Button } from '@/components/ui/button';
 import { Download } from 'lucide-react';
@@ -17,7 +16,6 @@ export default async function ResumePage() {
 
   return (
     <>
-      <Header />
       <main className="w-full py-12 md:py-24 lg:py-32 bg-background" role="main">
         <div className="container mx-auto px-4 md:px-6 max-w-4xl">
           <div className="flex justify-between items-center mb-8">

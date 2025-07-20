@@ -2,7 +2,6 @@
 import { getProjectBySlug, getProjects } from '@/lib/projects';
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
-import Header from '@/components/layout/header';
 import Footer from '@/components/layout/footer';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
@@ -74,7 +73,6 @@ export default function ProjectDetailPage({ params }: { params: { slug: string }
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <Header />
       <motion.main
         variants={staggerContainer(0.1, 0.2)}
         initial="hidden"
