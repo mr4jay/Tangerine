@@ -33,7 +33,6 @@ const navLinks = [
 
 export default function Header() {
   const [hasScrolled, setHasScrolled] = useState(false);
-  const pathname = usePathname();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -155,9 +154,9 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
   return (
     <SidebarProvider>
       <PortfolioSidebar />
-      <main className="flex-1 peer-[[data-sidebar]]:md:pl-[--sidebar-width-icon]" role="main">
+      <div className="flex-1 peer-[[data-sidebar]]:md:pl-[--sidebar-width-icon]" role="main">
         {children}
-      </main>
+      </div>
     </SidebarProvider>
   )
 }
