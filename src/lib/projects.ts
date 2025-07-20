@@ -1,27 +1,37 @@
 
-export type ProjectMetric = {
-  label: string;
-  value: number;
-  unit: 'USD' | 'percentage' | 'hours' | 'default';
-  description: string;
-};
+import { z } from 'zod';
 
-export type Project = {
-  slug: string;
-  title: string;
-  shortDescription: string;
-  longDescription: string;
-  tags: string[];
-  imageUrl: string;
-  aiHint: string;
-  demoUrl: string;
-  repoUrl: string;
-  keyOutcomes: string[];
-  techStack: { category: string; items: string[] }[];
-  metrics: ProjectMetric[];
-};
+export const ProjectMetricSchema = z.object({
+  label: z.string(),
+  value: z.number(),
+  unit: z.enum(['USD', 'percentage', 'hours', 'default']),
+  description: z.string(),
+});
+export type ProjectMetric = z.infer<typeof ProjectMetricSchema>;
 
-const projectsData: Project[] = [
+const TechStackSchema = z.object({
+  category: z.string(),
+  items: z.array(z.string()),
+});
+
+export const ProjectSchema = z.object({
+  slug: z.string().describe("A URL-friendly version of the project title (e.g., 'enterprise-reporting-ecosystem')."),
+  title: z.string(),
+  shortDescription: z.string().describe("A concise, one-sentence summary of the project."),
+  longDescription: z.string().describe("A detailed paragraph describing the project's context, goals, and solution."),
+  tags: z.array(z.string()).describe("An array of 3-5 relevant technology or skill tags."),
+  imageUrl: z.string().describe("The URL of a relevant header image for the project."),
+  aiHint: z.string().describe("2-3 keywords for finding a relevant stock photo (e.g., 'data platform architecture')."),
+  demoUrl: z.string().url().or(z.literal('#')).describe("The URL to a live demo, or '#' if not available."),
+  repoUrl: z.string().url().or(z.literal('#')).describe("The URL to the GitHub repository, or '#' if not available."),
+  keyOutcomes: z.array(z.string()).describe("An array of 3-4 bullet points highlighting the key results and achievements."),
+  techStack: z.array(TechStackSchema).describe("An array of technology stacks used, categorized appropriately."),
+  metrics: z.array(ProjectMetricSchema).describe("An array of 1-2 key performance indicators (KPIs) that showcase the project's impact."),
+});
+export type Project = z.infer<typeof ProjectSchema>;
+
+
+let projectsData: Project[] = [
   {
     slug: 'enterprise-reporting-ecosystem',
     title: 'Enterprise Reporting Ecosystem',
@@ -105,10 +115,19 @@ const projectsData: Project[] = [
   },
 ];
 
+// This function now returns a copy to prevent mutation issues during hot-reloading in dev.
 export function getProjects(): Project[] {
-  return projectsData;
+  return [...projectsData];
 }
 
 export function getProjectBySlug(slug: string): Project | undefined {
   return projectsData.find(p => p.slug === slug);
 }
+
+// Function to add a new project to the in-memory array.
+// This is for demonstration; it won't persist across server restarts.
+export function addProject(project: Project) {
+  // Add to the beginning of the array so it appears first
+  projectsData.unshift(project);
+}
+

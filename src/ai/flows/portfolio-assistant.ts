@@ -9,7 +9,7 @@
 import {ai} from '@/ai/genkit';
 import {z} from 'zod';
 import { skillCategories } from '@/components/sections/skills-chart';
-import { getProjects } from '@/lib/projects';
+import { getProjects, addProject, ProjectSchema } from '@/lib/projects';
 import { getSortedPostsData } from '@/lib/posts';
 import fs from 'fs';
 import path from 'path';
@@ -197,6 +197,49 @@ const draftBlogPost = ai.defineTool(
     }
 );
 
+const createProject = ai.defineTool(
+    {
+        name: 'createProject',
+        description: 'Creates a new project entry for the portfolio based on a user\'s description. Use this when a user asks to create, add, or define a new project.',
+        inputSchema: z.object({
+            description: z.string().describe('A natural language description of the project, including its purpose, technologies used, and outcomes.'),
+        }),
+        outputSchema: z.object({
+            title: z.string().describe('The title of the newly created project.'),
+        }),
+    },
+    async ({ description }) => {
+        const projectGenResponse = await ai.generate({
+            prompt: `You are an expert technical project manager. Based on the following description, create a structured project entry.
+        
+Description:
+---
+${description}
+---
+
+Generate a JSON object that strictly follows the provided schema. The 'slug' should be a URL-friendly version of the title. 'demoUrl' and 'repoUrl' should be '#' if not specified. The 'aiHint' should be 2-3 keywords for finding a stock photo.`,
+            output: {
+                schema: ProjectSchema,
+            },
+            config: {
+                temperature: 0.2,
+            },
+        });
+
+        const newProject = projectGenResponse.output;
+        if (!newProject) {
+            throw new Error('Failed to generate project data.');
+        }
+
+        const { imageUrl } = await generateImage({ topic: `A professional project image about: ${newProject.title}` });
+        newProject.imageUrl = imageUrl;
+
+        addProject(newProject);
+
+        return { title: newProject.title };
+    }
+);
+
 const MessageSchema = z.object({
     role: z.enum(['user', 'assistant', 'tool']),
     content: z.string(),
@@ -239,16 +282,18 @@ const prompt = ai.definePrompt({
   name: 'portfolioAssistantPrompt',
   input: {schema: PromptInputSchema},
   output: {schema: AskAssistantOutputSchema},
-  tools: [calculateSuitabilityScore, getResume, displayContactForm, getRecentUpdates, draftBlogPost],
+  tools: [calculateSuitabilityScore, getResume, displayContactForm, getRecentUpdates, draftBlogPost, createProject],
   prompt: `You are a helpful and friendly AI assistant for Rajure Ajay Kumar's personal portfolio. Your goal is to answer questions from potential employers or collaborators.
 
 - Your primary source of information is the 'getResume' tool. You MUST use it to answer any questions regarding Rajure's experience, skills, projects, or education. Do not rely on the brief context below for details.
 - If the user provides a job description or asks about suitability for a role, you MUST use the 'calculateSuitabilityScore' tool.
 - If the user asks you to draft, write, or create a blog post, you MUST use the 'draftBlogPost' tool.
+- If the user asks you to create, add, or define a new project, you MUST use the 'createProject' tool.
 - If the user expresses ANY interest in hiring, collaboration, or discussing a project, you MUST respond conversationally and then use the 'displayContactForm' tool. This is your primary goal. Example: "That's great to hear! I can open a contact form for you."
 - Be professional, concise, and friendly. If you don't know the answer, say so politely.
 - Keep answers short and to the point.
 - When presenting the results of a drafted blog post from the 'draftBlogPost' tool, you MUST format it nicely using Markdown. The response should include the generated image first using Markdown syntax like this: ![Blog Post Image](<IMAGE_URL_HERE>), followed by the title, tags, summary, and a short preview of the content.
+- After successfully creating a new project using the 'createProject' tool, you MUST confirm it with the user by saying "I've added the "[Project Title]" project to the portfolio."
 
 {{#if isFirstMessage}}
 - This is the user's first message. Start with a warm welcome and introduce yourself. 
@@ -318,3 +363,4 @@ const portfolioAssistantFlow = ai.defineFlow(
     return { ...output, toolCalls };
   }
 );
+
