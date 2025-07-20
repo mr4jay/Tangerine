@@ -39,7 +39,7 @@ const calculateReadTime = (content: string): number => {
 
 const processor = unified()
   .use(remarkParse)
-  .use(remarkRehype)
+  .use(remarkRehype, { allowDangerousHtml: true })
   .use(rehypeReact, {
     Fragment: React.Fragment,
     jsx: jsx,
@@ -126,7 +126,7 @@ export async function getPostData(slug: string): Promise<PostData | null> {
 
   const matterResult = matter(fileContents);
   
-  const contentReact = (await processor.process(matterResult.content)).result as React.ReactElement;
+  const contentReact = (await processor.process(matterResult.content)).result;
 
   const readTime = calculateReadTime(matterResult.content);
 
