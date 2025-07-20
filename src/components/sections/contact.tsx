@@ -155,6 +155,11 @@ const AssistantImage = (props: any) => {
     return <Image {...props} alt={props.alt || "Generated Image"} width={400} height={200} className="rounded-md my-2" unoptimized />;
 };
 
+// Custom Video component to handle data URIs
+const AssistantVideo = (props: any) => {
+  return <video {...props} controls autoPlay className="rounded-md my-2 w-full" />;
+};
+
 
 const processor = unified()
     .use(remarkParse)
@@ -165,6 +170,7 @@ const processor = unified()
         jsxs: jsxs,
         components: {
            img: AssistantImage,
+           video: AssistantVideo,
         },
     });
 
