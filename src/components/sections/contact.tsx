@@ -1,4 +1,3 @@
-
 "use client";
 
 import { Button } from '@/components/ui/button';
@@ -225,7 +224,7 @@ const AIChatAssistant = () => {
         setIsLoading(true);
 
         try {
-            const conversationHistory = newMessages.slice(0, -1).map(({ id, audioUrl, isAudioLoading, ...rest }) => rest);
+            const conversationHistory = newMessages.slice(1, -1).map(({ role, content }) => ({ role, content }));
             const result = await askAssistant({ question: input, history: conversationHistory });
             const assistantMessageId = Date.now() + 1;
             const assistantMessage: Message = { 
@@ -239,6 +238,7 @@ const AIChatAssistant = () => {
             handleNewAudio(result.answer, assistantMessageId);
 
         } catch (error) {
+            console.error("AI Assistant Error:", error);
             const errorMessage: Message = { id: Date.now() + 1, role: 'assistant', content: "Sorry, I'm having trouble connecting. Please try again later." };
             setMessages((prev) => [...prev, errorMessage]);
         } finally {

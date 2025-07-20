@@ -142,12 +142,12 @@ ${portfolioContext}
 {{#if history}}
 CONVERSATION HISTORY:
 {{#each history}}
-  {{#ifEquals role 'user'}}
-    User: {{{content}}}
-  {{/ifEquals}}
-  {{#ifEquals role 'assistant'}}
-    Assistant: {{{content}}}
-  {{/ifEquals}}
+{{#if (eq role "user")}}
+User: {{{content}}}
+{{/if}}
+{{#if (eq role "assistant")}}
+Assistant: {{{content}}}
+{{/if}}
 {{/each}}
 {{/if}}
 
