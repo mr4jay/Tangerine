@@ -78,8 +78,11 @@ const CertificationCard = ({ cert, onClick }: { cert: typeof certifications[0], 
     className="p-1 cursor-pointer"
     onClick={onClick}
     aria-label={`View details for ${cert.name}`}
+    role="button"
+    tabIndex={0}
+    onKeyDown={(e) => { if(e.key === 'Enter' || e.key === ' ') onClick()}}
   >
-    <Card className="flex flex-col h-full overflow-hidden bg-card shadow-sm hover:shadow-2xl hover:shadow-primary/20 transition-shadow duration-300">
+    <Card className="flex flex-col h-full overflow-hidden bg-card shadow-sm hover:shadow-2xl hover:shadow-primary/20 transition-shadow duration-300 pointer-events-none">
       <CardContent className="p-6 flex-grow flex flex-col items-center text-center">
         <motion.div layoutId={`card-logo-${cert.name}`} className="mb-4">
           <cert.logo className="h-16 w-16 text-primary" />
