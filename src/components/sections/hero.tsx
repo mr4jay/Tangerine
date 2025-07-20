@@ -31,7 +31,7 @@ export default function Hero() {
   const y = useTransform(scrollYProgress, [0, 1], ["0%", "10%"]);
 
   return (
-    <section ref={targetRef} id="home" className="relative w-full min-h-screen flex flex-col items-center justify-center overflow-hidden py-16 sm:py-0">
+    <section ref={targetRef} id="home" className="relative w-full min-h-screen flex flex-col items-center justify-center overflow-hidden py-24 sm:py-16">
       <motion.div
         className="absolute inset-0 w-full h-full bg-gradient-hero"
         style={{ y }}

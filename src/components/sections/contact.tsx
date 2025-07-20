@@ -381,17 +381,22 @@ export default function Contact() {
                 viewport={{ once: true, amount: 0.5 }}
              >
                 {socialLinks.map((link) => (
-                    <Card key={link.name} className="bg-card border-primary/20 shadow-lg shadow-primary/10 p-4 transition-all hover:border-primary hover:-translate-y-1">
-                        <Link href={link.href} target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 group" aria-label={`Connect via ${link.name}`}>
-                            <link.icon className="h-8 w-8 text-primary" />
-                            <div>
-                                <h3 className="text-lg font-semibold">{link.name}</h3>
-                                <p className="text-muted-foreground break-all text-sm">{link.value}</p>
+                    <motion.div
+                      key={link.name}
+                      whileHover={{ y: -5, transition: { duration: 0.3, ease: 'easeOut' } }}
+                    >
+                      <Card className="bg-card border-primary/20 p-4 transition-all duration-300 ease-in-out border hover:border-primary/80 hover:shadow-2xl hover:shadow-primary/20">
+                          <Link href={link.href} target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 group" aria-label={`Connect via ${link.name}`}>
+                              <link.icon className="h-8 w-8 text-primary" />
+                              <div>
+                                  <h3 className="text-lg font-semibold">{link.name}</h3>
+                                  <p className="text-muted-foreground break-all text-sm">{link.value}</p>
 
-                                <span className="text-primary text-sm font-medium mt-1 inline-block group-hover:underline">{link.cta}</span>
-                            </div>
-                        </Link>
-                    </Card>
+                                  <span className="text-primary text-sm font-medium mt-1 inline-block group-hover:underline">{link.cta}</span>
+                              </div>
+                          </Link>
+                      </Card>
+                    </motion.div>
                 ))}
             </motion.div>
         </div>
