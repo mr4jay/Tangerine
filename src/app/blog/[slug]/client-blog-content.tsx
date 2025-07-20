@@ -83,7 +83,7 @@ export default function ClientBlogContent({ post, allPosts }: { post: PostData; 
               >
                 <div className="flex flex-wrap gap-2 mb-2">
                   {post.tags.map((tag) => (
-                    <Badge key={tag} variant="default" className="bg-primary/20 text-primary border-primary/40 hover:bg-primary/30 cursor-pointer">
+                    <Badge key={tag} variant="outline" className="border-primary/30 text-primary">
                       {tag}
                     </Badge>
                   ))}
@@ -94,7 +94,7 @@ export default function ClientBlogContent({ post, allPosts }: { post: PostData; 
                   <span className='flex items-center gap-1'><Clock className="h-4 w-4" /> {post.readTime} min read</span>
                 </div>
                 
-                <div className="relative w-full h-64 md:h-96 mb-8 rounded-lg overflow-hidden shadow-lg">
+                <div className="relative w-full h-64 md:h-96 mb-8 rounded-lg overflow-hidden shadow-lg shadow-primary/10">
                   <Image 
                     src={post.imageUrl} 
                     alt={post.title} 

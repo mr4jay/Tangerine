@@ -66,7 +66,7 @@ const chartConfig = {
 
 export function SkillsChart() {
   return (
-    <Card className="w-full max-w-lg">
+    <Card className="w-full max-w-lg bg-card/80 border-primary/20 backdrop-blur-sm">
       <CardHeader>
         <CardTitle>Programming Proficiency</CardTitle>
         <CardDescription>A visual representation of my core programming skills.</CardDescription>
@@ -82,7 +82,7 @@ export function SkillsChart() {
               right: 10,
             }}
           >
-            <CartesianGrid horizontal={false} />
+            <CartesianGrid horizontal={false} stroke="hsl(var(--border) / 0.5)" />
             <YAxis
               dataKey="name"
               type="category"
@@ -93,7 +93,7 @@ export function SkillsChart() {
             />
             <XAxis dataKey="level" type="number" hide />
             <Tooltip 
-              cursor={{ fill: 'hsl(var(--secondary))' }}
+              cursor={{ fill: 'hsl(var(--accent))' }}
               content={<ChartTooltipContent 
                   formatter={(value, name, props) => (
                     <div className="flex flex-col gap-1">

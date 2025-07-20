@@ -40,7 +40,7 @@ export default function Blog({ posts }: { posts: PostData[] }) {
               whileHover={{ y: -5, transition: { duration: 0.3, ease: 'easeOut' } }}
               className="h-full"
             >
-              <Card className="flex flex-col h-full overflow-hidden bg-card transition-shadow duration-300 ease-in-out hover:shadow-2xl hover:shadow-primary/40">
+              <Card className="flex flex-col h-full overflow-hidden bg-card transition-all duration-300 ease-in-out border border-transparent hover:border-primary/80 hover:shadow-2xl hover:shadow-primary/20">
                 <CardHeader className="p-0">
                   <div className="relative w-full h-56">
                       <Image 
@@ -62,7 +62,7 @@ export default function Blog({ posts }: { posts: PostData[] }) {
                   <CardTitle className="mb-2 font-headline text-2xl text-foreground">{post.title}</CardTitle>
                    <div className="flex flex-wrap gap-2 mb-4">
                     {post.tags.slice(0,3).map((tag) => (
-                      <Badge key={tag} variant="default" className="bg-primary/20 text-primary border-primary/40">
+                      <Badge key={tag} variant="outline" className="border-primary/30 text-primary">
                         {tag}
                       </Badge>
                     ))}

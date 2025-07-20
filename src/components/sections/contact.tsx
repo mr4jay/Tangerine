@@ -309,11 +309,11 @@ const AIChatAssistant = () => {
                 <HireMeForm onOpenChange={setIsHireModalOpen} />
             </DialogContent>
         </Dialog>
-        <Card className="bg-card border-none shadow-lg h-[600px] flex flex-col">
+        <Card className="bg-card border-primary/20 h-[600px] flex flex-col shadow-lg shadow-primary/10">
             <CardContent className="p-6 flex flex-col flex-grow">
                 <div className="flex items-center gap-4 mb-4">
-                    <Avatar>
-                        <AvatarFallback><Bot /></AvatarFallback>
+                    <Avatar className='border-2 border-primary'>
+                        <AvatarFallback className='bg-transparent'><Bot className='text-primary'/></AvatarFallback>
                     </Avatar>
                     <div>
                         <h3 className="font-semibold text-lg">AI Assistant</h3>
@@ -325,8 +325,8 @@ const AIChatAssistant = () => {
                         {messages.map((message, index) => (
                             <div key={index} className={cn("flex items-start gap-3", message.role === 'user' ? 'justify-end' : '')}>
                                 {message.role === 'assistant' && (
-                                    <Avatar className="h-8 w-8">
-                                        <AvatarFallback><Bot className="h-5 w-5"/></AvatarFallback>
+                                    <Avatar className="h-8 w-8 border-2 border-primary">
+                                        <AvatarFallback className='bg-transparent'><Bot className="h-5 w-5 text-primary"/></AvatarFallback>
                                     </Avatar>
                                 )}
                                 <div className={cn("rounded-lg p-3 max-w-sm text-sm prose dark:prose-invert prose-p:my-0 prose-headings:my-1", message.role === 'user' ? 'bg-primary text-primary-foreground' : 'bg-secondary')}>
@@ -414,14 +414,14 @@ export default function Contact() {
                 viewport={{ once: true, amount: 0.5 }}
              >
                 {socialLinks.map((link) => (
-                    <Card key={link.name} className="bg-card border-none shadow-lg p-4 transition-transform hover:scale-105">
-                        <Link href={link.href} target="_blank" rel="noopener noreferrer" className="flex items-center gap-4" aria-label={`Connect via ${link.name}`}>
+                    <Card key={link.name} className="bg-card border-primary/20 shadow-lg shadow-primary/10 p-4 transition-all hover:border-primary hover:-translate-y-1">
+                        <Link href={link.href} target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 group" aria-label={`Connect via ${link.name}`}>
                             <link.icon className="h-8 w-8 text-primary" />
                             <div>
                                 <h3 className="text-lg font-semibold">{link.name}</h3>
                                 <p className="text-muted-foreground break-all text-sm">{link.value}</p>
 
-                                <span className="text-primary text-sm font-medium mt-1 inline-block">{link.cta}</span>
+                                <span className="text-primary text-sm font-medium mt-1 inline-block group-hover:underline">{link.cta}</span>
                             </div>
                         </Link>
                     </Card>
