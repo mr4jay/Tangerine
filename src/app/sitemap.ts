@@ -1,6 +1,6 @@
 
 import { MetadataRoute } from 'next'
-import { getSortedPostsData } from '@/lib/posts'
+import { getSortedPostsData } from '@/lib/posts-server'
 import { getProjects } from '@/lib/projects'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {

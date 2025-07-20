@@ -1,9 +1,11 @@
 
-import { getPostData, getSortedPostsData, PostData } from '@/lib/posts';
+import { getPostData } from '@/lib/posts-server';
+import { getSortedPostsData } from '@/lib/posts-server';
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
 import ClientBlogContent from './client-blog-content';
 import Footer from '@/components/layout/footer';
+import { PostData } from '@/lib/posts';
 
 // This is now a pure Server Component.
 export default async function BlogPostPage({ params }: { params: { slug: string } }) {

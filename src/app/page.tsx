@@ -5,7 +5,7 @@ import Blog from '@/components/sections/blog';
 import Contact from '@/components/sections/contact';
 import Footer from '@/components/layout/footer';
 import BackToTopButton from '@/components/layout/back-to-top-button';
-import { getSortedPostsData } from '@/lib/posts';
+import { getSortedPostsData } from '@/lib/posts-server';
 
 
 export default async function Home() {

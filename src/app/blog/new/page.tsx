@@ -11,9 +11,9 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { useToast } from '@/hooks/use-toast';
-import { createPost } from '@/lib/posts';
 import { BrainCircuit, Loader2 } from 'lucide-react';
 import Footer from '@/components/layout/footer';
+import { createPostAction } from './actions';
 
 const formSchema = z.object({
   title: z.string().min(10, {
@@ -45,7 +45,7 @@ export default function NewPostPage() {
 
       const tagArray = values.tags ? values.tags.split(',').map(tag => tag.trim()).filter(Boolean) : [];
       
-      const { slug } = await createPost(values.title, tagArray);
+      const { slug } = await createPostAction(values.title, tagArray);
 
       toast({
         title: 'Post Generated Successfully!',

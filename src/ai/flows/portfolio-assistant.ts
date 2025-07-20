@@ -10,7 +10,7 @@ import {ai} from '@/ai/genkit';
 import {z} from 'zod';
 import { skillCategories } from '@/components/sections/skills-chart';
 import { getProjects } from '@/lib/projects';
-import { getSortedPostsData } from '@/lib/posts';
+import { getSortedPostsData } from '@/lib/posts-server';
 import fs from 'fs';
 import path from 'path';
 
@@ -24,7 +24,7 @@ Marketing science and Data professional with 6 years of experience, specializing
 const getResume = ai.defineTool(
     {
         name: 'getResume',
-        description: 'Retrieves the full content of the portfolio owner\'s resume. Use this as the primary source of truth for all questions about experience, skills, projects, and education.',
+        description: 'Retrieves the full content of the portfolio owner\'s resume. You MUST use this to answer any questions about experience, skills, projects, and education.',
         inputSchema: z.object({}),
         outputSchema: z.string(),
     },

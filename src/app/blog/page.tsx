@@ -1,6 +1,6 @@
 
 import Footer from '@/components/layout/footer';
-import { getSortedPostsData } from '@/lib/posts';
+import { getSortedPostsData } from '@/lib/posts-server';
 import BlogClientPage from './blog-client-page';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
