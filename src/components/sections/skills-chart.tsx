@@ -1,8 +1,8 @@
 
 "use client"
 
-import { Bar, BarChart, CartesianGrid, XAxis, YAxis, Tooltip } from "recharts"
-
+import * as React from "react"
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts"
 import {
   Card,
   CardContent,
@@ -14,7 +14,7 @@ import {
   ChartContainer,
   ChartTooltipContent,
 } from "@/components/ui/chart"
-import { motion } from "framer-motion"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 export const skillCategories = [
   {
@@ -56,8 +56,6 @@ export const skillCategories = [
   },
 ];
 
-const chartData = skillCategories.find(c => c.name === 'Programming')?.skills || [];
-
 const chartConfig = {
   level: {
     label: "Proficiency",
@@ -65,50 +63,65 @@ const chartConfig = {
   },
 }
 
+const SkillBarChart = ({ data }: { data: typeof skillCategories[0]['skills'] }) => (
+  <ChartContainer config={chartConfig} className="h-64 w-full">
+    <ResponsiveContainer>
+      <BarChart
+        accessibilityLayer
+        data={data}
+        layout="vertical"
+        margin={{ left: 10, right: 10 }}
+      >
+        <CartesianGrid horizontal={false} stroke="hsl(var(--border) / 0.5)" />
+        <YAxis
+          dataKey="name"
+          type="category"
+          tickLine={false}
+          tickMargin={10}
+          axisLine={false}
+          className="text-muted-foreground text-xs"
+          width={80}
+        />
+        <XAxis dataKey="level" type="number" hide />
+        <Tooltip 
+          cursor={{ fill: 'hsl(var(--accent))' }}
+          content={<ChartTooltipContent 
+              formatter={(value, name, props) => (
+                <div className="flex flex-col gap-1">
+                  <span className="font-bold">{props.payload.name} ({value}%)</span>
+                  <span className="text-xs text-muted-foreground">{props.payload.description}</span>
+                </div>
+              )}
+              labelFormatter={() => ''}
+              indicator="dot" 
+          />}
+        />
+        <Bar dataKey="level" fill="var(--color-level)" radius={4} isAnimationActive={true} animationDuration={800} />
+      </BarChart>
+    </ResponsiveContainer>
+  </ChartContainer>
+);
+
 export function SkillsChart() {
   return (
-    <Card className="w-full max-w-lg bg-card/80 border-primary/20 backdrop-blur-sm">
+    <Card className="w-full max-w-2xl bg-card/80 border-primary/20 backdrop-blur-sm">
       <CardHeader>
-        <CardTitle>Programming Proficiency</CardTitle>
-        <CardDescription>A visual representation of my core programming skills.</CardDescription>
+        <CardTitle>Technical Skills</CardTitle>
+        <CardDescription>An interactive overview of my technical proficiency across various domains.</CardDescription>
       </CardHeader>
       <CardContent>
-        <ChartContainer config={chartConfig} className="h-64">
-          <BarChart
-            accessibilityLayer
-            data={chartData}
-            layout="vertical"
-            margin={{
-              left: 10,
-              right: 10,
-            }}
-          >
-            <CartesianGrid horizontal={false} stroke="hsl(var(--border) / 0.5)" />
-            <YAxis
-              dataKey="name"
-              type="category"
-              tickLine={false}
-              tickMargin={10}
-              axisLine={false}
-              className="text-muted-foreground text-xs"
-            />
-            <XAxis dataKey="level" type="number" hide />
-            <Tooltip 
-              cursor={{ fill: 'hsl(var(--accent))' }}
-              content={<ChartTooltipContent 
-                  formatter={(value, name, props) => (
-                    <div className="flex flex-col gap-1">
-                      <span className="font-bold">{props.payload.name} ({value}%)</span>
-                      <span className="text-xs text-muted-foreground">{props.payload.description}</span>
-                    </div>
-                  )}
-                  labelFormatter={() => ''}
-                  indicator="dot" 
-              />}
-            />
-            <Bar dataKey="level" fill="var(--color-level)" radius={4} isAnimationActive={true} animationDuration={800} />
-          </BarChart>
-        </ChartContainer>
+        <Tabs defaultValue={skillCategories[0].name} className="w-full">
+          <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 h-auto">
+            {skillCategories.map((category) => (
+              <TabsTrigger key={category.name} value={category.name}>{category.name}</TabsTrigger>
+            ))}
+          </TabsList>
+          {skillCategories.map((category) => (
+            <TabsContent key={category.name} value={category.name} className="mt-4">
+              <SkillBarChart data={category.skills} />
+            </TabsContent>
+          ))}
+        </Tabs>
       </CardContent>
     </Card>
   )
