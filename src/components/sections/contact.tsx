@@ -168,17 +168,35 @@ const AIChatAssistant = () => {
     const [input, setInput] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const scrollAreaRef = useRef<HTMLDivElement>(null);
+    const hasStarted = useRef(false);
+
 
     useEffect(() => {
-        // Add an initial greeting from the assistant
-        setMessages([
-            {
-                id: Date.now(),
-                role: 'assistant',
-                content: "Hello! I'm Rajure's AI assistant. Feel free to ask me anything about his projects, skills, or experience.",
-                isAudioLoading: false
+        const getInitialGreeting = async () => {
+            if (hasStarted.current) return;
+            hasStarted.current = true;
+            setIsLoading(true);
+            try {
+                const result = await askAssistant({ question: 'Hello', isFirstMessage: true });
+                const assistantMessageId = Date.now();
+                const assistantMessage: Message = {
+                    id: assistantMessageId,
+                    role: 'assistant',
+                    content: result.answer,
+                    isAudioLoading: true
+                };
+                setMessages([assistantMessage]);
+                handleNewAudio(result.answer, assistantMessageId);
+            } catch (error) {
+                 console.error("AI Assistant Error:", error);
+                 const errorMessage: Message = { id: Date.now(), role: 'assistant', content: "Sorry, I'm having trouble connecting. Please try again later." };
+                 setMessages([errorMessage]);
+            } finally {
+                setIsLoading(false);
             }
-        ]);
+        };
+
+        getInitialGreeting();
     }, []);
 
     useEffect(() => {
@@ -225,7 +243,7 @@ const AIChatAssistant = () => {
         setIsLoading(true);
 
         try {
-            const conversationHistory = newMessages.slice(1, -1).map(({ role, content }) => ({ role, content }));
+            const conversationHistory = newMessages.slice(0, -1).map(({ role, content }) => ({ role, content }));
             const result = await askAssistant({ question: input, history: conversationHistory });
             const assistantMessageId = Date.now() + 1;
             const assistantMessage: Message = { 
@@ -286,7 +304,7 @@ const AIChatAssistant = () => {
                                 )}
                             </div>
                         ))}
-                         {isLoading && (
+                         {isLoading && messages.length > 0 && (
                             <div className="flex items-start gap-3">
                                 <Avatar className="h-8 w-8">
                                     <AvatarFallback><Bot className="h-5 w-5"/></AvatarFallback>

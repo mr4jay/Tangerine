@@ -7,42 +7,30 @@
  */
 
 import {ai} from '@/ai/genkit';
-import {z} from 'genkit';
+import {z} from 'zod';
 import { skillCategories } from '@/components/sections/skills-chart';
+import fs from 'fs';
+import path from 'path';
 
-// This context should be updated with the specific details from the portfolio
+// This context provides a brief, high-level overview.
+// The AI will use the getResume tool for specific details.
 const portfolioContext = `
 About Me:
-I am a results-driven Senior Data Engineer with over 6 years of experience in designing, developing, and deploying scalable data solutions. My work has generated over $5M in cost savings and revenue growth for leading companies. My expertise spans the full data lifecycle, from ingestion and processing to warehousing and analytics, leveraging cutting-edge technologies like AWS, Snowflake, and Dataiku DSS. I am passionate about transforming complex datasets into actionable insights and building robust data infrastructures that empower data-driven decision-making.
-
-Career Timeline:
-- Senior Analyst at Omnicom Media Group (Sep 2023 - Feb 2025)
-- Data Scientist at Novartis (May 2021 - May 2022)
-- Data Analyst at Spoors Technologies (Sep 2018 - Mar 2021)
-
-
-Featured Projects:
-1. Enterprise Data Platform (Novartis): Architected and deployed a scalable enterprise-level data platform, achieving over $3M in cost savings and reducing data processing latency by 45%. Technologies: AWS, Snowflake, DBT, Airflow, Kinesis.
-2. Customer Churn Prediction Model (Spoors): Developed and deployed a machine learning model to predict customer churn, directly contributing to a $1.2M increase in retained revenue. Technologies: Dataiku DSS, Python, Scikit-learn, MLOps.
-3. Real-time Analytics Dashboard: Built a real-time analytics dashboard using AWS Kinesis and Lambda to process millions of events per second, enabling live KPI monitoring. Technologies: AWS Kinesis, Lambda, Snowflake, React.
-
-Skills:
-- Programming: Python (90%), SQL (95%), PySpark (85%), Scala (75%), Java (70%)
-- Cloud & DevOps: AWS (90%), Azure (70%), GCP (65%), Docker (85%), Kubernetes (80%), Jenkins (75%)
-- Data Tools: Dataiku DSS (90%), Snowflake (95%), Airflow (85%), Apache Spark (88%)
-- Marketing Platforms: Salesforce Datorama (80%), Google Ads (75%)
-
-Certifications:
-- AWS Certified Solutions Architect - Associate
-- Azure Data Engineer Associate
-- Google Cloud Professional Data Engineer
-- Dataiku Core Designer, Advanced Designer, ML Practitioner, MLOps Practitioner
-- Databricks Certified Data Engineer Associate
-
-Testimonials:
-- "Ajay's work on our enterprise data platform was transformative. His architectural vision and execution led to over $3M in cost savings and a 45% reduction in data processing latency." - John Doe, Director of Engineering, Novartis
-- "The customer churn prediction model Ajay developed was a game-changer for our retention strategy, directly contributing to a $1.2M increase in retained revenue." - Jane Smith, Product Manager, Spoors
+I am a results-driven marketing science and data professional with over 6 years of experience, specializing in workflow creation for DataOps. I am proficient in Datorama and advanced Excel VBA macros to build automated reporting systems and streamline marketing data operations. My expertise spans the full data lifecycle, from optimizing data pipelines to enhancing campaign performance and enabling data-driven decisions across cross-functional marketing teams. I am passionate about bridging the gap between data engineering and strategic marketing execution.
 `;
+
+const getResume = ai.defineTool(
+    {
+        name: 'getResume',
+        description: 'Retrieves the full content of the portfolio owner\'s resume. Use this as the primary source of truth for all questions about experience, skills, projects, and education.',
+        inputSchema: z.object({}),
+        outputSchema: z.string(),
+    },
+    async () => {
+        const resumePath = path.join(process.cwd(), 'resume.md');
+        return fs.readFileSync(resumePath, 'utf8');
+    }
+);
 
 const SuitabilityScoreInputSchema = z.object({
   requiredSkills: z.array(z.string()).describe('A list of skills required for a job position.'),
@@ -111,6 +99,7 @@ const MessageSchema = z.object({
 const AskAssistantInputSchema = z.object({
   question: z.string().describe('The current question to ask the AI assistant.'),
   history: z.array(MessageSchema).optional().describe('The history of the conversation so far.'),
+  isFirstMessage: z.boolean().optional().describe('Flag indicating if this is the first message from the user.')
 });
 export type AskAssistantInput = z.infer<typeof AskAssistantInputSchema>;
 
@@ -136,18 +125,18 @@ const prompt = ai.definePrompt({
   name: 'portfolioAssistantPrompt',
   input: {schema: PromptInputSchema},
   output: {schema: AskAssistantOutputSchema},
-  tools: [calculateSuitabilityScore],
-  prompt: `You are an AI assistant for Rajure Ajay Kumar's personal portfolio. Your goal is to answer questions from potential employers or collaborators based on the information provided in this portfolio.
+  tools: [calculateSuitabilityScore, getResume],
+  prompt: `You are a helpful and friendly AI assistant for Rajure Ajay Kumar's personal portfolio. Your goal is to answer questions from potential employers or collaborators.
 
-You must answer questions based *only* on the context provided below. If the answer is not in the context, politely state that you do not have that information. Be friendly, professional, and concise.
+- Your primary source of information is the 'getResume' tool. You MUST use it to answer any questions regarding Rajure's experience, skills, projects, or education. Do not rely on the brief context below for details.
+- If the user asks about suitability for a job or provides a list of skills, you MUST use the 'calculateSuitabilityScore' tool.
+- Be professional, concise, and friendly. If you don't know the answer, say so politely.
+- Keep answers short and to the point.
+{{#if isFirstMessage}}
+- This is the user's first message. Start with a warm welcome and introduce yourself. Suggest they can ask about his skills, experience, or check suitability for a role.
+{{/if}}
 
-If the user asks about suitability for a job role or provides a list of required skills, you MUST use the 'calculateSuitabilityScore' tool to provide a quantitative assessment. Incorporate the tool's output (score, matches, misses) into your final answer in a conversational way.
-
-Use the conversation history to understand context and provide more relevant, follow-up answers.
-
-Keep your answers short and to the point.
-
-CONTEXT:
+BRIEF CONTEXT:
 ---
 ${portfolioContext}
 ---
