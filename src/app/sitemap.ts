@@ -15,8 +15,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }));
 
   // Main pages
-  const routes = ['', '#about', '#projects', '#blog', '#skills', '#certifications', '#contact'].map((route) => ({
-    url: `${siteUrl}/${route}`,
+  const routes = ['', 'blog', '#about', '#projects', '#skills', '#certifications', '#contact'].map((route) => ({
+    url: `${siteUrl}/${route.startsWith('#') ? '' : route}${route.startsWith('#') ? route : ''}`,
     lastModified: new Date(),
     changeFrequency: 'monthly',
     priority: route === '' ? 1 : 0.8,

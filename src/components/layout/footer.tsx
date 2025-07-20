@@ -4,14 +4,14 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 
 const navLinks = [
-  { name: 'Home', href: '#home' },
-  { name: 'About', href: '#about' },
-  { name: 'Projects', href: '#projects' },
-  { name: 'Blog', href: '#blog' },
-  { name: 'Skills', href: '#skills' },
-  { name: 'Certifications', href: '#certifications' },
-  { name: 'Testimonials', href: '#testimonials' },
-  { name: 'Contact', href: '#contact' },
+  { name: 'Home', href: '/' },
+  { name: 'About', href: '/#about' },
+  { name: 'Projects', href: '/#projects' },
+  { name: 'Blog', href: '/blog' },
+  { name: 'Skills', href: '/#skills' },
+  { name: 'Certifications', href: '/#certifications' },
+  { name: 'Testimonials', href: '/#testimonials' },
+  { name: 'Contact', href: '/#contact' },
 ];
 
 export default function Footer() {
@@ -20,7 +20,7 @@ export default function Footer() {
       <div className="container mx-auto px-4 md:px-6 max-w-7xl">
         <div className="grid gap-8 lg:grid-cols-3 text-center lg:text-left">
           <div className="flex flex-col items-center lg:items-start gap-4">
-            <Link href="#home" className="flex items-center gap-2">
+            <Link href="/" className="flex items-center gap-2">
               <Code className="h-6 w-6 text-primary" />
               <span className="text-lg font-bold">DataCraft Portfolio</span>
             </Link>

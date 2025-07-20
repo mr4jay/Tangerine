@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from 'react';
@@ -7,47 +8,68 @@ import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { cn } from '@/lib/utils';
 import { ThemeToggle } from './theme-toggle';
+import { usePathname } from 'next/navigation';
 
 const navLinks = [
-  { name: 'Home', href: '#home' },
-  { name: 'About', href: '#about' },
-  { name: 'Projects', href: '#projects' },
-  { name: 'Blog', href: '#blog' },
-  { name: 'Skills', href: '#skills' },
-  { name: 'Certifications', href: '#certifications' },
-  { name: 'Testimonials', href: '#testimonials' },
-  { name: 'Contact', href: '#contact' },
+  { name: 'Home', href: '/' },
+  { name: 'About', href: '/#about' },
+  { name: 'Projects', href: '/#projects' },
+  { name: 'Blog', href: '/blog' },
+  { name: 'Skills', href: '/#skills' },
+  { name: 'Certifications', href: '/#certifications' },
+  { name: 'Testimonials', href: '/#testimonials' },
+  { name: 'Contact', href: '/#contact' },
 ];
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const [hasScrolled, setHasScrolled] = useState(false);
-  const [activeLink, setActiveLink] = useState('#home');
+  const [activeLink, setActiveLink] = useState('/');
+  const pathname = usePathname();
 
   useEffect(() => {
     const handleScroll = () => {
       setHasScrolled(window.scrollY > 10);
+      
+      if (pathname.startsWith('/blog')) {
+          setActiveLink('/blog');
+          return;
+      }
+      
+      const sections = navLinks
+        .filter(link => link.href.includes('/#'))
+        .map(link => document.getElementById(link.href.substring(2)))
+        .filter(Boolean);
 
-      const sections = navLinks.map(link => document.getElementById(link.href.substring(1))).filter(Boolean);
-      let current = '#home';
+      let current = '/';
       for (const section of sections) {
         if (section && section.offsetTop <= window.scrollY + 100) {
-          current = `#${section.id}`;
+          current = `/#${section.id}`;
         }
       }
       setActiveLink(current);
     };
 
     window.addEventListener('scroll', handleScroll);
+    
+    // Set initial active link
+    if (pathname.startsWith('/blog')) {
+        setActiveLink('/blog');
+    } else {
+        setActiveLink('/');
+    }
+
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [pathname]);
 
-  const getLinkClass = (href: string) => cn(
-    "text-sm font-semibold text-foreground/80 transition-all duration-300 hover:text-primary hover:scale-105 hover:opacity-90",
-    "relative after:content-[''] after:absolute after:left-0 after:bottom-[-4px] after:w-full after:h-[2px] after:bg-primary after:scale-x-0 after:transition-transform after:duration-300 after:origin-center",
-    activeLink === href && "text-primary after:scale-x-100"
-  );
-
+  const getLinkClass = (href: string) => {
+    const isActive = href === '/' ? activeLink === href : activeLink.includes(href);
+    return cn(
+        "text-sm font-semibold text-foreground/80 transition-all duration-300 hover:text-primary hover:scale-105 hover:opacity-90",
+        "relative after:content-[''] after:absolute after:left-0 after:bottom-[-4px] after:w-full after:h-[2px] after:bg-primary after:scale-x-0 after:transition-transform after:duration-300 after:origin-center",
+        isActive && "text-primary after:scale-x-100"
+    );
+  }
 
   return (
     <header className={cn(
@@ -55,7 +77,7 @@ export default function Header() {
       hasScrolled ? "border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60" : "bg-transparent"
     )}>
       <div className="container mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        <Link href="#home" className="flex items-center gap-2">
+        <Link href="/" className="flex items-center gap-2">
           <Code className="h-6 w-6 text-primary" />
           <span className="text-lg font-bold">DataCraft Portfolio</span>
         </Link>
@@ -81,7 +103,7 @@ export default function Header() {
             <SheetContent side="right" className="w-[300px] sm:w-[400px] bg-background">
               <nav className="flex flex-col h-full">
                 <div className="flex items-center justify-between p-4 border-b">
-                   <Link href="#home" className="flex items-center gap-2" onClick={() => setIsOpen(false)}>
+                   <Link href="/" className="flex items-center gap-2" onClick={() => setIsOpen(false)}>
                       <Code className="h-6 w-6 text-primary" />
                       <span className="text-lg font-bold">DataCraft</span>
                    </Link>
