@@ -153,7 +153,7 @@ export default function Projects() {
               whileHover={{ y: -5, scale: 1.02, boxShadow: "0 10px 20px -5px hsl(var(--primary) / 0.4)", transition: { duration: 0.3, ease: 'easeOut' } }}
               className="h-full"
             >
-              <Card className="flex flex-col h-full overflow-hidden bg-card transition-shadow duration-300 ease-in-out hover:shadow-2xl hover:shadow-primary/40">
+              <Card className="flex flex-col h-full overflow-hidden bg-card transition-shadow duration-300 ease-in-out">
                 <CardHeader className="p-0">
                   <div className="relative w-full h-48">
                       <Image 
