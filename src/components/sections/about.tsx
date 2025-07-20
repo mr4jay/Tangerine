@@ -4,10 +4,44 @@
 import { Button } from '@/components/ui/button';
 import { Download, Briefcase } from 'lucide-react';
 import Link from 'next/link';
-import { SkillsChart } from './skills-chart';
 import { trackEvent } from '@/components/analytics';
 import { motion } from 'framer-motion';
 import { staggerContainer, fadeIn } from '@/lib/motion';
+import dynamic from 'next/dynamic';
+import { Skeleton } from '@/components/ui/skeleton';
+
+const SkillsChart = dynamic(() => import('./skills-chart').then(mod => mod.SkillsChart), {
+  ssr: false,
+  loading: () => (
+      <div className="w-full max-w-lg p-4">
+        <Skeleton className="h-8 w-1/2 mb-4" />
+        <Skeleton className="h-4 w-3/4 mb-8" />
+        <div className="flex justify-between gap-4">
+            <div className="w-1/5">
+                <Skeleton className="h-4 w-full mb-2" />
+                <Skeleton className="h-40 w-full" />
+            </div>
+             <div className="w-1/5">
+                <Skeleton className="h-4 w-full mb-2" />
+                <Skeleton className="h-40 w-full" />
+            </div>
+             <div className="w-1/5">
+                <Skeleton className="h-4 w-full mb-2" />
+                <Skeleton className="h-40 w-full" />
+            </div>
+             <div className="w-1/5">
+                <Skeleton className="h-4 w-full mb-2" />
+                <Skeleton className="h-40 w-full" />
+            </div>
+             <div className="w-1/5">
+                <Skeleton className="h-4 w-full mb-2" />
+                <Skeleton className="h-40 w-full" />
+            </div>
+        </div>
+      </div>
+  )
+});
+
 
 const careerTimeline = [
   {
