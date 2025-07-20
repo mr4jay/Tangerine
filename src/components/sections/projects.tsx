@@ -32,6 +32,13 @@ const timelineData = [
     impact: '$3M+ cost savings',
     description: 'Architected and deployed a scalable enterprise-level data platform, achieving substantial cost savings and reducing data processing latency by 45%.',
   },
+   {
+    company: 'Omnicom Media Group',
+    period: '2023 – 2025',
+    title: 'Automated Reporting Ecosystem',
+    impact: '70% reduction in report time',
+    description: 'Architected and maintained an enterprise-grade reporting ecosystem using Salesforce Datorama, significantly reducing report turnaround time by 70% for over 800 campaigns.',
+  },
 ];
 
 const TimelineNode = ({ item, index, isMobile }: { item: typeof timelineData[0], index: number, isMobile: boolean }) => {
@@ -120,7 +127,7 @@ const ProjectTimeline = () => {
 
 export default function Projects() {
   const handleProjectClick = (projectName: string) => {
-    trackEvent('click', 'Projects', `View Project - ${projectName}`);
+    trackEvent('click', { category: 'Projects', label: `View Project - ${projectName}` });
   };
 
   return (
