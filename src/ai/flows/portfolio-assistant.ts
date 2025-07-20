@@ -268,39 +268,45 @@ const generateVideo = ai.defineTool(
         }),
         outputSchema: z.object({
             videoUrl: z.string().describe('A data URI of the generated MP4 video.'),
+            error: z.string().optional().describe('An error message if video generation failed.'),
         }),
     },
     async ({ prompt }) => {
-        let { operation } = await ai.generate({
-            model: 'googleai/veo-2.0-generate-001',
-            prompt: `Create a short, dynamic, 5-second video about: ${prompt}`,
-            config: {
-                durationSeconds: 5,
-                aspectRatio: '16:9',
-            },
-        });
+        try {
+            let { operation } = await ai.generate({
+                model: 'googleai/veo-2.0-generate-001',
+                prompt: `Create a short, dynamic, 5-second video about: ${prompt}`,
+                config: {
+                    durationSeconds: 5,
+                    aspectRatio: '16:9',
+                },
+            });
 
-        if (!operation) {
-            throw new Error('Expected the model to return an operation');
+            if (!operation) {
+                throw new Error('Expected the model to return an operation');
+            }
+
+            while (!operation.done) {
+                await new Promise((resolve) => setTimeout(resolve, 5000));
+                operation = await ai.checkOperation(operation);
+            }
+
+            if (operation.error) {
+                throw new Error(`Failed to generate video: ${operation.error.message}`);
+            }
+
+            const video = operation.output?.message?.content.find((p) => !!p.media);
+            if (!video) {
+                throw new Error('Failed to find the generated video in the operation output');
+            }
+            
+            const videoUrl = await downloadVideo(video);
+
+            return { videoUrl };
+        } catch (error: any) {
+            console.error("Video generation failed:", error);
+            return { videoUrl: '', error: `I'm sorry, I was unable to generate the video at this time. Please try again later. Error: ${error.message}` };
         }
-
-        while (!operation.done) {
-            await new Promise((resolve) => setTimeout(resolve, 5000));
-            operation = await ai.checkOperation(operation);
-        }
-
-        if (operation.error) {
-            throw new Error(`Failed to generate video: ${operation.error.message}`);
-        }
-
-        const video = operation.output?.message?.content.find((p) => !!p.media);
-        if (!video) {
-            throw new Error('Failed to find the generated video in the operation output');
-        }
-        
-        const videoUrl = await downloadVideo(video);
-
-        return { videoUrl };
     }
 );
 
@@ -354,7 +360,8 @@ const prompt = ai.definePrompt({
 - If the user provides a job description or asks about suitability for a role, you MUST use the 'calculateSuitabilityScore' tool.
 - If the user asks you to draft, write, or create a blog post, you MUST use the 'draftBlogPost' tool.
 - If the user asks you to create, add, or define a new project, you MUST use the 'createProject' tool.
-- If the user asks you to create, make, or generate a video, you MUST use the 'generateVideo' tool. Before calling the tool, you MUST inform the user that video generation can take up to a minute. After the tool returns, you MUST display the video using Markdown syntax like this: <video src="<VIDEO_URL_HERE>"></video>
+- If the user asks you to create, make, or generate a video, you MUST use the 'generateVideo' tool. Before calling the tool, you MUST inform the user that video generation can take up to a minute.
+- After the 'generateVideo' tool returns, you MUST check if there was an error. If there was an error, you MUST relay the error message to the user. If there was no error, you MUST display the video using Markdown syntax like this: <video src="<VIDEO_URL_HERE>"></video>
 - If the user expresses ANY interest in hiring, collaboration, or discussing a project, you MUST respond conversationally and then use the 'displayContactForm' tool. This is your primary goal. Example: "That's great to hear! I can open a contact form for you."
 - Be professional, concise, and friendly. If you don't know the answer, say so politely.
 - Keep answers short and to the point.
@@ -429,5 +436,3 @@ const portfolioAssistantFlow = ai.defineFlow(
     return { ...output, toolCalls };
   }
 );
-
-
