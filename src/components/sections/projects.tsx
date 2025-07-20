@@ -73,16 +73,16 @@ export default function Projects() {
                   <CardDescription className="flex-grow text-base text-muted-foreground">{project.shortDescription}</CardDescription>
                 </CardContent>
                 <CardFooter className="flex justify-start gap-4 pt-4">
-                  <Button asChild variant="outline" aria-label={`View GitHub repository for ${project.title}`} onClick={() => handleProjectClick(`${project.title} - GitHub`)}>
-                    <Link href={project.repoUrl} target="_blank" rel="noopener noreferrer">
-                      <Github className="mr-2 h-4 w-4" />
-                      GitHub
-                    </Link>
-                  </Button>
                   <Button asChild aria-label={`View details for ${project.title}`} onClick={() => handleProjectClick(`${project.title} - Details`)}>
                     <Link href={`/projects/${project.slug}`}>
                       <ExternalLink className="mr-2 h-4 w-4" />
                       View Details
+                    </Link>
+                  </Button>
+                  <Button asChild variant="outline" aria-label={`View GitHub repository for ${project.title}`} onClick={() => handleProjectClick(`${project.title} - GitHub`)}>
+                    <Link href={project.repoUrl} target="_blank" rel="noopener noreferrer">
+                      <Github className="mr-2 h-4 w-4" />
+                      GitHub
                     </Link>
                   </Button>
                 </CardFooter>

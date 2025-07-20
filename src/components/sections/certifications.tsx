@@ -97,7 +97,7 @@ const CertificationCard = ({ cert, onClick }: { cert: typeof certifications[0], 
 
 const ExpandedCard = ({ cert, onClick }: { cert: typeof certifications[0], onClick: () => void }) => {
   const isMobile = useIsMobile();
-  const scale = isMobile ? 1.1 : 1.2;
+  const scale = isMobile ? 1.05 : 1.1;
 
   return (
     <motion.div

@@ -12,6 +12,8 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ProjectMetricsChart } from '@/components/projects/project-metrics-chart';
+import { fadeIn } from '@/lib/motion';
+
 
 export async function generateStaticParams() {
   const projects = getProjects();
@@ -41,24 +43,6 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     },
   };
 }
-
-const fadeIn = (direction: 'up' | 'down' | 'left' | 'right', delay: number) => ({
-  hidden: {
-    opacity: 0,
-    x: direction === 'left' ? -20 : direction === 'right' ? 20 : 0,
-    y: direction === 'up' ? -20 : direction === 'down' ? 20 : 0,
-  },
-  visible: {
-    opacity: 1,
-    x: 0,
-    y: 0,
-    transition: {
-      duration: 0.5,
-      delay,
-      ease: 'easeOut',
-    },
-  },
-});
 
 export default function ProjectDetailPage({ params }: { params: { slug: string } }) {
   const project = getProjectBySlug(params.slug);
@@ -98,7 +82,7 @@ export default function ProjectDetailPage({ params }: { params: { slug: string }
         role="main"
       >
         <div className="container mx-auto px-4 md:px-6 max-w-5xl">
-          <motion.div variants={fadeIn('down', 0)} className="mb-8">
+          <motion.div variants={fadeIn('down', 'tween', 0, 0.5)} className="mb-8">
             <Link href="/#projects" className="inline-flex items-center text-primary hover:underline">
               <ArrowLeft className="mr-2 h-4 w-4" />
               Back to Projects
@@ -106,21 +90,21 @@ export default function ProjectDetailPage({ params }: { params: { slug: string }
           </motion.div>
 
           <motion.h1 
-            variants={fadeIn('down', 0.1)} 
+            variants={fadeIn('down', 'tween', 0.1, 0.5)} 
             className="text-4xl md:text-5xl font-bold tracking-tight font-headline text-foreground mb-4"
           >
             {project.title}
           </motion.h1>
 
           <motion.p 
-            variants={fadeIn('down', 0.2)} 
+            variants={fadeIn('down', 'tween', 0.2, 0.5)} 
             className="text-lg text-muted-foreground mb-8 max-w-3xl"
           >
             {project.shortDescription}
           </motion.p>
           
           <motion.div 
-            variants={fadeIn('down', 0.3)} 
+            variants={fadeIn('down', 'tween', 0.3, 0.5)} 
             className="relative w-full h-64 md:h-96 mb-12 rounded-lg overflow-hidden shadow-lg"
           >
             <Image
@@ -135,7 +119,7 @@ export default function ProjectDetailPage({ params }: { params: { slug: string }
           </motion.div>
           
           {project.metrics && project.metrics.length > 0 && (
-            <motion.div variants={fadeIn('up', 0.4)} className="mb-12">
+            <motion.div variants={fadeIn('up', 'tween', 0.4, 0.5)} className="mb-12">
                 <h2 className="text-3xl font-bold font-headline mb-4 text-primary">Project Impact</h2>
                 <ProjectMetricsChart metrics={project.metrics} />
             </motion.div>
@@ -143,12 +127,12 @@ export default function ProjectDetailPage({ params }: { params: { slug: string }
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
             <div className="lg:col-span-2 space-y-8">
-              <motion.div variants={fadeIn('up', 0.5)}>
+              <motion.div variants={fadeIn('up', 'tween', 0.5, 0.5)}>
                 <h2 className="text-3xl font-bold font-headline mb-4 text-primary">Overview</h2>
                 <p className="text-foreground/90 leading-relaxed">{project.longDescription}</p>
               </motion.div>
 
-              <motion.div variants={fadeIn('up', 0.6)}>
+              <motion.div variants={fadeIn('up', 'tween', 0.6, 0.5)}>
                 <h2 className="text-3xl font-bold font-headline mb-4 text-primary">Key Outcomes</h2>
                 <ul className="space-y-3">
                   {project.keyOutcomes.map((outcome, index) => (
@@ -162,7 +146,7 @@ export default function ProjectDetailPage({ params }: { params: { slug: string }
             </div>
 
             <aside className="space-y-8">
-               <motion.div variants={fadeIn('up', 0.7)}>
+               <motion.div variants={fadeIn('up', 'tween', 0.7, 0.5)}>
                  <Card className="bg-card border-border/60">
                    <CardHeader>
                      <CardTitle>Tech Stack</CardTitle>
@@ -183,7 +167,7 @@ export default function ProjectDetailPage({ params }: { params: { slug: string }
                    </CardContent>
                  </Card>
                </motion.div>
-                <motion.div variants={fadeIn('up', 0.8)} className="flex flex-col gap-4">
+                <motion.div variants={fadeIn('up', 'tween', 0.8, 0.5)} className="flex flex-col gap-4">
                      <Button asChild variant="outline" size="lg">
                         <Link href={project.repoUrl} target="_blank" rel="noopener noreferrer">
                           <Github className="mr-2 h-5 w-5" />
