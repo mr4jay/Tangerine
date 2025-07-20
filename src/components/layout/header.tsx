@@ -3,7 +3,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Menu, X, Code } from 'lucide-react';
+import { Menu, X, Code, Home, User, Briefcase, Rss, Wrench, FileText, Star, Award, MessageSquare } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { cn } from '@/lib/utils';
@@ -23,15 +23,15 @@ import {
 } from '@/components/ui/sidebar';
 
 const navLinks = [
-  { name: 'Home', href: '/', icon: Code },
-  { name: 'About', href: '/#about', icon: Code },
-  { name: 'Projects', href: '/#projects', icon: Code },
-  { name: 'Blog', href: '/blog', icon: Code },
-  { name: 'Skills', href: '/#skills', icon: Code },
-  { name: 'Resume', href: '/resume', icon: Code },
-  { name: 'Certifications', href: '/#certifications', icon: Code },
-  { name: 'Testimonials', href: '/#testimonials', icon: Code },
-  { name: 'Contact', href: '/#contact', icon: Code },
+  { name: 'Home', href: '/', icon: Home },
+  { name: 'About', href: '/#about', icon: User },
+  { name: 'Projects', href: '/#projects', icon: Briefcase },
+  { name: 'Blog', href: '/blog', icon: Rss },
+  { name: 'Skills', href: '/#skills', icon: Wrench },
+  { name: 'Resume', href: '/resume', icon: FileText },
+  { name: 'Certifications', href: '/#certifications', icon: Award },
+  { name: 'Testimonials', href: '/#testimonials', icon: Star },
+  { name: 'Contact', href: '/#contact', icon: MessageSquare },
 ];
 
 export default function Header() {
@@ -77,34 +77,42 @@ export function PortfolioSidebar() {
   const [activeLink, setActiveLink] = useState('/');
 
   useEffect(() => {
-      if (pathname === '/') {
-          const sections = navLinks
-            .filter(link => link.href.includes('/#'))
-            .map(link => document.getElementById(link.href.substring(2)))
-            .filter(Boolean);
-
-          const handleScroll = () => {
-            let current = '/';
-            for (const section of sections) {
-              if (section && section.offsetTop <= window.scrollY + 100) {
-                current = `/#${section.id}`;
-              }
-            }
-            setActiveLink(current);
-          }
-          
-          window.addEventListener('scroll', handleScroll, { passive: true });
-          handleScroll();
-          return () => window.removeEventListener('scroll', handleScroll);
-      } else {
+      if (pathname.startsWith('/blog') || pathname.startsWith('/projects/') || pathname.startsWith('/resume')) {
           setActiveLink(pathname);
+          return;
       }
+      
+      if(pathname === '/') {
+        const sections = navLinks
+          .map(link => link.href.split('#')[1])
+          .filter(Boolean)
+          .map(id => document.getElementById(id));
 
+        const handleScroll = () => {
+          const scrollPosition = window.scrollY + 100;
+          let currentSection = '/';
+          
+          for (const section of sections) {
+              if (section && section.offsetTop <= scrollPosition) {
+                  currentSection = `/#${section.id}`;
+              }
+          }
+          setActiveLink(currentSection);
+        }
+        
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        handleScroll(); // Initial check
+        return () => window.removeEventListener('scroll', handleScroll);
+      }
+      
   }, [pathname]);
 
   const getIsActive = (href: string) => {
-    if (href === '/') return activeLink === '/';
-    return activeLink.startsWith(href)
+    if (pathname !== '/') {
+        if(href === '/') return false;
+        return pathname.startsWith(href);
+    }
+    return activeLink === href;
   };
 
   return (
