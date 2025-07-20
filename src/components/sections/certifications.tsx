@@ -74,7 +74,7 @@ const certifications = [
 const CertificationCard = ({ cert, onClick }: { cert: typeof certifications[0], onClick: () => void }) => (
   <motion.div
     layoutId={`card-container-${cert.name}`}
-    whileHover={{ scale: 1.05, transition: { duration: 0.3 } }}
+    whileHover={{ y: -5, transition: { duration: 0.3 } }}
     className="p-1 cursor-pointer"
     onClick={onClick}
     aria-label={`View details for ${cert.name}`}
@@ -101,7 +101,7 @@ const ExpandedCard = ({ cert, onClick }: { cert: typeof certifications[0], onCli
 
   return (
     <motion.div
-      className="fixed inset-0 z-50 flex items-center justify-center"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4"
       onClick={onClick}
     >
       <motion.div className="absolute inset-0 bg-black/80" onClick={onClick}></motion.div>
@@ -110,7 +110,7 @@ const ExpandedCard = ({ cert, onClick }: { cert: typeof certifications[0], onCli
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale, opacity: 1, transition: { duration: 0.4, ease: [0.16, 1, 0.3, 1] } }}
         exit={{ scale: 0.8, opacity: 0, transition: { duration: 0.3 } }}
-        className="relative z-10 w-11/12 max-w-md"
+        className="relative z-10 w-full max-w-md"
       >
         <Card className="flex flex-col h-full overflow-hidden bg-card shadow-2xl shadow-primary/30">
           <CardContent className="p-8 flex-grow flex flex-col items-center text-center">
@@ -156,26 +156,16 @@ export default function Certifications() {
         >
           <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl font-headline">Certifications</h2>
           <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-            Validation of my expertise through industry-recognized certifications.
+            Validation of my expertise through industry-recognized certifications. Click any card to view details.
           </p>
         </motion.div>
-        <Carousel
-          opts={{
-            align: "start",
-            loop: true,
-          }}
-          className="w-full"
+        <div
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
         >
-          <CarouselContent>
-            {certifications.map((cert, index) => (
-              <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
-                <CertificationCard cert={cert} onClick={() => setSelectedId(cert.name)} />
-              </CarouselItem>
+            {certifications.map((cert) => (
+                <CertificationCard key={cert.name} cert={cert} onClick={() => setSelectedId(cert.name)} />
             ))}
-          </CarouselContent>
-          <CarouselPrevious className="ml-12" />
-          <CarouselNext className="mr-12" />
-        </Carousel>
+        </div>
       </div>
       <AnimatePresence>
         {selectedCert && (
