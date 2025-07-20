@@ -42,19 +42,19 @@ export default function Footer() {
              <h3 className="font-semibold text-foreground tracking-wider uppercase">Connect</h3>
              <div className="flex items-center gap-2">
                 <Button asChild variant="ghost" size="icon" aria-label="Email">
-                    <Link href="mailto:rajaykumar5555@gmail.com">
-                        <Mail className="h-6 w-6 text-primary" />
-                    </Link>
+                  <Link href="mailto:rajaykumar5555@gmail.com">
+                    <Mail className="h-6 w-6 text-primary" />
+                  </Link>
                 </Button>
                 <Button asChild variant="ghost" size="icon" aria-label="LinkedIn Profile">
-                    <Link href="https://linkedin.com/in/rajure-ajay-kumar" target="_blank" rel="noopener noreferrer">
-                        <Linkedin className="h-6 w-6 text-primary" />
-                    </Link>
+                  <Link href="https://linkedin.com/in/rajure-ajay-kumar" target="_blank" rel="noopener noreferrer">
+                    <Linkedin className="h-6 w-6 text-primary" />
+                  </Link>
                 </Button>
                  <Button asChild variant="ghost" size="icon" aria-label="GitHub Profile">
-                    <Link href="https://github.com/rajure-ajay" target="_blank" rel="noopener noreferrer">
-                        <Github className="h-6 w-6 text-primary" />
-                    </Link>
+                  <Link href="https://github.com/rajure-ajay" target="_blank" rel="noopener noreferrer">
+                    <Github className="h-6 w-6 text-primary" />
+                  </Link>
                 </Button>
             </div>
           </div>
