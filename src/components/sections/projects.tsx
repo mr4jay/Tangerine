@@ -6,7 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Github, ExternalLink, PlusCircle } from 'lucide-react';
+import { Github, ArrowRight, PlusCircle } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { trackEvent } from '@/components/analytics';
 import { cardVariants, headerVariants } from '@/lib/motion';
@@ -81,10 +81,10 @@ export default function Projects() {
                   <CardDescription className="flex-grow text-base text-muted-foreground">{project.shortDescription}</CardDescription>
                 </CardContent>
                 <CardFooter className="flex justify-start gap-4 pt-4">
-                  <Button asChild aria-label={`View details for ${project.title}`} onClick={() => handleProjectClick(`${project.title} - Details`)}>
+                  <Button asChild aria-label={`View details for ${project.title}`} onClick={() => handleProjectClick(`${project.title} - Details`)} className="group">
                     <Link href={`/projects/${project.slug}`}>
-                      <ExternalLink className="mr-2 h-4 w-4" />
                       View Details
+                      <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                     </Link>
                   </Button>
                   <Button asChild variant="outline" aria-label={`View GitHub repository for ${project.title}`} onClick={() => handleProjectClick(`${project.title} - GitHub`)}>

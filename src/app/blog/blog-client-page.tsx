@@ -125,8 +125,8 @@ export default function BlogClientPage({ posts }: { posts: PostData[] }) {
                   <CardDescription className="flex-grow text-base text-muted-foreground">{post.excerpt}</CardDescription>
                 </CardContent>
                 <CardFooter className="flex justify-start pt-4">
-                  <Button asChild variant="default" aria-label={`Read more about ${post.title}`}>
-                    <Link href={`/blog/${post.slug}`} className="group">
+                  <Button asChild variant="default" aria-label={`Read more about ${post.title}`} className="group">
+                    <Link href={`/blog/${post.slug}`}>
                       Read More
                       <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                     </Link>
