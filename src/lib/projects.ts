@@ -1,4 +1,11 @@
 
+export type ProjectMetric = {
+  label: string;
+  value: number;
+  unit: 'USD' | 'percentage' | 'hours';
+  description: string;
+};
+
 export type Project = {
   slug: string;
   title: string;
@@ -11,6 +18,7 @@ export type Project = {
   repoUrl: string;
   keyOutcomes: string[];
   techStack: { category: string; items: string[] }[];
+  metrics: ProjectMetric[];
 };
 
 const projectsData: Project[] = [
@@ -36,6 +44,10 @@ const projectsData: Project[] = [
       { category: 'Data Transformation', items: ['DBT'] },
       { category: 'Orchestration', items: ['Apache Airflow'] },
       { category: 'Languages', items: ['Python', 'SQL'] }
+    ],
+    metrics: [
+        { label: 'Cost Savings', value: 3000000, unit: 'USD', description: 'Annual cost savings achieved through infrastructure optimization.' },
+        { label: 'Latency Reduction', value: 45, unit: 'percentage', description: 'Reduction in data processing latency across key pipelines.' }
     ]
   },
   {
@@ -59,6 +71,10 @@ const projectsData: Project[] = [
       { category: 'Languages', items: ['Python'] },
       { category: 'Libraries', items: ['Scikit-learn', 'Pandas', 'NumPy'] },
       { category: 'Deployment', items: ['MLOps CI/CD', 'REST API'] }
+    ],
+    metrics: [
+        { label: 'Retained Revenue', value: 1200000, unit: 'USD', description: 'Increased retained revenue in the first year.' },
+        { label: 'Accuracy Improvement', value: 25, unit: 'percentage', description: 'Improvement in churn prediction accuracy.' }
     ]
   },
   {
@@ -83,6 +99,9 @@ const projectsData: Project[] = [
       { category: 'Data Warehouse', items: ['Snowflake'] },
       { category: 'Frontend', items: ['React', 'Recharts'] },
       { category: 'Languages', items: ['Python', 'JavaScript'] }
+    ],
+    metrics: [
+        { label: 'User Engagement', value: 15, unit: 'percentage', description: 'Improvement in user engagement metrics post-launch.' },
     ]
   },
 ];

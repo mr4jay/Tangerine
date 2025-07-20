@@ -11,6 +11,7 @@ import { ArrowLeft, CheckCircle, Github, ExternalLink } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { ProjectMetricsChart } from '@/components/projects/project-metrics-chart';
 
 export async function generateStaticParams() {
   const projects = getProjects();
@@ -25,6 +26,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   return {
     title: `${project.title} | Projects`,
     description: project.shortDescription,
+    keywords: [...project.tags, 'data engineer project metrics'],
     openGraph: {
       title: project.title,
       description: project.shortDescription,
@@ -131,15 +133,22 @@ export default function ProjectDetailPage({ params }: { params: { slug: string }
               sizes="(max-width: 768px) 100vw, 80vw"
             />
           </motion.div>
+          
+          {project.metrics && project.metrics.length > 0 && (
+            <motion.div variants={fadeIn('up', 0.4)} className="mb-12">
+                <h2 className="text-3xl font-bold font-headline mb-4 text-primary">Project Impact</h2>
+                <ProjectMetricsChart metrics={project.metrics} />
+            </motion.div>
+          )}
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
             <div className="lg:col-span-2 space-y-8">
-              <motion.div variants={fadeIn('up', 0.4)}>
+              <motion.div variants={fadeIn('up', 0.5)}>
                 <h2 className="text-3xl font-bold font-headline mb-4 text-primary">Overview</h2>
                 <p className="text-foreground/90 leading-relaxed">{project.longDescription}</p>
               </motion.div>
 
-              <motion.div variants={fadeIn('up', 0.5)}>
+              <motion.div variants={fadeIn('up', 0.6)}>
                 <h2 className="text-3xl font-bold font-headline mb-4 text-primary">Key Outcomes</h2>
                 <ul className="space-y-3">
                   {project.keyOutcomes.map((outcome, index) => (
@@ -153,7 +162,7 @@ export default function ProjectDetailPage({ params }: { params: { slug: string }
             </div>
 
             <aside className="space-y-8">
-               <motion.div variants={fadeIn('up', 0.6)}>
+               <motion.div variants={fadeIn('up', 0.7)}>
                  <Card className="bg-card border-border/60">
                    <CardHeader>
                      <CardTitle>Tech Stack</CardTitle>
@@ -174,7 +183,7 @@ export default function ProjectDetailPage({ params }: { params: { slug: string }
                    </CardContent>
                  </Card>
                </motion.div>
-                <motion.div variants={fadeIn('up', 0.7)} className="flex flex-col gap-4">
+                <motion.div variants={fadeIn('up', 0.8)} className="flex flex-col gap-4">
                      <Button asChild variant="outline" size="lg">
                         <Link href={project.repoUrl} target="_blank" rel="noopener noreferrer">
                           <Github className="mr-2 h-5 w-5" />
