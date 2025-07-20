@@ -24,12 +24,10 @@ import {
 
 const navLinks = [
   { name: 'Home', href: '/', icon: Home },
-  { name: 'About', href: '/#about', icon: User },
+  { name: 'About', href: '/about', icon: User },
   { name: 'Projects', href: '/#projects', icon: Briefcase },
   { name: 'Blog', href: '/blog', icon: Rss },
   { name: 'Resume', href: '/resume', icon: FileText },
-  { name: 'Certifications', href: '/#certifications', icon: Award },
-  { name: 'Testimonials', href: '/#testimonials', icon: Star },
   { name: 'Contact', href: '/#contact', icon: MessageSquare },
 ];
 
@@ -76,7 +74,7 @@ export function PortfolioSidebar() {
   const [activeLink, setActiveLink] = useState('/');
 
   useEffect(() => {
-      if (pathname.startsWith('/blog') || pathname.startsWith('/projects/') || pathname.startsWith('/resume')) {
+      if (pathname.startsWith('/blog') || pathname.startsWith('/projects/') || pathname.startsWith('/resume') || pathname.startsWith('/about')) {
           setActiveLink(pathname);
           return;
       }
@@ -107,11 +105,16 @@ export function PortfolioSidebar() {
   }, [pathname]);
 
   const getIsActive = (href: string) => {
-    if (pathname !== '/') {
-        if(href === '/') return false;
+    // Exact match for pages like /about or /blog
+    if (['/about', '/blog', '/resume'].includes(href)) {
         return pathname.startsWith(href);
     }
-    return activeLink === href;
+    // Handle hash links for homepage
+    if (href.includes('#')) {
+        return activeLink === href;
+    }
+    // Handle homepage itself
+    return pathname === href && activeLink === href;
   };
 
   return (

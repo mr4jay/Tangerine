@@ -5,12 +5,10 @@ import { Button } from '@/components/ui/button';
 
 const navLinks = [
   { name: 'Home', href: '/' },
-  { name: 'About', href: '/#about' },
+  { name: 'About', href: '/about' },
   { name: 'Projects', href: '/#projects' },
   { name: 'Blog', href: '/blog' },
   { name: 'Resume', href: '/resume' },
-  { name: 'Certifications', href: '/#certifications' },
-  { name: 'Testimonials', href: '/#testimonials' },
   { name: 'Contact', href: '/#contact' },
 ];
 
