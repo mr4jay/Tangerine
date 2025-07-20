@@ -1,0 +1,81 @@
+
+.blog-content {
+    color: hsl(var(--foreground) / 0.9);
+}
+
+/* Use the headline font for consistency and impact */
+.blog-content h1, .blog-content h2, .blog-content h3, .blog-content h4 {
+    font-family: var(--font-headline), sans-serif;
+    color: hsl(var(--foreground));
+    font-weight: 700;
+}
+
+/* Make h3 headings stand out with the primary color and a border */
+.blog-content h3 {
+    font-size: 1.75rem; /* 28px */
+    color: hsl(var(--primary));
+    padding-bottom: 0.5rem;
+    margin-top: 2.5rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid hsl(var(--border) / 0.7);
+}
+
+.blog-content p {
+    line-height: 1.8;
+    margin-bottom: 1.25rem;
+    font-size: 1.125rem; /* 18px */
+}
+
+/* Style lists to feel more integrated into the tech theme */
+.blog-content ul {
+    list-style-type: none;
+    padding-left: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.blog-content ul > li {
+    position: relative;
+    padding-left: 2rem;
+    margin-bottom: 0.75rem;
+    line-height: 1.7;
+    font-size: 1.125rem; /* 18px */
+}
+
+/* Custom list bullet with the primary color */
+.blog-content ul > li::before {
+    content: '■';
+    position: absolute;
+    left: 0;
+    top: 2px;
+    color: hsl(var(--primary));
+    font-size: 1.25rem;
+    line-height: 1;
+}
+
+/* Make links pop with the primary color and a subtle underline effect */
+.blog-content a {
+    color: hsl(var(--primary));
+    text-decoration: none;
+    background-image: linear-gradient(hsl(var(--primary) / 0.2), hsl(var(--primary) / 0.2));
+    background-position: 0% 100%;
+    background-repeat: no-repeat;
+    background-size: 0% 2px;
+    transition: background-size 0.3s;
+}
+
+.blog-content a:hover,
+.blog-content a:focus {
+    background-size: 100% 2px;
+}
+
+/* Override default prose styles that we don't want */
+.prose :where(h3):not(:where([class~="not-prose"] *)) {
+    color: hsl(var(--primary));
+    margin-top: 2.5em;
+    margin-bottom: 1.5em;
+}
+
+.prose :where(a):not(:where([class~="not-prose"] *)) {
+    color: hsl(var(--primary));
+    text-decoration: none;
+}
