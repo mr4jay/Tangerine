@@ -8,7 +8,7 @@
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
-import { skillCategories } from '@/components/sections/skills';
+import { skillCategories } from '@/components/sections/skills-chart';
 
 // This context should be updated with the specific details from the portfolio
 const portfolioContext = `
