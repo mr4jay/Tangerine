@@ -129,7 +129,7 @@ export async function getPostData(slug: string): Promise<PostData> {
 
   const matterResult = matter(fileContents);
   
-  const contentReact = (await processor.process(matterResult.content)).result;
+  const contentReact = (await processor.process(matterResult.content)).result as React.ReactElement;
 
   const readTime = calculateReadTime(matterResult.content);
 
