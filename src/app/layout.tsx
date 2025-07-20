@@ -3,16 +3,17 @@ import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from '@/components/theme-provider';
-import { Inter } from 'next/font/google';
+import { Share_Tech_Mono } from 'next/font/google';
 import Analytics from '@/components/analytics';
 import CookieConsent from '@/components/layout/cookie-consent';
 import { AppLayout } from '@/components/layout/app-layout';
 
 
-const inter = Inter({
+const techMono = Share_Tech_Mono({
   subsets: ['latin'],
   display: 'swap',
-  variable: '--font-inter',
+  variable: '--font-tech-mono',
+  weight: "400"
 });
 
 const portfolioUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
@@ -62,7 +63,7 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   themeColor: [
     { media: '(prefers-color-scheme: light)', color: '#F7FAFC' },
-    { media: '(prefers-color-scheme: dark)', color: '#1A202C' },
+    { media: '(prefers-color-scheme: dark)', color: '#0C0D12' },
   ],
 }
 
@@ -102,7 +103,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning className={inter.variable}>
+    <html lang="en" suppressHydrationWarning className={techMono.variable}>
       <head>
         <script
           type="application/ld+json"
