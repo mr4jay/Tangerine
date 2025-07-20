@@ -30,8 +30,8 @@ export default function Hero() {
 
   const y = useTransform(scrollYProgress, [0, 1], ["0%", "10%"]);
 
-  const titleText = "Marketing Science & Data Professional";
-  const subtitleText = "Streamlining DataOps Workflows";
+  const titleText = "Data Professional";
+  const subtitleText = "with advanced analytics and reporting";
 
   const typedTitle = useTypingEffect(titleText, 50);
   const typedSubtitle = useTypingEffect(subtitleText, 50, (titleText.length * 50) + 500);
@@ -71,7 +71,7 @@ export default function Hero() {
               <span className="animate-pulse opacity-0 data-[active=true]:opacity-100" data-active={typedSubtitle.length > 0}>|</span>
             </h2>
             <motion.p variants={fadeIn(0.4)} className="max-w-3xl mx-auto text-lg md:text-xl text-muted-foreground mb-8">
-              6+ years of experience driving value with Datorama, Dataiku, and advanced marketing analytics.
+              6+ years of experience driving value with data-driven insights and building powerful reporting solutions.
             </motion.p>
             <motion.div variants={fadeIn(0.5)}>
               <Button asChild size="lg" className="group bg-primary hover:bg-primary/90 text-primary-foreground transition-all duration-300 ease-in-out">
