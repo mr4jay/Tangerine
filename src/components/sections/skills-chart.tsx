@@ -14,6 +14,7 @@ import {
   ChartContainer,
   ChartTooltipContent,
 } from "@/components/ui/chart"
+import { motion } from "framer-motion"
 
 export const skillCategories = [
   {
@@ -105,7 +106,7 @@ export function SkillsChart() {
                   indicator="dot" 
               />}
             />
-            <Bar dataKey="level" fill="var(--color-level)" radius={4} />
+            <Bar dataKey="level" fill="var(--color-level)" radius={4} isAnimationActive={true} animationDuration={800} />
           </BarChart>
         </ChartContainer>
       </CardContent>

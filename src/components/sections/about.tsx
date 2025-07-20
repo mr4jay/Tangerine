@@ -2,7 +2,7 @@
 "use client";
 
 import { Button } from '@/components/ui/button';
-import { Download, Briefcase } from 'lucide-react';
+import { Download, Briefcase, MessageSquare } from 'lucide-react';
 import Link from 'next/link';
 import { trackEvent } from '@/components/analytics';
 import { motion } from 'framer-motion';
@@ -95,11 +95,20 @@ export default function About() {
               Skilled at optimizing data pipelines, enhancing campaign performance, and enabling data-driven decisions across cross-functional marketing teams. Known for bridging the gap between data engineering and strategic marketing execution.
             </p>
           </motion.div>
-          <motion.div variants={fadeIn('right', 'tween', 0.3, 0.6)} className="space-y-4">
-              <h3 className="text-2xl font-bold font-headline text-primary">Career Timeline</h3>
+          <motion.div 
+            variants={staggerContainer(0.1, 0.2)}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.5 }}
+          >
+              <motion.h3 variants={fadeIn('right', 'tween', 0.1, 0.6)} className="text-2xl font-bold font-headline text-primary mb-4">Career Timeline</motion.h3>
               <div className="space-y-6">
-                  {careerTimeline.map((item) => (
-                      <div key={item.company} className="flex items-start gap-4 group">
+                  {careerTimeline.map((item, index) => (
+                      <motion.div 
+                        key={item.company} 
+                        variants={fadeIn('up', 'tween', index * 0.1, 0.5)}
+                        className="flex items-start gap-4 group"
+                      >
                            <div className="flex-shrink-0 mt-1">
                              <Briefcase className="h-6 w-6 text-primary transition-transform duration-300 group-hover:scale-110" />
                            </div>
@@ -108,17 +117,23 @@ export default function About() {
                                <p className="text-muted-foreground">{item.company}</p>
                                <p className="text-sm text-muted-foreground/80">{item.period}</p>
                            </div>
-                      </div>
+                      </motion.div>
                   ))}
               </div>
           </motion.div>
-           <motion.div variants={fadeIn('right', 'tween', 0.4, 0.6)}>
+           <motion.div variants={fadeIn('right', 'tween', 0.4, 0.6)} className="flex flex-col sm:flex-row gap-4">
             <Button asChild size="lg" className="group" onClick={handleResumeDownload}>
                 <Link href="/resume" aria-label="View my interactive resume">
                   View Online Resume
                   <Download className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
                 </Link>
-              </Button>
+            </Button>
+            <Button asChild size="lg" variant="outline" className="group">
+                <Link href="/#contact" aria-label="Contact me">
+                  <MessageSquare className="mr-2 h-5 w-5 transition-transform group-hover:scale-110" />
+                  Hire Me
+                </Link>
+            </Button>
            </motion.div>
         </div>
          <motion.div variants={fadeIn('left', 'tween', 0.2, 0.6)} className="flex items-center justify-center p-4">

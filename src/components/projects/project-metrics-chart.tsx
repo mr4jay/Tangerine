@@ -46,7 +46,7 @@ export function ProjectMetricsChart({ metrics }: { metrics: ProjectMetric[] }) {
   }));
 
   return (
-    <motion.div variants={fadeIn} initial="hidden" animate="visible">
+    <motion.div variants={fadeIn} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.5 }}>
       <Card className="bg-card border-border/60" role="figure" aria-label="Project Metrics Chart">
         <CardHeader>
           <CardTitle>Key Metrics</CardTitle>
@@ -83,7 +83,7 @@ export function ProjectMetricsChart({ metrics }: { metrics: ProjectMetric[] }) {
                     />
                   }
                 />
-                <Bar dataKey="value" fill="var(--color-value)" radius={4}>
+                <Bar dataKey="value" fill="var(--color-value)" radius={4} isAnimationActive={true} animationDuration={800}>
                     <LabelList
                         dataKey="value"
                         position="right"
