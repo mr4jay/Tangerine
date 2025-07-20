@@ -126,16 +126,17 @@ export function PortfolioSidebar() {
           <SidebarMenu>
             {navLinks.map((link) => (
               <SidebarMenuItem key={link.href}>
-                 <Link href={link.href} passHref legacyBehavior>
-                    <SidebarMenuButton 
-                      onClick={() => setOpenMobile(false)}
-                      isActive={getIsActive(link.href)}
-                      tooltip={link.name}
-                    >
-                      <link.icon />
-                      <span>{link.name}</span>
-                    </SidebarMenuButton>
-                 </Link>
+                 <SidebarMenuButton 
+                  asChild
+                  onClick={() => setOpenMobile(false)}
+                  isActive={getIsActive(link.href)}
+                  tooltip={link.name}
+                >
+                  <Link href={link.href}>
+                    <link.icon />
+                    <span>{link.name}</span>
+                  </Link>
+                </SidebarMenuButton>
               </SidebarMenuItem>
             ))}
           </SidebarMenu>
