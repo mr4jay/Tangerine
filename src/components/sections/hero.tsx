@@ -34,7 +34,7 @@ export default function Hero() {
   const subtitleText = "Streamlining DataOps Workflows";
 
   const typedTitle = useTypingEffect(titleText, 50);
-  const typedSubtitle = useTypingEffect(subtitleText, 50, (titleText.length * 50) + 500); // Start after the title finishes
+  const typedSubtitle = useTypingEffect(subtitleText, 50, (titleText.length * 50) + 500);
 
   return (
     <section ref={targetRef} id="home" className="relative w-full min-h-screen flex flex-col items-center justify-center overflow-hidden py-24 sm:py-16">
