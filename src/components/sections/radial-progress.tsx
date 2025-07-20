@@ -1,4 +1,3 @@
-
 "use client";
 
 import { motion } from 'framer-motion';
@@ -47,8 +46,9 @@ export function RadialProgress({ percentage, label, tooltipContent }: RadialProg
                 strokeDashoffset={offset}
                 transform={`rotate(-90 ${size / 2} ${size / 2})`}
                 initial={{ strokeDashoffset: circumference }}
-                animate={{ strokeDashoffset: offset }}
-                transition={{ duration: 0.8, ease: "easeOut" }}
+                whileInView={{ strokeDashoffset: offset }}
+                viewport={{ once: true, amount: 0.8 }}
+                transition={{ duration: 1.5, ease: "easeOut" }}
               />
               {/* Text */}
               <text

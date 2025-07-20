@@ -44,21 +44,26 @@ const SkillsChart = dynamic(() => import('./skills-chart').then(mod => mod.Skill
 
 
 const careerTimeline = [
+    {
+    company: 'Omnicom Media Group',
+    role: 'Senior Analyst',
+    period: 'Sep 2023 - Feb 2025',
+  },
   {
     company: 'Novartis',
-    role: 'Senior Data Engineer',
+    role: 'Data Scientist',
     period: 'May 2021 - May 2022',
   },
   {
-    company: 'Spoors',
-    role: 'Data Engineer',
-    period: '2019 - 2021',
+    company: 'Spoors Technologies',
+    role: 'Data Analyst',
+    period: 'Sep 2018 - Mar 2021',
   },
 ];
 
 export default function About() {
   const handleResumeDownload = () => {
-    trackEvent('click', 'About', 'Download Resume');
+    trackEvent('download_resume', { category: 'About', label: 'Resume' });
   };
 
   return (
@@ -74,10 +79,10 @@ export default function About() {
           <motion.div variants={fadeIn('right', 'tween', 0.2, 0.6)} className="space-y-3">
             <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl font-headline text-foreground">About Me</h2>
             <p className="text-muted-foreground md:text-lg/relaxed">
-              I am a results-driven Senior Data Engineer with over 6 years of experience in designing, developing, and deploying scalable data solutions. My work has generated over $5M in cost savings and revenue growth for leading companies.
+              I am a results-driven marketing science and data professional with over 6 years of experience, specializing in workflow creation for DataOps. I am proficient in Datorama and advanced Excel VBA macros to build automated reporting systems and streamline marketing data operations.
             </p>
             <p className="text-muted-foreground md:text-lg/relaxed">
-              My expertise spans the full data lifecycle, from ingestion and processing to warehousing and analytics, leveraging cutting-edge technologies like AWS, Snowflake, and Dataiku DSS. I am passionate about transforming complex datasets into actionable insights and building robust data infrastructures that empower data-driven decision-making. I thrive in collaborative environments and am always eager to tackle new challenges in the world of data and AI.
+              My expertise spans the full data lifecycle, from optimizing data pipelines to enhancing campaign performance and enabling data-driven decisions across cross-functional marketing teams. I am passionate about bridging the gap between data engineering and strategic marketing execution, and I thrive in collaborative environments, always eager to tackle new challenges in the world of data and AI.
             </p>
           </motion.div>
           <motion.div variants={fadeIn('right', 'tween', 0.3, 0.6)} className="space-y-4">
@@ -99,7 +104,7 @@ export default function About() {
           </motion.div>
            <motion.div variants={fadeIn('right', 'tween', 0.4, 0.6)}>
             <Button asChild size="lg" className="group" onClick={handleResumeDownload}>
-                <a href="/resume.pdf" target="_blank" aria-label="Download my resume" rel="noopener noreferrer">
+                <a href="/resume.pdf" download="Rajure_Ajay_Kumar_Resume.pdf" aria-label="Download my resume">
                   Download Resume
                   <Download className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
                 </a>
