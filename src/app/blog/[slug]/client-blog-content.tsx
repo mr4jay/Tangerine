@@ -43,7 +43,7 @@ export default function ClientBlogContent({ post, allPosts }: { post: PostData; 
     },
     'publisher': {
       '@type': 'Organization',
-      'name': 'DataCraft Portfolio',
+      'name': 'Turning Data into Insight',
       'logo': {
         '@type': 'ImageObject',
         'url': professionalHeadshotUrl,

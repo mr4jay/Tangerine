@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     title: 'Rajure Ajay Kumar | Marketing Science and Data Professional Portfolio',
     description: 'Explore the portfolio of Rajure Ajay Kumar, a professional with expertise in building scalable data solutions using Datorama, and AI.',
     url: portfolioUrl,
-    siteName: 'DataCraft Portfolio',
+    siteName: 'Turning Data into Insight',
     images: [
       {
         url: professionalHeadshotUrl,

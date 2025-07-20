@@ -85,7 +85,7 @@ export function PortfolioSidebar() {
           <SidebarHeader>
               <Link href="/" className="flex items-center gap-2" onClick={() => setOpenMobile(false)}>
                   <Code className="h-6 w-6 text-primary" />
-                  <span className="text-lg font-bold">DataCraft</span>
+                  <span className="text-sm font-bold">Turning Data into Insight</span>
               </Link>
           </SidebarHeader>
           <SidebarMenu>

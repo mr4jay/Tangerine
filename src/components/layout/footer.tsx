@@ -20,7 +20,7 @@ export default function Footer() {
           <div className="flex flex-col items-center lg:items-start gap-4">
             <Link href="/" className="flex items-center gap-2">
               <Code className="h-6 w-6 text-primary" />
-              <span className="text-lg font-bold">DataCraft Portfolio</span>
+              <span className="text-lg font-bold">Turning Data into Insight</span>
             </Link>
              <p className="text-sm text-muted-foreground max-w-xs text-center lg:text-left">
                 A showcase of my journey in data engineering, from complex pipelines to AI-driven insights.

@@ -33,7 +33,7 @@ export default function Header() {
            </div>
           <Link href="/" className="flex items-center gap-2">
             <Code className="h-6 w-6 text-primary" />
-            <span className="text-lg font-bold">DataCraft Portfolio</span>
+            <span className="text-lg font-bold">Turning Data into Insight</span>
           </Link>
         </div>
 
