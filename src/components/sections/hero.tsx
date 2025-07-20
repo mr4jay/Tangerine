@@ -47,7 +47,7 @@ export default function Hero() {
         >
             <motion.div variants={fadeIn(0)} className="relative mb-6">
                 <Image
-                    src="https://placehold.co/150x150.png"
+                    src="https://images.unsplash.com/photo-1564564321837-a57b7070ac4f?q=80&w=150&h=150&fit=crop&crop=faces"
                     alt="Rajure Ajay Kumar Headshot"
                     width={150}
                     height={150}

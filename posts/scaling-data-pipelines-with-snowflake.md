@@ -1,7 +1,7 @@
 ---
 title: 'Scaling Data Pipelines with Snowflake: A Deep Dive'
 excerpt: 'Unlock the secrets to building and scaling high-throughput data pipelines with Snowflake. This deep dive covers its unique architecture, from multi-cluster warehouses to zero-copy cloning, and provides practical steps for creating a robust, cost-effective data platform that drives faster, data-driven decisions for your organization.'
-imageUrl: 'https://placehold.co/1200x600.png'
+imageUrl: 'https://images.unsplash.com/photo-1629904853716-f0bc54eea481?q=80&w=1200&h=600&fit=crop'
 aiHint: 'data pipeline architecture'
 publishDate: '2023-10-26'
 tags:
