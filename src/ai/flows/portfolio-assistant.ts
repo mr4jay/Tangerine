@@ -107,16 +107,26 @@ const MessageSchema = z.object({
     content: z.string(),
 });
 
+// This schema is used for the flow's public input
 const AskAssistantInputSchema = z.object({
   question: z.string().describe('The current question to ask the AI assistant.'),
   history: z.array(MessageSchema).optional().describe('The history of the conversation so far.'),
 });
-type AskAssistantInput = z.infer<typeof AskAssistantInputSchema>;
+export type AskAssistantInput = z.infer<typeof AskAssistantInputSchema>;
+
+// This schema is what the prompt will actually receive, with boolean flags
+const PromptInputSchema = AskAssistantInputSchema.extend({
+    history: z.array(MessageSchema.extend({
+        isUser: z.boolean().optional(),
+        isAssistant: z.boolean().optional(),
+    })).optional(),
+});
+
 
 const AskAssistantOutputSchema = z.object({
   answer: z.string().describe("The AI assistant's answer."),
 });
-type AskAssistantOutput = z.infer<typeof AskAssistantOutputSchema>;
+export type AskAssistantOutput = z.infer<typeof AskAssistantOutputSchema>;
 
 export async function askAssistant(input: AskAssistantInput): Promise<AskAssistantOutput> {
   return portfolioAssistantFlow(input);
@@ -124,7 +134,7 @@ export async function askAssistant(input: AskAssistantInput): Promise<AskAssista
 
 const prompt = ai.definePrompt({
   name: 'portfolioAssistantPrompt',
-  input: {schema: AskAssistantInputSchema},
+  input: {schema: PromptInputSchema},
   output: {schema: AskAssistantOutputSchema},
   tools: [calculateSuitabilityScore],
   prompt: `You are an AI assistant for Rajure Ajay Kumar's personal portfolio. Your goal is to answer questions from potential employers or collaborators based on the information provided in this portfolio.
@@ -145,10 +155,10 @@ ${portfolioContext}
 {{#if history}}
 CONVERSATION HISTORY:
 {{#each history}}
-{{#if (eq role "user")}}
+{{#if isUser}}
 User: {{{content}}}
 {{/if}}
-{{#if (eq role "assistant")}}
+{{#if isAssistant}}
 Assistant: {{{content}}}
 {{/if}}
 {{/each}}
@@ -166,7 +176,19 @@ const portfolioAssistantFlow = ai.defineFlow(
     outputSchema: AskAssistantOutputSchema,
   },
   async (input) => {
-    const {output} = await prompt(input);
+    // Add boolean flags for Handlebars compatibility
+    const historyWithFlags = input.history?.map(message => ({
+        ...message,
+        isUser: message.role === 'user',
+        isAssistant: message.role === 'assistant',
+    }));
+
+    const promptInput = {
+        ...input,
+        history: historyWithFlags,
+    };
+
+    const {output} = await prompt(promptInput);
     if (!output) {
       return { answer: "I'm sorry, I couldn't generate a response. Please try again." };
     }
