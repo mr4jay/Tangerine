@@ -3,7 +3,7 @@
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { Github, Linkedin, Mail, Bot, User, Send, Loader2, Briefcase } from 'lucide-react';
+import { Github, Linkedin, Mail, Bot, User, Send, Loader2, Briefcase, Pencil, AtSign } from 'lucide-react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { useState, useRef, useEffect, useCallback } from 'react';
@@ -88,15 +88,18 @@ const HireMeForm = ({ onOpenChange }: { onOpenChange: (open: boolean) => void })
 
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                  <FormField
                     control={form.control}
                     name="name"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel htmlFor="name-input">Name</FormLabel>
+                            <FormLabel>Name</FormLabel>
                             <FormControl>
-                                <Input id="name-input" placeholder="Your Name" {...field} />
+                                <div className="relative">
+                                    <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                                    <Input placeholder="Your Name" {...field} className="pl-10" />
+                                </div>
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -107,9 +110,12 @@ const HireMeForm = ({ onOpenChange }: { onOpenChange: (open: boolean) => void })
                     name="email"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel htmlFor="email-input">Email</FormLabel>
+                            <FormLabel>Email</FormLabel>
                             <FormControl>
-                                <Input id="email-input" placeholder="your.email@example.com" {...field} />
+                                <div className="relative">
+                                    <AtSign className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                                    <Input placeholder="your.email@example.com" {...field} className="pl-10" />
+                                </div>
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -120,15 +126,18 @@ const HireMeForm = ({ onOpenChange }: { onOpenChange: (open: boolean) => void })
                     name="message"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel htmlFor="message-input">Message</FormLabel>
+                            <FormLabel>Message</FormLabel>
                             <FormControl>
-                                <Textarea id="message-input" placeholder="Tell me about your project or opportunity..." className="resize-none" rows={5} {...field} />
+                                 <div className="relative">
+                                    <Pencil className="absolute left-3 top-3.5 h-4 w-4 text-muted-foreground" />
+                                    <Textarea placeholder="Tell me about your project or opportunity..." className="resize-none pl-10" rows={5} {...field} />
+                                </div>
                             </FormControl>
                             <FormMessage />
                         </FormItem>
                     )}
                 />
-                 <DialogFooter>
+                 <DialogFooter className="pt-4">
                     <DialogClose asChild>
                         <Button type="button" variant="outline">Cancel</Button>
                     </DialogClose>
@@ -270,7 +279,10 @@ const AIChatAssistant = () => {
         <Dialog open={isHireModalOpen} onOpenChange={setIsHireModalOpen}>
             <DialogContent className="sm:max-w-[480px] bg-card border-border/60">
                 <DialogHeader>
-                    <DialogTitle className="text-2xl font-headline">Contact Me</DialogTitle>
+                    <DialogTitle className="text-2xl font-headline flex items-center gap-2">
+                        <Briefcase className="h-6 w-6 text-primary"/>
+                        Contact Me
+                    </DialogTitle>
                     <DialogDescription>
                         Interested in working together? Fill out the form below and I'll get back to you as soon as possible.
                     </DialogDescription>
