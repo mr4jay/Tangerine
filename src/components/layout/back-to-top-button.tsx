@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from 'react';
@@ -46,7 +47,7 @@ export default function BackToTopButton() {
             onClick={scrollToTop}
             size="icon"
             className="rounded-full h-12 w-12 shadow-lg transition-transform hover:scale-110"
-            aria-label="Back to Top"
+            aria-label="Scroll to top"
           >
             <ArrowUp className="h-6 w-6" />
           </Button>

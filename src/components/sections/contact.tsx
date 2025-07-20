@@ -1,3 +1,4 @@
+
 "use client";
 
 import { Button } from '@/components/ui/button';
@@ -111,9 +112,9 @@ const HireMeModal = () => {
                             name="name"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Name</FormLabel>
+                                    <FormLabel htmlFor="name-input">Name</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="Your Name" {...field} />
+                                        <Input id="name-input" placeholder="Your Name" {...field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -124,9 +125,9 @@ const HireMeModal = () => {
                             name="email"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Email</FormLabel>
+                                    <FormLabel htmlFor="email-input">Email</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="your.email@example.com" {...field} />
+                                        <Input id="email-input" placeholder="your.email@example.com" {...field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -137,9 +138,9 @@ const HireMeModal = () => {
                             name="message"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Message</FormLabel>
+                                    <FormLabel htmlFor="message-input">Message</FormLabel>
                                     <FormControl>
-                                        <Textarea placeholder="Tell me about your project or opportunity..." className="resize-none" rows={5} {...field} />
+                                        <Textarea id="message-input" placeholder="Tell me about your project or opportunity..." className="resize-none" rows={5} {...field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -306,8 +307,9 @@ const AIChatAssistant = () => {
                         placeholder="e.g., What is his experience with Snowflake?"
                         className="bg-background border-border/60 flex-grow"
                         disabled={isLoading}
+                        aria-label="Ask the AI assistant a question"
                     />
-                    <Button type="submit" size="icon" disabled={isLoading || !input.trim()}>
+                    <Button type="submit" size="icon" disabled={isLoading || !input.trim()} aria-label="Send question">
                         <Send className="h-5 w-5"/>
                     </Button>
                 </form>
@@ -351,7 +353,7 @@ export default function Contact() {
              >
                 {socialLinks.map((link) => (
                     <Card key={link.name} className="bg-card border-none shadow-lg p-4 transition-transform hover:scale-105">
-                        <Link href={link.href} target="_blank" rel="noopener noreferrer" className="flex items-center gap-4">
+                        <Link href={link.href} target="_blank" rel="noopener noreferrer" className="flex items-center gap-4" aria-label={`Connect via ${link.name}`}>
                             <link.icon className="h-8 w-8 text-primary" />
                             <div>
                                 <h3 className="text-lg font-semibold">{link.name}</h3>

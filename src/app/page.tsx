@@ -20,7 +20,7 @@ export default async function Home() {
   return (
     <HomeClient>
         <Header />
-        <main className="flex-1">
+        <main className="flex-1" role="main">
         <Hero />
         <div id="about"><About /></div>
         <div id="projects"><Projects /></div>

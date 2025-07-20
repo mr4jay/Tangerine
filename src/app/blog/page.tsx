@@ -54,7 +54,7 @@ export default function BlogListPage() {
   return (
     <>
       <Header />
-      <main className="w-full py-12 md:py-24 lg:py-32 bg-background">
+      <main className="w-full py-12 md:py-24 lg:py-32 bg-background" role="main">
         <div className="container mx-auto px-4 md:px-6 max-w-7xl">
           <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12">
             <h1 className="text-4xl font-bold tracking-tighter sm:text-6xl font-headline">Data Engineering & AI Blog</h1>

@@ -43,19 +43,19 @@ export default function Footer() {
           <div className="flex flex-col items-center lg:items-end gap-4">
              <h3 className="font-semibold text-foreground tracking-wider uppercase">Connect</h3>
              <div className="flex items-center gap-2">
-                <Button asChild variant="ghost" size="icon" className="text-primary hover:text-primary/90 hover:bg-primary/10">
-                    <Link href="mailto:rajure.ajay.kumar@email.com" aria-label="Email">
-                        <Mail className="h-6 w-6" />
+                <Button asChild variant="ghost" size="icon" aria-label="Email">
+                    <Link href="mailto:rajure.ajay.kumar@email.com">
+                        <Mail className="h-6 w-6 text-primary" />
                     </Link>
                 </Button>
-                <Button asChild variant="ghost" size="icon" className="text-primary hover:text-primary/90 hover:bg-primary/10">
-                    <Link href="https://linkedin.com/in/rajure-ajay-kumar" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
-                        <Linkedin className="h-6 w-6" />
+                <Button asChild variant="ghost" size="icon" aria-label="LinkedIn Profile">
+                    <Link href="https://linkedin.com/in/rajure-ajay-kumar" target="_blank" rel="noopener noreferrer">
+                        <Linkedin className="h-6 w-6 text-primary" />
                     </Link>
                 </Button>
-                 <Button asChild variant="ghost" size="icon" className="text-primary hover:text-primary/90 hover:bg-primary/10">
-                    <Link href="https://github.com/rajure-ajay" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
-                        <Github className="h-6 w-6" />
+                 <Button asChild variant="ghost" size="icon" aria-label="GitHub Profile">
+                    <Link href="https://github.com/rajure-ajay" target="_blank" rel="noopener noreferrer">
+                        <Github className="h-6 w-6 text-primary" />
                     </Link>
                 </Button>
             </div>

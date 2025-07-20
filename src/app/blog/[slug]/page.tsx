@@ -118,6 +118,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
         className="w-full py-12 md:py-24 lg:py-32 bg-background"
+        role="main"
       >
         <div className="container mx-auto px-4 md:px-6 max-w-7xl">
             <div className="mb-8">
