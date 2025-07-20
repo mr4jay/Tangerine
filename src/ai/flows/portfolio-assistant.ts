@@ -16,7 +16,7 @@ import path from 'path';
 // The AI will use the getResume tool for specific details.
 const portfolioContext = `
 About Me:
-I am a results-driven marketing science and data professional with over 6 years of experience, specializing in workflow creation for DataOps. I am proficient in Datorama and advanced Excel VBA macros to build automated reporting systems and streamline marketing data operations. My expertise spans the full data lifecycle, from optimizing data pipelines to enhancing campaign performance, and enabling data-driven decisions across cross-functional marketing teams. I am passionate about bridging the gap between data engineering and strategic marketing execution.
+Marketing science and Data professional with 6 years of experience, specializing in workflow creation for DataOps. Proficient in Datorama and advanced Excel VBA macros to build automated reporting systems and streamline marketing data operations. Skilled at optimizing data pipelines, enhancing campaign performance, and enabling data-driven decisions across cross-functional marketing teams. Known for bridging the gap between data engineering and strategic marketing execution.
 `;
 
 const getResume = ai.defineTool(
