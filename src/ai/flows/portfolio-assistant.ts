@@ -1,3 +1,4 @@
+
 'use server';
 /**
  * @fileOverview An AI assistant that can answer questions about Rajure Ajay Kumar's portfolio.
@@ -15,7 +16,7 @@ About Me:
 I am a results-driven Senior Data Engineer with over 6 years of experience in designing, developing, and deploying scalable data solutions. My work has generated over $5M in cost savings and revenue growth for leading companies. My expertise spans the full data lifecycle, from ingestion and processing to warehousing and analytics, leveraging cutting-edge technologies like AWS, Snowflake, and Dataiku DSS. I am passionate about transforming complex datasets into actionable insights and building robust data infrastructures that empower data-driven decision-making.
 
 Career Timeline:
-- Senior Data Engineer at Novartis (2021 - Present)
+- Senior Data Engineer at Novartis (May 2021 - May 2022)
 - Data Engineer at Spoors (2019 - 2021)
 
 Featured Projects:

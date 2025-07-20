@@ -47,7 +47,7 @@ const careerTimeline = [
   {
     company: 'Novartis',
     role: 'Senior Data Engineer',
-    period: '2021 - Present',
+    period: 'May 2021 - May 2022',
   },
   {
     company: 'Spoors',
