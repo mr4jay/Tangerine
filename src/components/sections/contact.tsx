@@ -275,7 +275,7 @@ const AIChatAssistant = () => {
                     </Avatar>
                     <div>
                         <h3 className="font-semibold text-lg">AI Assistant</h3>
-                        <p className="text-sm text-muted-foreground">Ask me about Rajure's skills and experience.</p>
+                        <p className="text-sm text-muted-foreground">Ask me about skills, experience, or check suitability for a role.</p>
                     </div>
                 </div>
                 <ScrollArea className="flex-grow pr-4 -mr-4 mb-4" ref={scrollAreaRef}>
