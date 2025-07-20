@@ -13,6 +13,7 @@ import Footer from '@/components/layout/footer';
 import { PostData } from '@/lib/posts';
 import { format } from 'date-fns';
 import { Badge } from '@/components/ui/badge';
+import KeyTakeaways from '@/components/blog/key-takeaways';
 
 const RelatedPosts = ({ currentSlug, allPosts }: { currentSlug: string; allPosts: PostData[] }) => {
   const related = allPosts.filter(p => p.slug !== currentSlug).slice(0, 2);
@@ -129,6 +130,9 @@ export default function ClientBlogContent({ post, allPosts }: { post: PostData; 
                 <div className="prose prose-lg dark:prose-invert max-w-none text-foreground/90 space-y-4">
                   {post.contentReact}
                 </div>
+
+                {post.content && <KeyTakeaways content={post.content} />}
+
                 <div className="mt-12 pt-8 border-t border-border/40">
                   <h3 className="text-xl font-bold mb-4">Share this post</h3>
                   <div className="flex items-center gap-4">

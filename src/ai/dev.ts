@@ -5,3 +5,4 @@ import './flows/tts-flow';
 import './flows/summarize-post-flow';
 import './flows/extract-tags-flow';
 import './flows/generate-post-flow';
+import './flows/key-takeaways-flow';

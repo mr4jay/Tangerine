@@ -24,6 +24,7 @@ export type PostData = {
   publishDate: string;
   tags: string[];
   readTime: number; // in minutes
+  content?: string; // The raw markdown content
   contentReact?: React.ReactElement;
 };
 
@@ -145,6 +146,7 @@ export async function getPostData(slug: string): Promise<PostData | null> {
   }
 
   const contentReact = (await processor.process(matterResult.content)).result;
+  const content = matterResult.content;
 
   const readTime = calculateReadTime(matterResult.content);
 
@@ -157,6 +159,7 @@ export async function getPostData(slug: string): Promise<PostData | null> {
 
   return {
     slug,
+    content,
     contentReact,
     excerpt: summary,
     tags,
