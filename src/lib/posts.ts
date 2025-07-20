@@ -196,17 +196,17 @@ export async function createPost(title: string, tags: string[]): Promise<{ slug:
   // 2. Generate summary from content
   const { summary } = await summarizePost({ content });
 
-  // 3. Generate image from title
-  const { imageUrl } = await generateImage({ topic: title });
-
-  // 4. Generate better tags from content
+  // 3. Generate better tags from content
   const { tags: finalTags } = await extractTags({ content });
+
+  // 4. Generate image from title and refined tags
+  const { imageUrl } = await generateImage({ topic: title, tags: finalTags });
 
   const frontmatter = `---
 title: '${title.replace(/'/g, "''")}'
 excerpt: '${summary.replace(/'/g, "''")}'
 imageUrl: '${imageUrl}'
-aiHint: '${title.split(' ').slice(0, 2).join(' ').toLowerCase()}'
+aiHint: '${finalTags.slice(0, 2).join(' ').toLowerCase()}'
 publishDate: '${format(new Date(), 'yyyy-MM-dd')}'
 tags:
 ${finalTags.map(tag => `  - '${tag.replace(/'/g, "''")}'`).join('\n')}

@@ -1,3 +1,4 @@
+
 'use server';
 /**
  * @fileOverview An AI flow to generate an image from a text prompt.
@@ -10,6 +11,7 @@ import { z } from 'zod';
 
 const GenerateImageInputSchema = z.object({
   topic: z.string().describe('The topic or prompt for the image to be generated.'),
+  tags: z.array(z.string()).optional().describe('Optional tags to provide more context for the image generation.'),
 });
 export type GenerateImageInput = z.infer<typeof GenerateImageInputSchema>;
 
@@ -24,11 +26,17 @@ const generateImageFlow = ai.defineFlow(
     inputSchema: GenerateImageInputSchema,
     outputSchema: GenerateImageOutputSchema,
   },
-  async ({ topic }) => {
+  async ({ topic, tags }) => {
+    const prompt = `Create a professional, high-quality blog header image for a technical article. The image should be abstract and visually appealing, suitable for a data engineering blog. Avoid including any text in the image.
+    
+    The main topic is: "${topic}".
+    
+    Use the following keywords for additional context: ${tags?.join(', ')}`;
+
     const { media } = await ai.generate({
       // IMPORTANT: This specific model is required for image generation.
       model: 'googleai/gemini-2.0-flash-preview-image-generation',
-      prompt: `Create a professional, high-quality blog header image for a technical article on the topic of: "${topic}". The image should be abstract and visually appealing, suitable for a data engineering blog. Avoid text.`,
+      prompt,
       config: {
         // IMPORTANT: Must provide both TEXT and IMAGE modalities.
         responseModalities: ['TEXT', 'IMAGE'],
