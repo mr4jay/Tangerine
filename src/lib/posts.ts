@@ -64,6 +64,23 @@ export async function getSortedPostsData(): Promise<PostData[]> {
 
     let summary = matterResult.data.excerpt;
     let tags: string[] = matterResult.data.tags || [];
+
+    // AI-generate summary if it's missing
+    if (!summary) {
+      console.log(`Generating summary for ${slug}...`);
+      const summaryResult = await summarizePost({ content: matterResult.content });
+      summary = summaryResult.summary;
+      // Note: This won't save it back to the file, it's generated on-the-fly.
+      await delay(1000); // Add a delay to avoid hitting rate limits
+    }
+
+    // AI-generate tags if they are missing
+    if (!tags || tags.length === 0) {
+        console.log(`Generating tags for ${slug}...`);
+        const tagsResult = await extractTags({ content: matterResult.content });
+        tags = tagsResult.tags;
+        await delay(1000); // Add a delay to avoid hitting rate limits
+    }
     
     allPostsData.push({
       slug,
@@ -115,6 +132,20 @@ export async function getPostData(slug: string): Promise<PostData | null> {
 
   let summary = matterResult.data.excerpt;
   let tags: string[] = matterResult.data.tags || [];
+
+  // AI-generate summary if it's missing
+  if (!summary) {
+    console.log(`Generating summary for ${slug}...`);
+    const summaryResult = await summarizePost({ content: matterResult.content });
+    summary = summaryResult.summary;
+  }
+
+  // AI-generate tags if they are missing
+  if (!tags || tags.length === 0) {
+    console.log(`Generating tags for ${slug}...`);
+    const tagsResult = await extractTags({ content: matterResult.content });
+    tags = tagsResult.tags;
+  }
 
   return {
     slug,
