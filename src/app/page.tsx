@@ -11,14 +11,13 @@ import Contact from '@/components/sections/contact';
 import Footer from '@/components/layout/footer';
 import BackToTopButton from '@/components/layout/back-to-top-button';
 import { getSortedPostsData } from '@/lib/posts';
-import HomeClient from './home-client';
 
 
 export default async function Home() {
   const blogPosts = await getSortedPostsData();
 
   return (
-    <HomeClient>
+    <div className="flex min-h-screen flex-col bg-background">
         <Header />
         <main>
           <Hero />
@@ -31,6 +30,6 @@ export default async function Home() {
         </main>
         <Footer />
         <BackToTopButton />
-    </HomeClient>
+    </div>
   );
 }
