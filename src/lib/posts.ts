@@ -5,6 +5,7 @@ import matter from 'gray-matter';
 import { summarizePost } from '@/ai/flows/summarize-post-flow';
 import { extractTags } from '@/ai/flows/extract-tags-flow';
 import { generatePost } from '@/ai/flows/generate-post-flow';
+import { generateImage } from '@/ai/flows/generate-image-flow';
 import { unified } from 'unified';
 import remarkParse from 'remark-parse';
 import remarkRehype from 'remark-rehype';
@@ -12,6 +13,7 @@ import rehypeReact from 'rehype-react';
 import React from 'react';
 import { jsx, jsxs } from 'react/jsx-runtime';
 import { CodeBlock } from '@/components/blog/code-block';
+import { format } from 'date-fns';
 
 const postsDirectory = path.join(process.cwd(), 'posts');
 
@@ -57,6 +59,7 @@ export async function getSortedPostsData(): Promise<PostData[]> {
   const allPostsData: PostData[] = [];
 
   for (const fileName of fileNames) {
+    if (!fileName.endsWith('.md')) continue;
     const slug = fileName.replace(/\.md$/, '');
     const fullPath = path.join(postsDirectory, fileName);
     const fileContents = fs.readFileSync(fullPath, 'utf8');
@@ -171,4 +174,48 @@ export async function getPostData(slug: string): Promise<PostData | null> {
         publishDate: string; 
       }),
   };
+}
+
+// Function to create and save a new post file
+export async function createPost(title: string, tags: string[]): Promise<{ slug: string }> {
+  const slug = title
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-');
+
+  const fullPath = path.join(postsDirectory, `${slug}.md`);
+
+  if (fs.existsSync(fullPath)) {
+    throw new Error('A post with a similar title already exists.');
+  }
+
+  // 1. Generate content
+  const { content } = await generatePost({ title, tags });
+
+  // 2. Generate summary from content
+  const { summary } = await summarizePost({ content });
+
+  // 3. Generate image from title
+  const { imageUrl } = await generateImage({ topic: title });
+
+  // 4. Generate better tags from content
+  const { tags: finalTags } = await extractTags({ content });
+
+  const frontmatter = `---
+title: '${title.replace(/'/g, "''")}'
+excerpt: '${summary.replace(/'/g, "''")}'
+imageUrl: '${imageUrl}'
+aiHint: '${title.split(' ').slice(0, 2).join(' ').toLowerCase()}'
+publishDate: '${format(new Date(), 'yyyy-MM-dd')}'
+tags:
+${finalTags.map(tag => `  - '${tag.replace(/'/g, "''")}'`).join('\n')}
+---
+
+${content}
+`;
+
+  fs.writeFileSync(fullPath, frontmatter, 'utf8');
+  
+  return { slug };
 }

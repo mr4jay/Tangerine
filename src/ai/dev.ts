@@ -8,3 +8,4 @@ import './flows/generate-post-flow';
 import './flows/key-takeaways-flow';
 import './flows/find-related-posts-flow';
 import './flows/generate-project-flow';
+import './flows/generate-image-flow';

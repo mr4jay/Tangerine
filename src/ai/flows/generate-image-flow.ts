@@ -6,7 +6,7 @@
  */
 
 import { ai } from '@/ai/genkit';
-import { z } from 'genkit';
+import { z } from 'zod';
 
 const GenerateImageInputSchema = z.object({
   topic: z.string().describe('The topic or prompt for the image to be generated.'),
@@ -28,7 +28,7 @@ const generateImageFlow = ai.defineFlow(
     const { media } = await ai.generate({
       // IMPORTANT: This specific model is required for image generation.
       model: 'googleai/gemini-2.0-flash-preview-image-generation',
-      prompt: topic,
+      prompt: `Create a professional, high-quality blog header image for a technical article on the topic of: "${topic}". The image should be abstract and visually appealing, suitable for a data engineering blog. Avoid text.`,
       config: {
         // IMPORTANT: Must provide both TEXT and IMAGE modalities.
         responseModalities: ['TEXT', 'IMAGE'],
