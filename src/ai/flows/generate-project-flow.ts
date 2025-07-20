@@ -1,3 +1,4 @@
+
 'use server';
 /**
  * @fileOverview An AI flow to generate a complete project entry from a topic.
@@ -7,14 +8,14 @@
 
 import { ai } from '@/ai/genkit';
 import { z } from 'zod';
-import { ProjectSchema } from '@/lib/projects';
+import { Project, ProjectSchema } from '@/lib/projects';
 
-export const GenerateProjectInputSchema = z.object({
+const GenerateProjectInputSchema = z.object({
   topic: z.string().describe('The main topic or title of the project. This will be used to generate all project details.'),
 });
-export type GenerateProjectInput = z.infer<typeof GenerateProjectInputSchema>;
+type GenerateProjectInput = z.infer<typeof GenerateProjectInputSchema>;
 
-export type GenerateProjectOutput = z.infer<typeof ProjectSchema>;
+type GenerateProjectOutput = z.infer<typeof ProjectSchema>;
 
 const prompt = ai.definePrompt({
   name: 'generateProjectPrompt',
@@ -57,6 +58,6 @@ const generateProjectFlow = ai.defineFlow(
   }
 );
 
-export async function generateProject(input: GenerateProjectInput): Promise<GenerateProjectOutput> {
+export async function generateProject(input: { topic: string }): Promise<Project> {
   return generateProjectFlow(input);
 }
