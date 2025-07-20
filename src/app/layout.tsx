@@ -6,7 +6,7 @@ import { ThemeProvider } from '@/components/theme-provider';
 import { Inter } from 'next/font/google';
 import Analytics from '@/components/analytics';
 import CookieConsent from '@/components/layout/cookie-consent';
-import { AppLayout } from '@/components/layout/header';
+import { AppLayout } from '@/components/layout/app-layout';
 
 
 const inter = Inter({

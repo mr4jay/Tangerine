@@ -15,6 +15,7 @@ import { format } from 'date-fns';
 import { Badge } from '@/components/ui/badge';
 import KeyTakeaways from '@/components/blog/key-takeaways';
 import AIRelatedPosts from '@/components/blog/ai-related-posts';
+import ListenToPost from '@/components/blog/listen-to-this-post';
 
 export default function ClientBlogContent({ post, allPosts }: { post: PostData; allPosts: PostData[] }) {
   if (!post) {
@@ -59,7 +60,6 @@ export default function ClientBlogContent({ post, allPosts }: { post: PostData; 
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <Header />
       <motion.main
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -89,7 +89,7 @@ export default function ClientBlogContent({ post, allPosts }: { post: PostData; 
                   ))}
                 </div>
                 <h1 className="text-3xl md:text-4xl font-bold tracking-tight font-headline text-foreground mb-4">{post.title}</h1>
-                <div className="flex items-center gap-4 text-muted-foreground mb-6">
+                <div className="flex items-center gap-4 text-sm text-muted-foreground mb-6">
                   <span>{format(new Date(post.publishDate), 'MMMM dd, yyyy')}</span>
                   <span className='flex items-center gap-1'><Clock className="h-4 w-4" /> {post.readTime} min read</span>
                 </div>
@@ -105,6 +105,8 @@ export default function ClientBlogContent({ post, allPosts }: { post: PostData; 
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 75vw, 66vw"
                   />
                 </div>
+
+                {post.content && <ListenToPost content={post.content} />}
 
                 <div className="prose prose-lg dark:prose-invert max-w-none text-foreground/90 space-y-4">
                   {post.contentReact}
@@ -140,7 +142,6 @@ export default function ClientBlogContent({ post, allPosts }: { post: PostData; 
           </div>
         </div>
       </motion.main>
-      <Footer />
     </>
   );
 }
