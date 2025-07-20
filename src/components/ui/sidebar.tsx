@@ -567,8 +567,10 @@ const SidebarMenuButton = React.forwardRef<
         className={cn(sidebarMenuButtonVariants({ variant, size }), className)}
         {...props}
       >
-        {children}
-        <div className="absolute bottom-1 left-1/2 -translate-x-1/2 h-0.5 bg-sidebar-primary-foreground w-0 data-[active=true]:w-4 transition-all duration-300 ease-in-out"></div>
+        <>
+          {children}
+          <div className="absolute bottom-1 left-1/2 -translate-x-1/2 h-0.5 bg-sidebar-primary-foreground w-0 data-[active=true]:w-4 transition-all duration-300 ease-in-out"></div>
+        </>
       </Comp>
     )
 
