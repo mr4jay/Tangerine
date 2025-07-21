@@ -25,7 +25,7 @@ export async function createPostAction(title: string, tags: string[]): Promise<{
     throw new Error('A post with a similar title already exists.');
   }
 
-  // Helper function to add a delay
+  // Helper function to add a delay to avoid hitting potential rate limits on the AI service
   const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
   // 1. Generate content

@@ -51,18 +51,28 @@ export async function getSortedPostsData(): Promise<PostData[]> {
     // AI-generate summary if it's missing
     if (!summary) {
       console.log(`Generating summary for ${slug}...`);
-      const summaryResult = await summarizePost({ content: matterResult.content });
-      summary = summaryResult.summary;
-      // Note: This won't save it back to the file, it's generated on-the-fly.
-      await delay(1000); // Add a delay to avoid hitting rate limits
+      try {
+        const summaryResult = await summarizePost({ content: matterResult.content });
+        summary = summaryResult.summary;
+        // Note: This won't save it back to the file, it's generated on-the-fly.
+        await delay(1000); // Add a delay to avoid hitting rate limits
+      } catch (e) {
+        console.error(`Failed to generate summary for ${slug}:`, e);
+        summary = "Could not generate summary.";
+      }
     }
 
     // AI-generate tags if they are missing
     if (!tags || tags.length === 0) {
         console.log(`Generating tags for ${slug}...`);
-        const tagsResult = await extractTags({ content: matterResult.content });
-        tags = tagsResult.tags;
-        await delay(1000); // Add a delay to avoid hitting rate limits
+        try {
+            const tagsResult = await extractTags({ content: matterResult.content });
+            tags = tagsResult.tags;
+            await delay(1000); // Add a delay to avoid hitting rate limits
+        } catch(e) {
+            console.error(`Failed to generate tags for ${slug}:`, e);
+            tags = [];
+        }
     }
     
     allPostsData.push({
@@ -115,15 +125,25 @@ export async function getPostData(slug: string): Promise<PostData | null> {
   // AI-generate tags if they are missing
   if (!tags || tags.length === 0) {
     console.log(`Generating tags for ${slug}...`);
-    const tagsResult = await extractTags({ content: matterResult.content });
-    tags = tagsResult.tags;
+    try {
+        const tagsResult = await extractTags({ content: matterResult.content });
+        tags = tagsResult.tags;
+    } catch (e) {
+        console.error(`Failed to generate tags for ${slug}:`, e);
+        tags = [];
+    }
   }
 
   // AI-generate content if it's missing or very short
   if (!matterResult.content || matterResult.content.trim().length < 50) {
       console.log(`Generating content for ${slug}...`);
-      const { content } = await generatePost({ title: matterResult.data.title, tags });
-      matterResult.content = content;
+      try {
+        const { content } = await generatePost({ title: matterResult.data.title, tags });
+        matterResult.content = content;
+      } catch(e) {
+        console.error(`Failed to generate content for ${slug}:`, e);
+        matterResult.content = "Could not generate content.";
+      }
   }
 
   const contentReact = (await processor.process(matterResult.content)).result;
@@ -134,8 +154,13 @@ export async function getPostData(slug: string): Promise<PostData | null> {
   // AI-generate summary if it's missing
   if (!summary) {
     console.log(`Generating summary for ${slug}...`);
-    const summaryResult = await summarizePost({ content: matterResult.content });
-    summary = summaryResult.summary;
+    try {
+        const summaryResult = await summarizePost({ content: matterResult.content });
+        summary = summaryResult.summary;
+    } catch (e) {
+        console.error(`Failed to generate summary for ${slug}:`, e);
+        summary = "Could not generate summary.";
+    }
   }
 
   return {
