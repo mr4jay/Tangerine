@@ -27,9 +27,9 @@ const heroContent = {
   imageUrl: "https://images.unsplash.com/photo-1564564321837-a57b7070ac4f?q=80&w=150&h=150&fit=crop&crop=faces",
   imageAlt: "Rajure Ajay Kumar Headshot",
   imageHint: "professional portrait",
-  title: "Data Professional",
-  subtitle: "with advanced analytics and reporting skills",
-  description: "6+ years of experience driving value with data-driven insights and building powerful reporting solutions.",
+  title: "Marketing Science & Data Professional",
+  subtitle: "Streamlining DataOps Workflows",
+  description: "6+ years of experience driving value with Datorama, Dataiku, and advanced marketing analytics.",
   ctaText: "Explore My Work",
   ctaLink: "#projects",
 };
@@ -44,8 +44,8 @@ export default function Hero() {
 
   const y = useTransform(scrollYProgress, [0, 1], ["0%", "10%"]);
 
-  const typedTitle = useTypingEffect(heroContent.title, 60);
-  const typedSubtitle = useTypingEffect(heroContent.subtitle, 60, (heroContent.title.length * 60) + 500);
+  const typedTitle = useTypingEffect(heroContent.title, 50);
+  const typedSubtitle = useTypingEffect(heroContent.subtitle, 50, (heroContent.title.length * 50) + 500);
 
   return (
     <section ref={targetRef} id="home" className="relative w-full min-h-screen flex flex-col items-center justify-center overflow-hidden py-24 sm:py-16">
@@ -73,12 +73,12 @@ export default function Hero() {
                     priority
                 />
             </motion.div>
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-foreground h-24 md:h-16">
-              {"Data Professional"}
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-foreground h-24 md:h-28 lg:h-20">
+              {typedTitle}
               <span className="animate-pulse">|</span>
             </h1>
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-primary mb-4 h-20 md:h-12">
-              {"with advanced analytics and reporting skills"}
+              {typedSubtitle}
               <span className="animate-pulse opacity-0 data-[active=true]:opacity-100" data-active={typedSubtitle.length > 0}>|</span>
             </h2>
             <motion.p variants={fadeIn(0.4)} className="max-w-3xl mx-auto text-lg md:text-xl text-muted-foreground mb-8">
