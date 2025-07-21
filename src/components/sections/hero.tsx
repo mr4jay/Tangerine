@@ -73,11 +73,11 @@ export default function Hero() {
                     priority
                 />
             </motion.div>
-            <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-foreground h-24 md:h-16">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-foreground h-24 md:h-16">
               {typedTitle}
               <span className="animate-pulse">|</span>
             </h1>
-            <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-primary mb-4 h-20 md:h-12">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-primary mb-4 h-20 md:h-12">
               {typedSubtitle}
               <span className="animate-pulse opacity-0 data-[active=true]:opacity-100" data-active={typedSubtitle.length > 0}>|</span>
             </h2>

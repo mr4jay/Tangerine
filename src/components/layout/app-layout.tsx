@@ -2,147 +2,154 @@
 "use client";
 
 import Link from 'next/link';
-import { Home, User, Briefcase, Rss, FileText, MessageSquare, Code } from 'lucide-react';
+import { Home, User, Briefcase, Rss, FileText, MessageSquare, Code, PanelLeft } from 'lucide-react';
 import { ThemeToggle } from './theme-toggle';
 import { usePathname } from 'next/navigation';
 import { useState, useEffect, useCallback } from 'react';
-import {
-  Sidebar,
-  SidebarProvider,
-  SidebarContent,
-  SidebarHeader,
-  SidebarMenu,
-  SidebarMenuItem,
-  SidebarMenuButton,
-  SidebarFooter,
-  useSidebar,
-  SidebarTrigger,
-} from '@/components/ui/sidebar';
 import Preloader from './preloader';
 import { AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
-
+import { Button } from '@/components/ui/button';
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 const navLinks = [
-  { name: 'Home', href: '/', icon: Home },
-  { name: 'About', href: '/about', icon: User },
-  { name: 'Projects', href: '/#projects', icon: Briefcase },
-  { name: 'Blog', href: '/blog', icon: Rss },
-  { name: 'Resume', href: '/resume', icon: FileText },
-  { name: 'Contact', href: '/#contact', icon: MessageSquare },
+  { name: 'Home', href: '/', icon: Home, isPage: true },
+  { name: 'About', href: '/about', icon: User, isPage: true },
+  { name: 'Projects', href: '/#projects', icon: Briefcase, isPage: false },
+  { name: 'Blog', href: '/blog', icon: Rss, isPage: true },
+  { name: 'Resume', href: '/resume', icon: FileText, isPage: true },
+  { name: 'Contact', href: '/#contact', icon: MessageSquare, isPage: false },
 ];
 
-
-export function PortfolioSidebar() {
+const NavContent = () => {
   const pathname = usePathname();
-  const { setOpenMobile, isMobile } = useSidebar();
   const [activeLink, setActiveLink] = useState(pathname);
+  const [openMobile, setOpenMobile] = useState(false);
 
   const handleScroll = useCallback(() => {
     const sections = navLinks
-      .map(link => (link.href.startsWith('/#') ? link.href.substring(2) : null))
-      .filter(Boolean)
-      .map(id => document.getElementById(id as string));
-
-    let currentSection = '/';
-    // Add a bit of offset to trigger the active link earlier
-    const scrollOffset = window.innerHeight / 3;
+      .filter(link => link.href.startsWith('/#'))
+      .map(link => document.getElementById(link.href.substring(2)));
+    
+    let currentSectionId = '';
+    const scrollOffset = window.innerHeight * 0.4;
 
     for (const section of sections) {
-        if (section && section.offsetTop <= window.scrollY + scrollOffset) {
-            currentSection = `/#${section.id}`;
-        }
+      if (section && section.offsetTop <= window.scrollY + scrollOffset) {
+        currentSectionId = `/#${section.id}`;
+      }
     }
-    setActiveLink(currentSection);
-  }, []);
 
+    if (pathname === '/') {
+        setActiveLink(currentSectionId || '/');
+    } else {
+        const base_path = `/${pathname.split('/')[1]}`;
+        setActiveLink(base_path);
+    }
+  }, [pathname]);
 
   useEffect(() => {
-    if (pathname === '/') {
-      window.addEventListener('scroll', handleScroll, { passive: true });
-      handleScroll(); // Call on mount to set initial state
-      return () => window.removeEventListener('scroll', handleScroll);
-    } else {
-      // For other pages, just match the base path
-      const base_path = `/${pathname.split('/')[1]}`;
-      setActiveLink(base_path);
-    }
-  }, [pathname, handleScroll]);
-
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [handleScroll]);
 
   const getIsActive = (href: string) => {
     if (href.startsWith('/#')) {
         return activeLink === href;
     }
-    if (href === '/') {
-        return activeLink === '/';
-    }
-    // For nested pages like /blog/some-post
-    return activeLink.startsWith(href) && href !== '/';
+    return pathname.startsWith(href) && href !== '/';
   };
-
-  const handleClick = (href: string) => {
-    if (isMobile) {
-        setOpenMobile(false);
-    }
-    if (href.startsWith('/#')) {
-        setActiveLink(href);
-    }
-  };
-
 
   return (
-      <Sidebar>
-        <SidebarContent>
-          <SidebarHeader className="p-4">
-              <Link href="/" className="flex items-center gap-2" onClick={() => handleClick('/')}>
-                  <Code className="h-6 w-6 text-primary" />
-                  <span className="text-lg font-bold group-data-[collapsible=icon]:hidden">
-                    Turning Data into Insight
-                  </span>
+    <nav className="flex flex-col gap-2 p-2">
+      {navLinks.map((link) => (
+        <Tooltip key={link.href}>
+          <TooltipTrigger asChild>
+            <Button
+              asChild
+              variant={getIsActive(link.href) ? 'default' : 'ghost'}
+              className="justify-start gap-2"
+              onClick={() => setOpenMobile(false)}
+            >
+              <Link href={link.href}>
+                <link.icon className="h-5 w-5" />
+                <span className="group-data-[collapsed=true]:hidden">{link.name}</span>
               </Link>
-          </SidebarHeader>
-          <SidebarMenu>
-            {navLinks.map((link) => (
-              <SidebarMenuItem key={link.href}>
-                <SidebarMenuButton 
-                  asChild
-                  onClick={() => handleClick(link.href)}
-                  isActive={getIsActive(link.href)}
-                  tooltip={link.name}
-                >
-                  <Link href={link.href}>
-                    <link.icon />
-                    <span>{link.name}</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            ))}
-          </SidebarMenu>
-        </SidebarContent>
-        <SidebarFooter>
-           <ThemeToggle />
-        </SidebarFooter>
-      </Sidebar>
-  )
-}
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent side="right" align="center" className="group-data-[collapsed=false]:hidden">
+            {link.name}
+          </TooltipContent>
+        </Tooltip>
+      ))}
+    </nav>
+  );
+};
 
-function MainContentHeader() {
-    return (
-        <header className={cn(
-            "sticky top-0 z-40 w-full bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60",
-            "border-b border-border/40 h-14 flex items-center px-4 md:hidden"
-        )}>
-            <div className="flex items-center gap-2">
-                <SidebarTrigger />
-                <Link href="/" className="flex items-center gap-2">
+
+function SidebarNav() {
+  const [isCollapsed, setIsCollapsed] = useState(false);
+
+  return (
+    <TooltipProvider delayDuration={0}>
+        <div 
+            data-collapsed={isCollapsed}
+            className={cn(
+                "hidden md:flex flex-col border-r bg-background transition-[width] duration-300",
+                isCollapsed ? "w-14" : "w-56",
+                "group"
+            )}
+        >
+            <div className="flex h-16 items-center justify-center border-b px-4">
+                <Link href="/" className="flex items-center gap-2 font-bold">
                     <Code className="h-6 w-6 text-primary" />
-                    <span className="font-bold">Turning Data into Insight</span>
+                    <span className={cn("truncate", isCollapsed && "hidden")}>Data Insight</span>
                 </Link>
             </div>
-        </header>
-    )
+            <NavContent />
+            <div className="mt-auto flex flex-col items-center gap-2 p-2 border-t">
+                <Button variant="ghost" size="icon" className="h-9 w-9" onClick={() => setIsCollapsed(!isCollapsed)}>
+                     <PanelLeft className="h-5 w-5" />
+                </Button>
+                <ThemeToggle />
+            </div>
+        </div>
+    </TooltipProvider>
+  );
 }
+
+function MobileNav() {
+  const [open, setOpen] = useState(false);
+  
+  return (
+    <header className="sticky top-0 z-40 flex h-16 items-center justify-between border-b bg-background/95 px-4 backdrop-blur-sm md:hidden">
+      <Link href="/" className="flex items-center gap-2 font-bold">
+        <Code className="h-6 w-6 text-primary" />
+        <span className="truncate">Data Insight</span>
+      </Link>
+      <Sheet open={open} onOpenChange={setOpen}>
+        <SheetTrigger asChild>
+          <Button variant="outline" size="icon">
+            <PanelLeft className="h-5 w-5" />
+            <span className="sr-only">Toggle Menu</span>
+          </Button>
+        </SheetTrigger>
+        <SheetContent side="left" className="w-56 p-0">
+           <div className="flex h-16 items-center justify-center border-b px-4">
+                <Link href="/" className="flex items-center gap-2 font-bold">
+                    <Code className="h-6 w-6 text-primary" />
+                    <span className="truncate">Data Insight</span>
+                </Link>
+            </div>
+          <NavContent />
+        </SheetContent>
+      </Sheet>
+    </header>
+  );
+}
+
 
 export function AppLayout({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
@@ -158,19 +165,19 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
   }, []);
 
   return (
-    <SidebarProvider>
+    <>
       <AnimatePresence mode="wait">
         {isLoading && <Preloader />}
       </AnimatePresence>
       <div className="flex min-h-screen">
-        <PortfolioSidebar />
+        <SidebarNav />
         <div className="flex-1 flex flex-col">
-          <MainContentHeader />
+          <MobileNav />
           <main role="main" className="flex-1">
             {children}
           </main>
         </div>
       </div>
-    </SidebarProvider>
+    </>
   )
 }
