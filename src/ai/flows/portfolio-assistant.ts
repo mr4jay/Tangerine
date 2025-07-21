@@ -17,8 +17,7 @@ import path from 'path';
 // This context provides a brief, high-level overview.
 // The AI will use the getResume tool for specific details.
 const portfolioContext = `
-About Me:
-Marketing science and Data professional with 6 years of experience, specializing in workflow creation for DataOps. Proficient in Datorama and advanced Excel VBA macros to build automated reporting systems and streamline marketing data operations. Skilled at optimizing data pipelines, enhancing campaign performance, and enabling data-driven decisions across cross-functional marketing teams. Known for bridging the gap between data engineering and strategic marketing execution.
+Dynamic data professional with a B.Tech in Information Technology and over 6 years of experience in data analytics, machine learning, and AI-driven solutions, with a focus on delivering impactful insights for global clients like Novartis, PepsiCo, Ford, and AT&T. Proficient in Python, SQL, Salesforce Datorama, Dataiku DSS, Tableau, AWS, and GCP, I specialize in building predictive models, automating data pipelines, and optimizing processes for industries including pharmaceuticals, FMCG, automotive, telecom, and sustainability.
 `;
 
 const getResume = ai.defineTool(

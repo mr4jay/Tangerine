@@ -22,36 +22,32 @@ export const skillCategories = [
     skills: [
       { name: 'Python', level: 90, description: "Advanced proficiency in Python for data analysis, pipeline development, and machine learning applications." },
       { name: 'SQL', level: 95, description: "Expert in complex queries, performance tuning, and database design across various SQL dialects." },
-      { name: 'PySpark', level: 85, description: "Strong experience in large-scale data processing and analytics using PySpark." },
-      { name: 'Scala', level: 75, description: "Proficient in Scala for building robust and scalable data engineering solutions on the JVM." },
-      { name: 'Java', level: 70, description: "Solid foundation in Java for enterprise-level application development and data services." },
     ],
   },
   {
-    name: 'Cloud & DevOps',
+    name: 'Cloud & Automation',
     skills: [
-      { name: 'AWS', level: 90, description: "Expertise in AWS services like S3, Glue, Kinesis, Lambda, and EMR for building end-to-end data solutions." },
-      { name: 'Azure', level: 70, description: "Experience with Azure Data Factory, Synapse Analytics, and Blob Storage." },
-      { name: 'GCP', level: 65, description: "Familiarity with Google Cloud services including BigQuery, Dataflow, and Cloud Storage." },
-      { name: 'Docker', level: 85, description: "Proficient in containerizing applications and services for consistent deployment environments." },
-      { name: 'Kubernetes', level: 80, description: "Skilled in orchestrating containerized applications for high availability and scalability." },
-      { name: 'Jenkins', level: 75, description: "Experienced in setting up CI/CD pipelines for automated build, test, and deployment." },
+      { name: 'AWS', level: 80, description: "Advanced knowledge of AWS services including S3, Glue, Lambda, and EMR for data solutions." },
+      { name: 'GCP', level: 75, description: "Proficient with Google Cloud services like BigQuery, Dataflow, and Cloud Storage." },
+      { name: 'APIs', level: 85, description: "Skilled in integrating systems and automating workflows using RESTful APIs and Webhooks." },
     ],
   },
   {
-    name: 'Data Tools',
+    name: 'Data Platforms',
     skills: [
+      { name: 'Salesforce Datorama', level: 95, description: "Expert in Datorama for marketing data integration, harmonization, and visualization." },
       { name: 'Dataiku DSS', level: 90, description: "Advanced user of Dataiku for visual data preparation, model building, and MLOps." },
-      { name: 'Snowflake', level: 95, description: "Deep expertise in Snowflake for cloud data warehousing, performance optimization, and data sharing." },
-      { name: 'Airflow', level: 85, description: "Proficient in authoring, scheduling, and monitoring complex data workflows with Airflow." },
-      { name: 'Apache Spark', level: 88, description: "Strong understanding of Spark's architecture for distributed data processing." },
+      { name: 'Tableau', level: 85, description: "Proficient in creating insightful and interactive dashboards for business intelligence." },
+      { name: 'Alteryx Studio', level: 80, description: "Experienced in using Alteryx for data blending and advanced analytics workflows." },
     ],
   },
   {
-    name: 'Marketing Platforms',
+    name: 'Machine Learning',
     skills: [
-      { name: 'Salesforce Datorama', level: 80, description: "Skilled in integrating and visualizing marketing data within the Datorama platform." },
-      { name: 'Google Ads', level: 75, description: "Experience in leveraging Google Ads data for campaign analysis and performance reporting." },
+      { name: 'Predictive Modeling', level: 85, description: "Experienced in building and deploying models for tasks like customer churn and forecasting." },
+      { name: 'GenAI', level: 75, description: "Familiarity with applying generative AI models for content and data augmentation tasks." },
+      { name: 'Pandas & NumPy', level: 90, description: "Core data manipulation and analysis skills using Python's primary data science libraries." },
+      { name: 'Scikit-learn', level: 85, description: "Strong ability to implement various ML algorithms for classification, regression, and clustering." },
     ],
   },
 ];
@@ -80,7 +76,7 @@ const SkillBarChart = ({ data }: { data: typeof skillCategories[0]['skills'] }) 
           tickMargin={10}
           axisLine={false}
           className="text-muted-foreground text-xs"
-          width={80}
+          width={100}
         />
         <XAxis dataKey="level" type="number" hide />
         <Tooltip 

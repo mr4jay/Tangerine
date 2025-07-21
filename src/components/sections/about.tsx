@@ -58,10 +58,10 @@ export default function About() {
           <motion.div variants={fadeIn('right', 'tween', 0.2, 0.6)} className="space-y-3">
             <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl font-headline text-foreground">About Me</h2>
             <p className="text-muted-foreground md:text-lg/relaxed">
-              Marketing science and Data professional with 6 years of experience, specializing in workflow creation for DataOps. Proficient in Datorama and advanced Excel VBA macros to build automated reporting systems and streamline marketing data operations.
+              Dynamic data professional with a B.Tech in Information Technology and over 6 years of experience in data analytics, machine learning, and AI-driven solutions, with a focus on delivering impactful insights for global clients like Novartis, PepsiCo, Ford, and AT&T.
             </p>
             <p className="text-muted-foreground md:text-lg/relaxed">
-              Skilled at optimizing data pipelines, enhancing campaign performance, and enabling data-driven decisions across cross-functional marketing teams. Known for bridging the gap between data engineering and strategic marketing execution.
+              Proficient in Python, SQL, Salesforce Datorama, Dataiku DSS, and cloud platforms, I specialize in building predictive models and automating data pipelines. I am passionate about leveraging GenAI and IoT to drive innovation.
             </p>
           </motion.div>
           <motion.div 
