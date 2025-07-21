@@ -90,3 +90,37 @@
     text-decoration: underline;
     filter: brightness(1.2);
 }
+
+/* Print-specific styles */
+@media print {
+    body {
+        background: none;
+    }
+    .resume-content a {
+        color: #000;
+        text-decoration: none;
+    }
+    .resume-content {
+        color: #000;
+    }
+    .resume-content h1, .resume-content h2, .resume-content h3 {
+        color: #000;
+        border-color: #ccc;
+    }
+    .resume-content p {
+        color: #333;
+    }
+    .prose {
+        --tw-prose-body: #000;
+        --tw-prose-headings: #000;
+        --tw-prose-links: #000;
+        --tw-prose-bold: #000;
+        --tw-prose-bullets: #333;
+    }
+}
+
+@page {
+    size: A4;
+    margin: 1in;
+}
+
