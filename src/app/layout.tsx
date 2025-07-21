@@ -86,7 +86,7 @@ const jsonLd = {
   ],
   knowsAbout: ['Data Engineering', 'Datorama', 'Dataiku DSS', 'Python', 'MLOps', 'SQL', 'Data Pipelines', 'Excel VBA'],
   sameAs: [
-    'https://linkedin.com/in/rajure-ajay-kumar',
+    'https://www.linkedin.com/in/rajure-ajay-kumar',
     'https://github.com/rajure-ajay',
   ],
   "mainEntityOfPage": {

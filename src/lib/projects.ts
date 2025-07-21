@@ -34,8 +34,8 @@ export type Project = z.infer<typeof ProjectSchema>;
 let projectsData: Project[] = [
   {
     slug: 'real-time-campaign-analytics',
-    title: 'Real-Time Campaign Analytics',
-    shortDescription: 'Built a real-time analytics platform for PepsiCo & McDonald’s, reducing report generation time by 70% and improving campaign ROI by 15%.',
+    title: 'Real-Time Campaign Analytics for PepsiCo and McDonald’s',
+    shortDescription: 'Built a real-time analytics platform using Salesforce Datorama for 200+ campaigns, integrating Google Ads, Meta, and CRM data.',
     longDescription: 'At Omnicom, I built a real-time analytics platform using Salesforce Datorama for 200+ campaigns for top-tier clients like PepsiCo and McDonald\'s. The system integrated diverse data sources like Google Ads, Meta, and CRM data via APIs. The platform automated complex data workflows, providing stakeholders with immediate, actionable insights and aligning with Google India’s real-time analytics and Infosys Topaz’s precision marketing needs.',
     tags: ['Datorama', 'Real-Time Analytics', 'Marketing', 'API Integration'],
     imageUrl: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=1200&h=600&fit=crop',
@@ -43,16 +43,15 @@ let projectsData: Project[] = [
     demoUrl: '#',
     repoUrl: '#',
     keyOutcomes: [
-      'Reduced report generation time by 70% through automated data workflows.',
-      'Improved campaign ROI by 15% by providing timely, data-driven insights.',
+      'Reduced report generation time by 70% and improved campaign ROI by 15% through custom metrics.',
+      'Integrated diverse data from Google Ads, Meta, and CRM systems.',
       'Developed custom metrics and Python scripts to analyze performance across channels and regions.',
-      'Integrated over 15 distinct data sources using TotalConnect, LiteConnect, and custom APIs.'
     ],
     techStack: [
       { category: 'Marketing Cloud', items: ['Salesforce Datorama'] },
-      { category: 'Data Integration', items: ['TotalConnect', 'LiteConnect', 'APIs'] },
+      { category: 'Data Integration', items: ['TotalConnect', 'APIs'] },
       { category: 'Languages', items: ['Python', 'SQL'] },
-      { category: 'Libraries', items: ['Pandas', 'NumPy'] }
+      { category: 'Libraries', items: ['Pandas'] }
     ],
     metrics: [
         { label: 'Report Generation Reduction', value: 70, unit: 'percentage', description: 'Reduction in time to deliver campaign performance reports.' },
@@ -61,8 +60,8 @@ let projectsData: Project[] = [
   },
   {
     slug: 'customer-retention-models',
-    title: 'Predictive Modeling for Novartis',
-    shortDescription: 'Developed machine learning models using Dataiku DSS to predict customer churn, increasing retention by 20% for Novartis.',
+    title: 'Predictive Modeling for Novartis Customer Retention',
+    shortDescription: 'Developed machine learning models using Dataiku DSS to predict customer churn, increasing retention by 20% for Novartis’s pharmaceutical brands.',
     longDescription: 'While engaged with Novartis, I developed and deployed predictive machine learning models using Dataiku DSS to identify at-risk customers for their pharmaceutical brands. This initiative involved migrating legacy Alteryx workflows, optimizing data pipelines, and leveraging AutoML capabilities. The models were successfully integrated into business workflows, enabling proactive interventions that increased customer retention by 20% and supported NVIDIA India’s healthcare AI initiatives.',
     tags: ['Dataiku DSS', 'Predictive Modeling', 'Python', 'MLOps'],
     imageUrl: 'https://images.unsplash.com/photo-1611095790444-1dfa3c131557?q=80&w=1200&h=600&fit=crop',
@@ -70,16 +69,13 @@ let projectsData: Project[] = [
     demoUrl: '#',
     repoUrl: '#',
     keyOutcomes: [
-      'Increased customer retention by 20% through targeted, proactive interventions.',
-      'Improved workflow efficiency by 70% by migrating Alteryx workflows to Dataiku DSS.',
-      'Managed and optimized data storage and access for three major Novartis brands.',
+      'Increased retention by 20% through targeted interventions.',
+      'Successfully migrated complex data workflows from Alteryx to Dataiku DSS.',
       'Leveraged Dataiku’s AutoML for predictive modeling and SQL for data warehousing.'
     ],
      techStack: [
       { category: 'AI/ML Platform', items: ['Dataiku DSS'] },
-      { category: 'Data Migration', items: ['Alteryx'] },
-      { category: 'Languages', items: ['Python', 'SQL'] },
-      { category: 'Libraries', items: ['Scikit-learn', 'Pandas'] }
+      { category: 'Languages', items: ['Python', 'Scikit-learn', 'SQL'] }
     ],
     metrics: [
         { label: 'Customer Retention Increase', value: 20, unit: 'percentage', description: 'Increase in customer retention rates post-deployment.' },
@@ -99,20 +95,66 @@ let projectsData: Project[] = [
     keyOutcomes: [
       'Enhanced data accuracy by 25% for critical campaign analytics.',
       'Successfully integrated over 10 distinct data sources, including high-volume IoT streams.',
-      'Automated the entire data ingestion and harmonization process, reducing manual effort.',
-      'Built a scalable data pipeline to support real-time telecom analytics.'
+      'Automated the entire data ingestion and harmonization process using TotalConnect and LiteConnect.'
     ],
     techStack: [
       { category: 'Data Integration', items: ['TotalConnect', 'LiteConnect'] },
       { category: 'Marketing Cloud', items: ['Salesforce Datorama'] },
-      { category: 'Languages', items: ['Python', 'SQL'] },
-      { category: 'Data Sources', items: ['IoT', 'CRM', 'Google Ads'] }
+      { category: 'Languages', items: ['Python', 'APIs'] }
     ],
     metrics: [
         { label: 'Data Accuracy Improvement', value: 25, unit: 'percentage', description: 'Improvement in data accuracy for integrated data sources.' },
         { label: 'Data Sources Integrated', value: 10, unit: 'default', description: 'Number of distinct data sources successfully integrated.' },
     ]
   },
+   {
+    slug: 'sustainability-analytics-framework',
+    title: 'Sustainability Analytics Framework',
+    shortDescription: 'Configured Dataiku DSS on AWS for a retail client, optimizing energy usage analytics for sustainability reporting.',
+    longDescription: 'As a freelance data analyst, I configured Dataiku DSS on an AWS virtual machine to build a sustainability analytics framework for a retail client. The project focused on optimizing energy usage analytics to support their environmental reporting goals. This initiative reduced analysis time by 50% and aligns with the AI-for-grid and IoT-for-solar initiatives at companies like ReNew Power.',
+    tags: ['Sustainability', 'Dataiku DSS', 'AWS', 'Tableau'],
+    imageUrl: 'https://images.unsplash.com/photo-1466611653911-95081537e5b7?q=80&w=1200&h=600&fit=crop',
+    aiHint: 'renewable energy data',
+    demoUrl: '#',
+    repoUrl: '#',
+    keyOutcomes: [
+      'Reduced sustainability report analysis time by 50%.',
+      'Provided a scalable framework for ongoing energy usage analytics.',
+      'Developed interactive Tableau dashboards to visualize key sustainability metrics.'
+    ],
+    techStack: [
+      { category: 'AI/ML Platform', items: ['Dataiku DSS'] },
+      { category: 'Cloud', items: ['AWS'] },
+      { category: 'Visualization', items: ['Tableau'] },
+      { category: 'Languages', items: ['Python'] }
+    ],
+    metrics: [
+        { label: 'Analysis Time Reduction', value: 50, unit: 'percentage', description: 'Reduction in time required for sustainability data analysis and reporting.' }
+    ]
+  },
+  {
+    slug: 'automotive-data-visualization-ford',
+    title: 'Automotive Data Visualization for Ford',
+    shortDescription: 'Built Tableau dashboards to analyze campaign performance for Ford’s automotive marketing, cutting dashboard refresh time by 50%.',
+    longDescription: 'For Ford at Omnicom, I developed a suite of interactive Tableau dashboards to analyze and visualize campaign performance for their automotive marketing initiatives. By optimizing the underlying SQL queries and data structures, I was able to cut the dashboard refresh time by 50%, providing faster insights to the marketing team. This project aligns with the ADAS and digital twin goals of companies like Tata Elxsi and L&T Technology Services.',
+    tags: ['Tableau', 'Data Visualization', 'Automotive', 'SQL'],
+    imageUrl: 'https://images.unsplash.com/photo-1553531384-411a247ccd78?q=80&w=1200&h=600&fit=crop',
+    aiHint: 'car dashboard data',
+    demoUrl: '#',
+    repoUrl: '#',
+    keyOutcomes: [
+      'Cut dashboard refresh and data update time by 50%.',
+      'Provided the marketing team with near real-time insights into campaign performance.',
+      'Developed and optimized complex SQL queries for performance.'
+    ],
+    techStack: [
+      { category: 'Visualization', items: ['Tableau'] },
+      { category: 'Languages', items: ['Python', 'SQL'] }
+    ],
+    metrics: [
+        { label: 'Dashboard Refresh Speed-up', value: 50, unit: 'percentage', description: 'Improvement in the time taken for dashboards to refresh with new data.' }
+    ]
+  }
 ];
 
 // This function now returns a copy to prevent mutation issues during hot-reloading in dev.
