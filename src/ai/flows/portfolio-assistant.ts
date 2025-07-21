@@ -18,12 +18,22 @@ import path from 'path';
 // The AI will use the getResume tool for specific details.
 const portfolioContext = `
 Dynamic data professional with a B.Tech in Information Technology and over 6 years of experience in data analytics, machine learning, and AI-driven solutions, with a focus on delivering impactful insights for global clients like Novartis, PepsiCo, Ford, and AT&T. Proficient in Python, SQL, Salesforce Datorama, Dataiku DSS, Tableau, AWS, and GCP, I specialize in building predictive models, automating data pipelines, and optimizing processes for industries including pharmaceuticals, FMCG, automotive, telecom, and sustainability.
+
+Key Projects:
+- Real-Time Campaign Analytics for PepsiCo & McDonald's.
+- Predictive Customer Retention Modeling for Novartis.
+- IoT Data Pipeline for AT&T.
+
+Recent Blog Posts:
+- MLOps in Pharma: Deploying Models at Scale
+- Optimizing Marketing Analytics with Datorama
+- Scaling Data Pipelines with Snowflake
 `;
 
 const getResume = ai.defineTool(
     {
         name: 'getResume',
-        description: 'Retrieves the full content of the portfolio owner\'s resume. You MUST use this to answer any questions about experience, skills, projects, and education.',
+        description: 'Retrieves the full content of the portfolio owner\'s resume. You MUST use this to answer any specific questions about experience, skills, projects, and education.',
         inputSchema: z.object({}),
         outputSchema: z.string(),
     },
@@ -173,7 +183,8 @@ const prompt = ai.definePrompt({
   prompt: `You are a helpful and professional AI assistant for Rajure Ajay Kumar's personal portfolio. Your goal is to answer questions from potential employers or collaborators.
 
 - Keep your answers concise and professional.
-- You MUST use the 'getResume' tool to get the raw data on Rajure's experience, skills, or projects. Do not make up information.
+- Use the high-level context provided below for general questions.
+- For very specific details about past roles, dates, or specific project outcomes, you MUST use the 'getResume' tool to get the full, detailed resume content.
 - If the user provides a job description or asks about suitability for a role, you MUST use the 'calculateSuitabilityScore' tool.
 - If the user expresses ANY interest in hiring, collaboration, or discussing a project, you MUST respond conversationally and then use the 'displayContactForm' tool. Example: "I can help with that. I'll bring up a contact form for you."
 
