@@ -1,4 +1,6 @@
 
+'use client';
+
 import { getProjectBySlug, getProjects } from '@/lib/projects';
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
@@ -14,34 +16,36 @@ import { ProjectMetricsChart } from '@/components/projects/project-metrics-chart
 import { staggerContainer, fadeIn } from '@/lib/motion';
 
 
-export async function generateStaticParams() {
-  const projects = getProjects();
-  return projects.map(p => ({ slug: p.slug }));
-}
+// This cannot be statically generated on the client
+// export async function generateStaticParams() {
+//   const projects = getProjects();
+//   return projects.map(p => ({ slug: p.slug }));
+// }
 
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
-  const project = getProjectBySlug(params.slug);
-  if (!project) {
-    return {};
-  }
-  return {
-    title: `${project.title} | Projects`,
-    description: project.shortDescription,
-    keywords: [...project.tags, 'data engineer project metrics'],
-    openGraph: {
-      title: project.title,
-      description: project.shortDescription,
-      images: [project.imageUrl],
-      type: 'article',
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title: project.title,
-      description: project.shortDescription,
-      images: [project.imageUrl],
-    },
-  };
-}
+// This cannot be generated on the client
+// export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+//   const project = getProjectBySlug(params.slug);
+//   if (!project) {
+//     return {};
+//   }
+//   return {
+//     title: `${project.title} | Projects`,
+//     description: project.shortDescription,
+//     keywords: [...project.tags, 'data engineer project metrics'],
+//     openGraph: {
+//       title: project.title,
+//       description: project.shortDescription,
+//       images: [project.imageUrl],
+//       type: 'article',
+//     },
+//     twitter: {
+//       card: 'summary_large_image',
+//       title: project.title,
+//       description: project.shortDescription,
+//       images: [project.imageUrl],
+//     },
+//   };
+// }
 
 export default function ProjectDetailPage({ params }: { params: { slug: string } }) {
   const project = getProjectBySlug(params.slug);
@@ -69,6 +73,11 @@ export default function ProjectDetailPage({ params }: { params: { slug: string }
 
   return (
     <>
+      <head>
+          <title>{`${project.title} | Projects`}</title>
+          <meta name="description" content={project.shortDescription} />
+          {/* Add other meta tags here if needed */}
+      </head>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

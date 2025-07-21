@@ -14,6 +14,7 @@ import { useToast } from '@/hooks/use-toast';
 import { BrainCircuit, Loader2 } from 'lucide-react';
 import Footer from '@/components/layout/footer';
 import { createPostAction } from './actions';
+import { Textarea } from '@/components/ui/textarea';
 
 const formSchema = z.object({
   title: z.string().min(10, {
@@ -89,8 +90,10 @@ export default function NewPostPage() {
                       <FormItem>
                         <FormLabel>Post Title</FormLabel>
                         <FormControl>
-                          <Input
+                          <Textarea
                             placeholder="e.g., Scaling Data Pipelines with Snowflake: A Deep Dive"
+                            className="resize-none"
+                            rows={3}
                             {...field}
                           />
                         </FormControl>

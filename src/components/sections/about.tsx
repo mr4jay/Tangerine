@@ -94,24 +94,12 @@ export default function About() {
             <Button asChild size="lg" className="group" onClick={handleResumeDownload}>
                 <Link href="/resume" aria-label="View my interactive resume">
                   View Online Resume
-                  <motion.div 
-                    className="inline-block ml-2"
-                    whileHover={{ x: 4 }}
-                    transition={{ type: "spring", stiffness: 400, damping: 10 }}
-                  >
-                    <Download className="h-5 w-5" />
-                  </motion.div>
+                  <Download className="h-5 w-5 ml-2 transition-transform duration-300 group-hover:translate-x-1" />
                 </Link>
             </Button>
             <Button asChild size="lg" variant="outline" className="group">
                 <Link href="/#contact" aria-label="Contact me">
-                   <motion.div
-                      className="inline-block mr-2"
-                      whileHover={{ scale: 1.2, rotate: 10 }}
-                      transition={{ type: "spring", stiffness: 400, damping: 10 }}
-                    >
-                      <MessageSquare className="h-5 w-5" />
-                    </motion.div>
+                  <MessageSquare className="h-5 w-5 mr-2 transition-transform duration-300 group-hover:scale-110" />
                   Hire Me
                 </Link>
             </Button>

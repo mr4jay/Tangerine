@@ -44,44 +44,46 @@ export default function BlogClientPage({ posts }: { posts: PostData[] }) {
 
   return (
     <>
-      <div className="mb-12 grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="relative md:col-span-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-          <Input
-            type="search"
-            placeholder="Search posts..."
-            className="w-full pl-10"
-            value={searchTerm}
-            onChange={e => setSearchTerm(e.target.value)}
-            aria-label="Search blog posts"
-          />
+      <Card className="mb-12 p-6 bg-card/50">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="relative md:col-span-1">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+            <Input
+                type="search"
+                placeholder="Search posts..."
+                className="w-full pl-10"
+                value={searchTerm}
+                onChange={e => setSearchTerm(e.target.value)}
+                aria-label="Search blog posts"
+            />
+            </div>
+            <div className="md:col-span-1">
+            <Select onValueChange={setSelectedTag} defaultValue="all">
+                <SelectTrigger aria-label="Filter by tag">
+                <SelectValue placeholder="Filter by tag" />
+                </SelectTrigger>
+                <SelectContent>
+                {allTags.map(tag => (
+                    <SelectItem key={tag} value={tag}>
+                    {tag === 'all' ? 'All Tags' : tag}
+                    </SelectItem>
+                ))}
+                </SelectContent>
+            </Select>
+            </div>
+            <div className="md:col-span-1">
+            <Select onValueChange={setSortBy} defaultValue="newest">
+                <SelectTrigger aria-label="Sort by date">
+                <SelectValue placeholder="Sort by" />
+                </SelectTrigger>
+                <SelectContent>
+                <SelectItem value="newest">Sort by Newest</SelectItem>
+                <SelectItem value="oldest">Sort by Oldest</SelectItem>
+                </SelectContent>
+            </Select>
+            </div>
         </div>
-        <div className="md:col-span-1">
-          <Select onValueChange={setSelectedTag} defaultValue="all">
-            <SelectTrigger aria-label="Filter by tag">
-              <SelectValue placeholder="Filter by tag" />
-            </SelectTrigger>
-            <SelectContent>
-              {allTags.map(tag => (
-                <SelectItem key={tag} value={tag}>
-                  {tag === 'all' ? 'All Tags' : tag}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-        <div className="md:col-span-1">
-          <Select onValueChange={setSortBy} defaultValue="newest">
-            <SelectTrigger aria-label="Sort by date">
-              <SelectValue placeholder="Sort by" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="newest">Sort by Newest</SelectItem>
-              <SelectItem value="oldest">Sort by Oldest</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-      </div>
+      </Card>
       
       {filteredAndSortedPosts.length > 0 ? (
         <div className="grid gap-8 md:grid-cols-2">
