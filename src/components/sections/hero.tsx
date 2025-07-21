@@ -28,7 +28,7 @@ const heroContent = {
   imageAlt: "Rajure Ajay Kumar Headshot",
   imageHint: "professional portrait",
   title: "Data Professional",
-  subtitle: "with advanced analytics and reporting",
+  subtitle: "with advanced analytics and reporting skills",
   description: "6+ years of experience driving value with data-driven insights and building powerful reporting solutions.",
   ctaText: "Explore My Work",
   ctaLink: "#projects",
@@ -44,8 +44,8 @@ export default function Hero() {
 
   const y = useTransform(scrollYProgress, [0, 1], ["0%", "10%"]);
 
-  const typedTitle = useTypingEffect(heroContent.title, 50);
-  const typedSubtitle = useTypingEffect(heroContent.subtitle, 50, (heroContent.title.length * 50) + 500);
+  const typedTitle = useTypingEffect(heroContent.title, 60);
+  const typedSubtitle = useTypingEffect(heroContent.subtitle, 60, (heroContent.title.length * 60) + 500);
 
   return (
     <section ref={targetRef} id="home" className="relative w-full min-h-screen flex flex-col items-center justify-center overflow-hidden py-24 sm:py-16">
@@ -74,11 +74,11 @@ export default function Hero() {
                 />
             </motion.div>
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-foreground h-24 md:h-16">
-              {typedTitle}
+              {"Data Professional"}
               <span className="animate-pulse">|</span>
             </h1>
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-primary mb-4 h-20 md:h-12">
-              {typedSubtitle}
+              {"with advanced analytics and reporting skills"}
               <span className="animate-pulse opacity-0 data-[active=true]:opacity-100" data-active={typedSubtitle.length > 0}>|</span>
             </h2>
             <motion.p variants={fadeIn(0.4)} className="max-w-3xl mx-auto text-lg md:text-xl text-muted-foreground mb-8">
