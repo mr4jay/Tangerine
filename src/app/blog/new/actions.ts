@@ -11,6 +11,14 @@ import { format } from 'date-fns';
 
 const postsDirectory = path.join(process.cwd(), 'posts');
 
+// Helper function to create a random date within the last year
+function getRandomRecentDate(): Date {
+    const end = new Date();
+    const start = new Date();
+    start.setFullYear(start.getFullYear() - 1);
+    return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
+}
+
 // Function to create and save a new post file
 export async function createPostAction(title: string, tags: string[]): Promise<{ slug: string }> {
   const slug = title
@@ -42,13 +50,15 @@ export async function createPostAction(title: string, tags: string[]): Promise<{
 
   // 4. Generate image from title and refined tags
   const { imageUrl } = await generateImage({ topic: title, tags: finalTags });
+  
+  const publishDate = getRandomRecentDate();
 
   const frontmatter = `---
 title: '${title.replace(/'/g, "''")}'
 excerpt: '${summary.replace(/'/g, "''")}'
 imageUrl: '${imageUrl}'
 aiHint: '${finalTags.slice(0, 2).join(' ').toLowerCase()}'
-publishDate: '${format(new Date(), 'yyyy-MM-dd')}'
+publishDate: '${format(publishDate, 'yyyy-MM-dd')}'
 tags:
 ${finalTags.map(tag => `  - '${tag.replace(/'/g, "''")}'`).join('\n')}
 ---

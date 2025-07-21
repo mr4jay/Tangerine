@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -11,10 +11,12 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { useToast } from '@/hooks/use-toast';
-import { BrainCircuit, Loader2 } from 'lucide-react';
+import { BrainCircuit, Loader2, Sparkles, Wand2 } from 'lucide-react';
 import Footer from '@/components/layout/footer';
 import { createPostAction } from './actions';
 import { Textarea } from '@/components/ui/textarea';
+import { suggestPostTopics } from '@/ai/flows/suggest-post-topics-flow';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const formSchema = z.object({
   title: z.string().min(10, {
@@ -27,6 +29,8 @@ export default function NewPostPage() {
   const router = useRouter();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
+  const [isSuggesting, setIsSuggesting] = useState(true);
+  const [suggestions, setSuggestions] = useState<string[]>([]);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -35,6 +39,30 @@ export default function NewPostPage() {
       tags: '',
     },
   });
+
+  useEffect(() => {
+    async function fetchSuggestions() {
+      try {
+        setIsSuggesting(true);
+        const { topics } = await suggestPostTopics();
+        setSuggestions(topics);
+      } catch (error) {
+        console.error("Failed to fetch suggestions", error);
+        toast({
+            variant: "destructive",
+            title: "Could not load suggestions",
+            description: "There was an error fetching AI topic suggestions."
+        })
+      } finally {
+        setIsSuggesting(false);
+      }
+    }
+    fetchSuggestions();
+  }, [toast]);
+
+  const handleSuggestionClick = (topic: string) => {
+    form.setValue('title', topic);
+  };
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
@@ -77,12 +105,40 @@ export default function NewPostPage() {
                 Generate New Blog Post with AI
               </CardTitle>
               <CardDescription>
-                Provide a title and optional tags. The AI will generate a complete, portfolio-ready blog post, including content and a header image.
+                Provide a title or select a suggestion. The AI will generate a complete, portfolio-ready blog post, including content and a header image.
               </CardDescription>
             </CardHeader>
             <CardContent>
               <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-semibold flex items-center gap-2 text-muted-foreground">
+                        <Sparkles className="h-5 w-5 text-primary" />
+                        AI-Suggested Topics
+                    </h3>
+                    {isSuggesting ? (
+                        <div className="space-y-2">
+                            <Skeleton className="h-8 w-full" />
+                            <Skeleton className="h-8 w-5/6" />
+                            <Skeleton className="h-8 w-3/4" />
+                        </div>
+                    ) : (
+                        <div className="flex flex-wrap gap-2">
+                            {suggestions.map((topic, index) => (
+                                <Button 
+                                    key={index} 
+                                    variant="outline"
+                                    type="button"
+                                    size="sm"
+                                    onClick={() => handleSuggestionClick(topic)}
+                                    className="text-left h-auto"
+                                >
+                                    {topic}
+                                </Button>
+                            ))}
+                        </div>
+                    )}
+                  </div>
                   <FormField
                     control={form.control}
                     name="title"
@@ -125,7 +181,10 @@ export default function NewPostPage() {
                         Generating...
                       </>
                     ) : (
-                      'Generate Post'
+                      <>
+                        <Wand2 className="mr-2 h-5 w-5" />
+                        Generate Post
+                      </>
                     )}
                   </Button>
                 </form>
