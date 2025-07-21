@@ -17,13 +17,6 @@ const certifications = [
     verifyUrl: '#',
   },
   {
-    name: 'Azure Data Engineer Associate',
-    issuer: 'Microsoft',
-    date: 'Issued Mar 2023',
-    logo: AzureLogo,
-    verifyUrl: '#',
-  },
-  {
     name: 'Google Cloud Professional Data Engineer',
     issuer: 'Google',
     date: 'Issued Dec 2022',
@@ -37,13 +30,6 @@ const certifications = [
     logo: DataikuLogo,
     verifyUrl: '#',
   },
-    {
-    name: 'Dataiku Advanced Designer',
-    issuer: 'Dataiku',
-    date: 'Issued Jan 2023',
-    logo: DataikuLogo,
-    verifyUrl: '#',
-  },
   {
     name: 'Dataiku ML Practitioner',
     issuer: 'Dataiku',
@@ -51,10 +37,17 @@ const certifications = [
     logo: DataikuLogo,
     verifyUrl: '#',
   },
-    {
+  {
     name: 'Dataiku MLOps Practitioner',
     issuer: 'Dataiku',
     date: 'Issued Apr 2023',
+    logo: DataikuLogo,
+    verifyUrl: '#',
+  },
+  {
+    name: 'Dataiku Generative AI Practitioner',
+    issuer: 'Dataiku',
+    date: 'Issued 2024',
     logo: DataikuLogo,
     verifyUrl: '#',
   },
@@ -64,7 +57,14 @@ const certifications = [
     date: 'Issued Jun 2022',
     logo: DatabricksLogo,
     verifyUrl: '#',
-  }
+  },
+  {
+    name: 'Azure Data Engineer Associate',
+    issuer: 'Microsoft',
+    date: 'Issued Mar 2023',
+    logo: AzureLogo,
+    verifyUrl: '#',
+  },
 ];
 
 const headerVariants = {
