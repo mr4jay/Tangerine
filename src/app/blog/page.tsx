@@ -17,7 +17,7 @@ export default async function BlogPage() {
             <div className="space-y-4">
               <h1 className="text-4xl font-bold tracking-tighter sm:text-6xl font-headline">Data Engineering & AI Blog</h1>
               <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-                Explore insights on data, technology, and professional growth. Use the filters below to find what you're looking for.
+                Explore insights on data, technology, and professional growth. Use the filters below to find what you&apos;re looking for.
               </p>
             </div>
             <Button asChild>

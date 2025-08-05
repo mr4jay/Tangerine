@@ -78,7 +78,7 @@ export default function Testimonials() {
                         <CardContent className="p-8 flex-grow flex flex-col justify-between">
                             <Quote className="h-8 w-8 text-primary mb-4" />
                             <blockquote className="text-lg text-foreground/90 flex-grow">
-                                "{testimonial.quote}"
+                                &ldquo;{testimonial.quote}&rdquo;
                             </blockquote>
                             <div className="mt-8 flex items-center gap-4">
                                 <Image 
