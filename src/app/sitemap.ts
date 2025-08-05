@@ -3,6 +3,8 @@ import { MetadataRoute } from 'next'
 import { getSortedPostsData } from '@/lib/posts-server'
 import { getProjects } from '@/lib/projects'
 
+export const dynamic = 'force-static';
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
   

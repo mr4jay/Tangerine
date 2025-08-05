@@ -79,7 +79,7 @@ const HireMeForm = ({ onOpenChange }: { onOpenChange: (open: boolean) => void })
         
         toast({
             title: "Message Sent!",
-            description: "Thank you for reaching out. I'll get back to you shortly.",
+        description: "Thank you for reaching out. I&apos;ll get back to you shortly.",
         });
         form.reset();
         onOpenChange(false);
@@ -188,7 +188,7 @@ const AIChatAssistant = () => {
                 handleNewAudio(result.answer, assistantMessageId);
             } catch (error) {
                  console.error("AI Assistant Error:", error);
-                 const errorMessage: Message = { id: Date.now(), role: 'assistant', content: "Sorry, I'm having trouble connecting. Please try again later." };
+            const errorMessage: Message = { id: Date.now(), role: 'assistant', content: "Sorry, I&apos;m having trouble connecting. Please try again later." };
                  setMessages([errorMessage]);
             } finally {
                 setIsLoading(false);
@@ -270,7 +270,7 @@ const AIChatAssistant = () => {
 
         } catch (error) {
             console.error("AI Assistant Error:", error);
-            const errorMessage: Message = { id: Date.now() + 1, role: 'assistant', content: "Sorry, I'm having trouble connecting. Please try again later." };
+            const errorMessage: Message = { id: Date.now() + 1, role: 'assistant', content: "Sorry, I&apos;m having trouble connecting. Please try again later." };
             setMessages((prev) => [...prev, errorMessage]);
         } finally {
             setIsLoading(false);
@@ -287,7 +287,7 @@ const AIChatAssistant = () => {
                         Contact Me
                     </DialogTitle>
                     <DialogDescription>
-                        Interested in working together? Fill out the form below and I'll get back to you as soon as possible.
+                        Interested in working together? Fill out the form below and I&apos;ll get back to you as soon as possible.
                     </DialogDescription>
                 </DialogHeader>
                 <HireMeForm onOpenChange={setIsHireModalOpen} />
@@ -360,7 +360,7 @@ const AIChatAssistant = () => {
                     <Input
                         value={input}
                         onChange={(e) => setInput(e.target.value)}
-                        placeholder="e.g., Let's discuss a project"
+                        placeholder="e.g., Let&apos;s discuss a project"
                         className="bg-background border-border/60 flex-grow"
                         disabled={isLoading}
                         aria-label="Ask the AI assistant a question"

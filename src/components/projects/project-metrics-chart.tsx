@@ -50,7 +50,7 @@ export function ProjectMetricsChart({ metrics }: { metrics: ProjectMetric[] }) {
       <Card className="bg-card border-border/60" role="figure" aria-label="Project Metrics Chart">
         <CardHeader>
           <CardTitle>Key Metrics</CardTitle>
-          <CardDescription>A visualization of the project's key performance indicators.</CardDescription>
+          <CardDescription>A visualization of the project&apos;s key performance indicators.</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="h-80 w-full">

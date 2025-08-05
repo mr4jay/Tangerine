@@ -79,3 +79,22 @@ Your code is now stored safely on GitHub!
 5.  **Deploy**: Click the "Deploy" button.
 
 Vercel will now build and deploy your application. After a few moments, you will get a URL where you can see your live portfolio. Any future pushes to your `main` branch on GitHub will automatically trigger a new deployment on Vercel.
+
+---
+
+## Deploying to GitHub Pages
+
+1.  Run the build script to generate static files:
+    ```bash
+    npm run build
+    ```
+    The exported site will be created in the `out` directory with a `.nojekyll` file for GitHub Pages.
+
+2.  Commit the contents of `out` to a branch named `gh-pages`:
+    ```bash
+    git subtree push --prefix out origin gh-pages
+    ```
+
+3.  In your repository settings on GitHub, enable **Pages** and select the `gh-pages` branch.
+
+After a few minutes your portfolio will be available at `https://<your-username>.github.io/<repository-name>/`.
